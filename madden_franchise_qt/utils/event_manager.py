@@ -43,7 +43,7 @@ class EventManager:
         if difficulty in ['easy', 'medium', 'hard']:
             self.config['difficulty'] = difficulty
             self.data_manager.save_config(self.config)
-            self._try_auto_save()
+            self._try_auto_save()  # Ignore return value, config update is the main task
             return True
         return False
     
@@ -62,7 +62,7 @@ class EventManager:
         if year is not None:
             self.config['franchise_info']['current_year'] = year
         self.data_manager.save_config(self.config)
-        self._try_auto_save()
+        self._try_auto_save()  # Ignore return value, config update is the main task
     
     def update_roster(self, position, player_name):
         """Update a roster position
@@ -79,7 +79,7 @@ class EventManager:
         
         self.config['roster'][position] = player_name
         self.data_manager.save_config(self.config)
-        self._try_auto_save()
+        self._try_auto_save()  # Ignore return value, roster update is the main task
         return True
     
     def update_coach(self, position, coach_name):
@@ -98,7 +98,7 @@ class EventManager:
         if position in ['HC', 'OC', 'DC']:
             self.config['coaches'][position] = coach_name
             self.data_manager.save_config(self.config)
-            self._try_auto_save()
+            self._try_auto_save()  # Ignore return value, coach update is the main task
             return True
         return False
     
@@ -313,19 +313,36 @@ class EventManager:
         self.event_history = history
     
     def _try_auto_save(self):
-        """Try to auto-save if enabled and a save file exists"""
+        """Try to auto-save if enabled and a save file exists
+        
+        Returns:
+            tuple: (success, message) - Success flag and explanation message
+        """
+        # Debug output to check what's happening
+        print(f"Auto-save config value: {self.config.get('auto_save')}")
+        
         auto_save = self.config.get('auto_save', False)
         save_file = self.config.get('franchise_info', {}).get('save_file', '')
         
-        if auto_save and save_file:
-            # Get the config with event history included
-            config_with_history = self.get_config_with_history()
+        if not auto_save:
+            return False, "Auto-save is disabled"
             
-            # Save without user interaction
-            self.data_manager.save_franchise(config_with_history, save_file)
-            return True
+        if not save_file:
+            return False, "No save file exists - please save manually first"
         
-        return False
+        # Get the config with event history included
+        config_with_history = self.get_config_with_history()
+        
+        # Ensure auto_save status is included in the save file
+        config_with_history['auto_save'] = True
+        
+        # Save without user interaction
+        success, message = self.data_manager.save_franchise(config_with_history, save_file)
+        
+        # Print for debugging
+        print(f"Auto-save attempted: {success}, Message: {message}")
+        
+        return success, message
     
     def accept_event(self, event):
         """Accept an event and add it to history
@@ -337,5 +354,5 @@ class EventManager:
             bool: True if successful
         """
         self._add_to_history(event)
-        self._try_auto_save()
+        self._try_auto_save()  # Ignore return value, event acceptance is the main task
         return True 

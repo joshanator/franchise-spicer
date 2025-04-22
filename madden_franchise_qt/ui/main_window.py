@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import (
     QMainWindow, QTabWidget, QMessageBox, QInputDialog,
     QWidget, QVBoxLayout, QLabel, QHBoxLayout, QPushButton,
-    QSpinBox, QLineEdit, QComboBox, QStatusBar
+    QSpinBox, QLineEdit, QComboBox, QStatusBar, QDialog
 )
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QTimer
 from PySide6.QtGui import QIcon, QFont, QAction
 
 import os
@@ -39,6 +39,9 @@ class MainWindow(QMainWindow):
         
         # Set default tab
         self.tab_widget.setCurrentIndex(0)
+        
+        # Show startup dialog requiring franchise creation/loading
+        QTimer.singleShot(200, self.show_startup_dialog)
     
     def _init_ui(self):
         """Initialize the main UI components"""
@@ -96,10 +99,16 @@ class MainWindow(QMainWindow):
         file_menu.addAction(load_action)
         
         # Save franchise action
-        save_action = QAction("&Save Franchise", self)
+        save_action = QAction("&Save", self)
         save_action.setShortcut("Ctrl+S")
         save_action.triggered.connect(self.save_franchise)
         file_menu.addAction(save_action)
+        
+        # Save As franchise action
+        save_as_action = QAction("Save &As...", self)
+        save_as_action.setShortcut("Ctrl+Shift+S")
+        save_as_action.triggered.connect(self.save_franchise_as)
+        file_menu.addAction(save_as_action)
         
         # Exit action
         file_menu.addSeparator()
@@ -155,6 +164,78 @@ class MainWindow(QMainWindow):
         week, year = self.event_manager.get_current_week_year()
         self.week_year_label.setText(f"Week: {week} | Year: {year}")
     
+    def show_startup_dialog(self):
+        """Show startup dialog requiring user to create or load a franchise"""
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Welcome to Madden 25 Franchise Event Generator")
+        dialog.setModal(True)
+        dialog.setMinimumWidth(400)
+        
+        # Prevent closing the dialog with X button
+        dialog.setWindowFlag(Qt.WindowCloseButtonHint, False)
+        
+        layout = QVBoxLayout(dialog)
+        
+        # Add logo or title
+        title = QLabel("Welcome to Madden 25 Franchise Event Generator")
+        title.setAlignment(Qt.AlignCenter)
+        title.setFont(QFont("Arial", 14, QFont.Bold))
+        layout.addWidget(title)
+        
+        # Add instruction
+        instruction = QLabel("To begin, you must create a new franchise or load an existing one.")
+        instruction.setWordWrap(True)
+        instruction.setAlignment(Qt.AlignCenter)
+        layout.addWidget(instruction)
+        
+        # Add spacer
+        layout.addSpacing(20)
+        
+        # Add buttons
+        btn_layout = QHBoxLayout()
+        
+        new_btn = QPushButton("Create New Franchise")
+        new_btn.setMinimumHeight(40)
+        new_btn.clicked.connect(lambda: self.handle_startup_selection(dialog, "new"))
+        btn_layout.addWidget(new_btn)
+        
+        load_btn = QPushButton("Load Existing Franchise")
+        load_btn.setMinimumHeight(40)
+        
+        # Check if there are any save files to load
+        save_files = self.data_manager.list_save_files()
+        if not save_files:
+            load_btn.setEnabled(False)
+            load_btn.setToolTip("No save files found")
+        
+        load_btn.clicked.connect(lambda: self.handle_startup_selection(dialog, "load"))
+        btn_layout.addWidget(load_btn)
+        
+        layout.addLayout(btn_layout)
+        
+        # Add exit button
+        exit_btn = QPushButton("Exit")
+        exit_btn.clicked.connect(self.close)
+        layout.addWidget(exit_btn)
+        
+        dialog.show()
+    
+    def handle_startup_selection(self, dialog, action):
+        """Handle the startup dialog selection
+        
+        Args:
+            dialog: The dialog to close if successful
+            action: Either 'new' or 'load'
+        """
+        if action == "new":
+            success = self.new_franchise()
+            if success:
+                dialog.accept()
+        elif action == "load":
+            success = self.load_franchise()
+            if success:
+                dialog.accept()
+    
     def new_franchise(self):
         """Create a new franchise"""
         team_name, ok = QInputDialog.getText(
@@ -173,8 +254,11 @@ class MainWindow(QMainWindow):
                 
                 # Refresh all tabs
                 self.refresh_all_tabs()
+                return True
             else:
                 QMessageBox.critical(self, "Error", message)
+        
+        return False
     
     def load_franchise(self):
         """Load a franchise from a save file"""
@@ -182,7 +266,7 @@ class MainWindow(QMainWindow):
         
         if not save_files:
             QMessageBox.information(self, "No Saves", "No save files found.")
-            return
+            return False
         
         selected_file, ok = QInputDialog.getItem(
             self, "Load Franchise", "Select save file:", save_files, 0, False
@@ -200,13 +284,39 @@ class MainWindow(QMainWindow):
                 
                 # Refresh all tabs
                 self.refresh_all_tabs()
+                return True
             else:
                 QMessageBox.critical(self, "Error", message)
+        
+        return False
     
     def save_franchise(self):
-        """Save the current franchise"""
+        """Save the current franchise to the current file"""
+        # Get the current save file
+        current_save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
+        
+        if not current_save_file:
+            # If no current save file, do a save as
+            return self.save_franchise_as()
+        
+        # Get the config with event history included
+        config_with_history = self.event_manager.get_config_with_history()
+        
+        success, message = self.data_manager.save_franchise(
+            config_with_history, current_save_file
+        )
+        
+        if success:
+            self.status_message.setText(f"Saved to {current_save_file}")
+            return True
+        else:
+            QMessageBox.critical(self, "Error", f"Failed to save: {message}")
+            return False
+    
+    def save_franchise_as(self):
+        """Save the current franchise to a new file"""
         custom_name, ok = QInputDialog.getText(
-            self, "Save Franchise", "Enter save name (leave blank for automatic naming):"
+            self, "Save Franchise As", "Enter save name (leave blank for automatic naming):"
         )
         
         if ok:
@@ -219,8 +329,12 @@ class MainWindow(QMainWindow):
             
             if success:
                 QMessageBox.information(self, "Success", message)
+                return True
             else:
                 QMessageBox.critical(self, "Error", message)
+                return False
+        
+        return False
     
     def set_difficulty(self):
         """Set the difficulty level"""

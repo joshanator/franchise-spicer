@@ -139,9 +139,13 @@ class FranchiseTab(QWidget):
         self.new_franchise_button.clicked.connect(self._new_franchise)
         buttons_layout.addWidget(self.new_franchise_button)
         
-        self.save_franchise_button = QPushButton("Save Franchise")
+        self.save_franchise_button = QPushButton("Save")
         self.save_franchise_button.clicked.connect(self._save_franchise)
         buttons_layout.addWidget(self.save_franchise_button)
+        
+        self.save_as_franchise_button = QPushButton("Save As...")
+        self.save_as_franchise_button.clicked.connect(self._save_franchise_as)
+        buttons_layout.addWidget(self.save_as_franchise_button)
         
         self.load_franchise_button = QPushButton("Load Franchise")
         self.load_franchise_button.clicked.connect(self._load_franchise)
@@ -197,6 +201,7 @@ class FranchiseTab(QWidget):
         
         # Update auto-save checkbox
         auto_save = self.event_manager.config.get('auto_save', False)
+        print(f"Refresh: auto_save={auto_save}")
         self.auto_save_checkbox.setChecked(auto_save)
         
         # Update season stage
@@ -217,7 +222,10 @@ class FranchiseTab(QWidget):
         # Update save file info
         save_file = franchise_info.get('save_file', '')
         if save_file:
-            self.save_file_label.setText(f"Current save file: {save_file}")
+            if auto_save:
+                self.save_file_label.setText(f"Current save file: {save_file} (Auto-save ON)")
+            else:
+                self.save_file_label.setText(f"Current save file: {save_file}")
         else:
             self.save_file_label.setText("No save file loaded")
     
@@ -341,6 +349,13 @@ class FranchiseTab(QWidget):
         if hasattr(main_window, 'save_franchise'):
             main_window.save_franchise()
     
+    def _save_franchise_as(self):
+        """Save the current franchise as a new file"""
+        # Access main window method
+        main_window = self.window()
+        if hasattr(main_window, 'save_franchise_as'):
+            main_window.save_franchise_as()
+    
     def _load_franchise(self):
         """Load a franchise"""
         # Access main window method
@@ -355,12 +370,43 @@ class FranchiseTab(QWidget):
             state: The checkbox state
         """
         is_checked = state == Qt.Checked
+        
+        # Debug print
+        print(f"Auto-save checkbox toggled to: {is_checked}")
+        
+        # Update the config
         self.event_manager.config['auto_save'] = is_checked
         self.event_manager.data_manager.save_config(self.event_manager.config)
         
-        if is_checked:
-            self._show_auto_save_notification(True)
+        # More debug info
+        print(f"Config auto_save value after toggle: {self.event_manager.config.get('auto_save')}")
         
+        if is_checked:
+            # Trigger an immediate auto-save to verify it's working
+            success, message = self.event_manager._try_auto_save()
+            
+            if success:
+                self._show_auto_save_notification(True)
+                
+                # Update save file label to indicate auto-save is on
+                save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
+                if save_file:
+                    self.save_file_label.setText(f"Current save file: {save_file} (Auto-save ON)")
+            else:
+                QMessageBox.warning(
+                    self,
+                    "Auto-Save Warning",
+                    f"Auto-save is enabled but couldn't perform initial save: {message}\n\n"
+                    "Please save your franchise manually first before relying on auto-save."
+                )
+        else:
+            self._show_auto_save_notification(False)
+            
+            # Update save file label to indicate auto-save is off
+            save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
+            if save_file:
+                self.save_file_label.setText(f"Current save file: {save_file}")
+    
     def _show_auto_save_notification(self, enabled):
         """Show a notification about auto-save status
         
