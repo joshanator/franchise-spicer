@@ -43,6 +43,7 @@ class EventManager:
         if difficulty in ['easy', 'medium', 'hard']:
             self.config['difficulty'] = difficulty
             self.data_manager.save_config(self.config)
+            self._try_auto_save()
             return True
         return False
     
@@ -61,6 +62,7 @@ class EventManager:
         if year is not None:
             self.config['franchise_info']['current_year'] = year
         self.data_manager.save_config(self.config)
+        self._try_auto_save()
     
     def update_roster(self, position, player_name):
         """Update a roster position
@@ -77,6 +79,7 @@ class EventManager:
         
         self.config['roster'][position] = player_name
         self.data_manager.save_config(self.config)
+        self._try_auto_save()
         return True
     
     def update_coach(self, position, coach_name):
@@ -95,6 +98,7 @@ class EventManager:
         if position in ['HC', 'OC', 'DC']:
             self.config['coaches'][position] = coach_name
             self.data_manager.save_config(self.config)
+            self._try_auto_save()
             return True
         return False
     
@@ -145,9 +149,7 @@ class EventManager:
         # Process the event to fill in placeholders
         processed_event = self._process_event(event)
         
-        # Add to history
-        self._add_to_history(processed_event)
-        
+        # No longer adding to history here - will do it when user accepts
         return processed_event
     
     def _process_event(self, event):
@@ -308,4 +310,32 @@ class EventManager:
         Args:
             history: The history to set
         """
-        self.event_history = history 
+        self.event_history = history
+    
+    def _try_auto_save(self):
+        """Try to auto-save if enabled and a save file exists"""
+        auto_save = self.config.get('auto_save', False)
+        save_file = self.config.get('franchise_info', {}).get('save_file', '')
+        
+        if auto_save and save_file:
+            # Get the config with event history included
+            config_with_history = self.get_config_with_history()
+            
+            # Save without user interaction
+            self.data_manager.save_franchise(config_with_history, save_file)
+            return True
+        
+        return False
+    
+    def accept_event(self, event):
+        """Accept an event and add it to history
+        
+        Args:
+            event: The event to accept and add to history
+            
+        Returns:
+            bool: True if successful
+        """
+        self._add_to_history(event)
+        self._try_auto_save()
+        return True 

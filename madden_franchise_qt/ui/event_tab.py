@@ -277,8 +277,11 @@ class EventTab(QWidget):
         if not self.current_event:
             return
         
-        # Event is already added to history in the roll_event method of EventManager
-        self._show_status_message("Event has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
+        # Add the event to history only when accepted
+        if self.event_manager.accept_event(self.current_event):
+            self._show_status_message("Event has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
+        else:
+            self._show_status_message("Failed to record event to history", error=True)
         
         # Reset for next event
         self.current_event = None
@@ -340,6 +343,8 @@ class EventTab(QWidget):
                     
                     # Update the current event
                     self.current_event['selected_target'] = target_display
+                    # Store updated description in the event too
+                    self.current_event['processed_description'] = desc
                 
                 # Hide the add name button
                 if hasattr(self, 'add_player_name_button'):

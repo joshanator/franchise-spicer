@@ -152,7 +152,6 @@ class RosterTab(QWidget):
             ("DT1", "Defensive Tackle 1"),
             ("DT2", "Defensive Tackle 2"),
             ("DT3", "Defensive Tackle 3"),
-            ("DT4", "Defensive Tackle 4"),
             ("LOLB1", "Left Outside Linebacker 1"),
             ("LOLB2", "Left Outside Linebacker 2"),
             ("MLB1", "Middle Linebacker 1"),
@@ -212,9 +211,7 @@ class RosterTab(QWidget):
         
         special_positions = [
             ("K", "Kicker"),
-            ("P", "Punter"),
-            ("KR", "Kick Returner"),
-            ("PR", "Punt Returner")
+            ("P", "Punter")
         ]
         
         for i, (pos_code, pos_name) in enumerate(special_positions):
