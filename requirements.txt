@@ -1,0 +1,2 @@
+# No external dependencies beyond standard Python libraries
+# Python 3.6+ is required for f-strings and other features 

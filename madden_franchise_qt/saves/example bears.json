@@ -1,0 +1,57 @@
+{
+  "difficulty": "medium",
+  "franchise_info": {
+    "team_name": "",
+    "current_week": 1,
+    "current_year": 1,
+    "save_file": ""
+  },
+  "roster": {
+    "QB1": "justin feilds",
+    "QB2": "",
+    "RB1": "",
+    "RB2": "",
+    "RB3": "",
+    "WR1": "",
+    "WR2": "",
+    "WR3": "",
+    "WR4": "",
+    "TE1": "cole kmet",
+    "TE2": "",
+    "LT": "",
+    "LG": "",
+    "C": "",
+    "RG": "",
+    "RT": "",
+    "LE": "",
+    "RE": "",
+    "DT1": "",
+    "DT2": "",
+    "MLB": "",
+    "LOLB": "",
+    "ROLB": "",
+    "CB1": "",
+    "CB2": "",
+    "CB3": "",
+    "FS": "",
+    "SS": "",
+    "K": "",
+    "P": ""
+  },
+  "coaches": {
+    "HC": "",
+    "OC": "",
+    "DC": ""
+  },
+  "event_history": [
+    {
+      "event_id": 7,
+      "title": "PED Suspension",
+      "description": "Player suspended for 4 games due to performance enhancing drugs.",
+      "impact": "Player unavailable for specified number of games",
+      "timestamp": "2025-04-22T19:00:29.995680",
+      "week": 1,
+      "year": 1
+    }
+  ]
+}
