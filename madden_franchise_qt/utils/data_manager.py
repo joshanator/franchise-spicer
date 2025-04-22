@@ -158,7 +158,7 @@ class DataManager:
             return False, f"Error saving franchise: {str(e)}"
     
     def load_franchise(self, filename):
-        """Load a franchise from a file
+        """Load a franchise from a save file
         
         Args:
             filename: The filename to load
@@ -178,16 +178,25 @@ class DataManager:
             # Extract event history
             event_history = saved_data.get('event_history', [])
             
+            # Extract auto-save status
+            auto_save = saved_data.get('auto_save', False)
+            
             # Create a copy without event history for the config
             config = saved_data.copy()
             if 'event_history' in config:
                 del config['event_history']
+            
+            # Preserve auto-save status in config
+            config['auto_save'] = auto_save
             
             # Update the save file reference
             config['franchise_info']['save_file'] = filename
             
             # Save the config (without event history)
             self.save_config(config)
+            
+            # Print debug info
+            print(f"Loaded config with auto_save={config.get('auto_save')}")
             
             return True, f"Franchise loaded from {filename}", config, event_history
         
