@@ -14,6 +14,14 @@ class EventManager:
         self.data_manager = data_manager
         self.config = data_manager.load_config()
         self.events = data_manager.load_events()
+        
+        # Keep event history in memory, only stored in save files
+        self.event_history = self.config.get('event_history', [])
+        
+        # Remove event_history from config to keep it separate
+        if 'event_history' in self.config:
+            del self.config['event_history']
+            # Don't save here since this will be stored in save files only
     
     def get_difficulty(self):
         """Get the current difficulty
@@ -99,11 +107,33 @@ class EventManager:
         difficulty = self.get_difficulty()
         eligible_events = []
         
-        # Filter events based on difficulty weights
+        # Get current season stage
+        current_season_stage = self.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
+        
+        # Define season stage mapping (allows events to specify multiple stages)
+        stage_mapping = {
+            "Pre-Season": ["pre-season", "any"],
+            "Regular Season (Weeks 1-8)": ["regular-season", "weeks-1-8", "any"],
+            "Trade Deadline (Week 8)": ["trade-deadline", "regular-season", "any"],
+            "Regular Season (Weeks 9-18)": ["regular-season", "weeks-9-18", "any"],
+            "Playoffs": ["playoffs", "any"],
+            "Free Agency": ["free-agency", "any"]
+        }
+        
+        # Determine allowed season stages for the current stage
+        allowed_stages = stage_mapping.get(current_season_stage, ["any"])
+        
+        # Filter events based on difficulty weights and season stage
         for event in self.events.get('events', []):
+            # Check difficulty weight
             weight = event.get('difficulty_weights', {}).get(difficulty, 0.5)
-            # Use the weight as probability to include the event
-            if random.random() < weight:
+            
+            # Check season stage eligibility
+            event_stages = event.get('season_stages', ["any"])
+            stage_match = any(stage in allowed_stages for stage in event_stages)
+            
+            # If this event matches both difficulty and season stage, add to eligible events
+            if random.random() < weight and stage_match:
                 eligible_events.append(event)
         
         if not eligible_events:
@@ -136,9 +166,23 @@ class EventManager:
         
         # Handle target options
         if 'target_options' in processed_event:
-            target = random.choice(processed_event['target_options'])
-            description = description.replace('{target}', target)
-            processed_event['selected_target'] = target
+            target_position = random.choice(processed_event['target_options'])
+            
+            # Store the original target position for later reference
+            processed_event['original_target_position'] = target_position
+            
+            # Try to get player name for this position, fallback to position
+            player_name = self.config.get('roster', {}).get(target_position, "")
+            
+            if player_name and player_name.strip():
+                # Use format: "Name (Position)"
+                target_display = f"{player_name} ({target_position})"
+            else:
+                # Just use position if no name available
+                target_display = target_position
+                
+            description = description.replace('{target}', target_display)
+            processed_event['selected_target'] = target_display
         
         # Handle reason options
         if 'reason_options' in processed_event:
@@ -209,14 +253,12 @@ class EventManager:
             'impact': event.get('impact', ''),
             'timestamp': datetime.now().isoformat(),
             'week': self.config['franchise_info']['current_week'],
-            'year': self.config['franchise_info']['current_year']
+            'year': self.config['franchise_info']['current_year'],
+            'selected_target': event.get('selected_target', 'N/A')  # Include player/position
         }
         
-        if 'event_history' not in self.config:
-            self.config['event_history'] = []
-        
-        self.config['event_history'].append(history_entry)
-        self.data_manager.save_config(self.config)
+        # Add to in-memory event history (not directly to config)
+        self.event_history.append(history_entry)
     
     def get_event_history(self):
         """Get the event history
@@ -224,7 +266,7 @@ class EventManager:
         Returns:
             list: The event history
         """
-        return self.config.get('event_history', [])
+        return self.event_history
     
     def get_current_week_year(self):
         """Get the current week and year
@@ -243,4 +285,27 @@ class EventManager:
     
     def reload_events(self):
         """Reload the events data"""
-        self.events = self.data_manager.load_events() 
+        self.events = self.data_manager.load_events()
+        
+    def get_config_with_history(self):
+        """Get a copy of the config with event history included
+        Used for saving the franchise with history
+        
+        Returns:
+            dict: Config with event history
+        """
+        config_copy = self.config.copy()
+        config_copy['event_history'] = self.event_history
+        return config_copy
+        
+    def clear_event_history(self):
+        """Clear the event history"""
+        self.event_history = []
+        
+    def set_event_history(self, history):
+        """Set the event history
+        
+        Args:
+            history: The history to set
+        """
+        self.event_history = history 

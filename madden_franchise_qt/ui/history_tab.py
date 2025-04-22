@@ -60,7 +60,7 @@ class HistoryTab(QWidget):
         # History tree
         self.history_tree = QTreeWidget()
         self.history_tree.setColumnCount(5)
-        self.history_tree.setHeaderLabels(["Week/Year", "Date", "Event", "Description", "Impact"])
+        self.history_tree.setHeaderLabels(["Week/Year", "Player/Position", "Event", "Description", "Impact"])
         
         # Configure header
         header = self.history_tree.header()
@@ -187,17 +187,12 @@ class HistoryTab(QWidget):
             year = event.get('year', '')
             item.setText(0, f"W{week}/Y{year}")
             
-            # Date
-            timestamp = event.get('timestamp', '')
-            if timestamp:
-                try:
-                    dt = datetime.fromisoformat(timestamp)
-                    formatted_date = dt.strftime('%Y-%m-%d %H:%M')
-                except (ValueError, TypeError):
-                    formatted_date = timestamp
-            else:
-                formatted_date = ''
-            item.setText(1, formatted_date)
+            # Player/Position instead of Date
+            player_position = event.get('player_position', '')
+            if not player_position:
+                # Try to get it from the event's selected_target
+                player_position = event.get('selected_target', 'N/A')
+            item.setText(1, player_position)
             
             # Event title
             item.setText(2, event.get('title', ''))
@@ -237,7 +232,7 @@ class HistoryTab(QWidget):
         
         # Build detail text
         detail_text = f"<h3>{current.text(2)}</h3>"  # Event title
-        detail_text += f"<p><b>Date:</b> {current.text(1)}</p>"
+        detail_text += f"<p><b>Player/Position:</b> {current.text(1)}</p>"
         detail_text += f"<p><b>Week/Year:</b> {current.text(0)}</p>"
         detail_text += f"<p><b>Description:</b> {current.text(3)}</p>"
         detail_text += f"<p><b>Impact:</b> {current.text(4)}</p>"

@@ -91,11 +91,16 @@ class RosterTab(QWidget):
             ("WR4", "Wide Receiver 4"),
             ("TE1", "Tight End 1"),
             ("TE2", "Tight End 2"),
-            ("LT", "Left Tackle"),
-            ("LG", "Left Guard"),
-            ("C", "Center"),
-            ("RG", "Right Guard"),
-            ("RT", "Right Tackle")
+            ("LT1", "Left Tackle 1"),
+            ("LT2", "Left Tackle 2"),
+            ("LG1", "Left Guard 1"),
+            ("LG2", "Left Guard 2"),
+            ("C1", "Center 1"),
+            ("C2", "Center 2"),
+            ("RG1", "Right Guard 1"),
+            ("RG2", "Right Guard 2"),
+            ("RT1", "Right Tackle 1"),
+            ("RT2", "Right Tackle 2")
         ]
         
         for i, (pos_code, pos_name) in enumerate(offense_positions):
@@ -140,18 +145,28 @@ class RosterTab(QWidget):
         grid_layout.setColumnStretch(2, 0)  # Button column doesn't stretch
         
         defense_positions = [
-            ("LE", "Left Defensive End"),
-            ("RE", "Right Defensive End"),
+            ("LE1", "Left Defensive End 1"),
+            ("LE2", "Left Defensive End 2"),
+            ("RE1", "Right Defensive End 1"),
+            ("RE2", "Right Defensive End 2"),
             ("DT1", "Defensive Tackle 1"),
             ("DT2", "Defensive Tackle 2"),
-            ("LOLB", "Left Outside Linebacker"),
-            ("MLB", "Middle Linebacker"),
-            ("ROLB", "Right Outside Linebacker"),
+            ("DT3", "Defensive Tackle 3"),
+            ("DT4", "Defensive Tackle 4"),
+            ("LOLB1", "Left Outside Linebacker 1"),
+            ("LOLB2", "Left Outside Linebacker 2"),
+            ("MLB1", "Middle Linebacker 1"),
+            ("MLB2", "Middle Linebacker 2"),
+            ("ROLB1", "Right Outside Linebacker 1"),
+            ("ROLB2", "Right Outside Linebacker 2"),
             ("CB1", "Cornerback 1"),
             ("CB2", "Cornerback 2"),
             ("CB3", "Cornerback 3"),
-            ("FS", "Free Safety"),
-            ("SS", "Strong Safety")
+            ("CB4", "Cornerback 4"),
+            ("FS1", "Free Safety 1"),
+            ("FS2", "Free Safety 2"),
+            ("SS1", "Strong Safety 1"),
+            ("SS2", "Strong Safety 2")
         ]
         
         for i, (pos_code, pos_name) in enumerate(defense_positions):

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QSpinBox, QLineEdit, QGroupBox,
-    QRadioButton, QMessageBox, QButtonGroup
+    QRadioButton, QMessageBox, QButtonGroup, QComboBox
 )
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont
@@ -69,6 +69,27 @@ class FranchiseTab(QWidget):
         week_year_layout.addWidget(self.update_week_year_button)
         
         info_layout.addLayout(week_year_layout)
+        
+        # Season stage dropdown
+        season_stage_layout = QHBoxLayout()
+        season_stage_layout.addWidget(QLabel("Current Season Stage:"))
+        self.season_stage_combo = QComboBox()
+        self.season_stage_combo.addItems([
+            "Pre-Season",
+            "Regular Season (Weeks 1-8)",
+            "Trade Deadline (Week 8)",
+            "Regular Season (Weeks 9-18)",
+            "Playoffs",
+            "Free Agency"
+        ])
+        season_stage_layout.addWidget(self.season_stage_combo)
+        
+        # Season stage update button
+        self.update_season_stage_button = QPushButton("Update Season Stage")
+        self.update_season_stage_button.clicked.connect(self._update_season_stage)
+        season_stage_layout.addWidget(self.update_season_stage_button)
+        
+        info_layout.addLayout(season_stage_layout)
         
         # Advance week button
         self.advance_button = QPushButton("Advance to Next Week")
@@ -167,6 +188,12 @@ class FranchiseTab(QWidget):
         self.week_spinner.setValue(franchise_info.get('current_week', 1))
         self.year_spinner.setValue(franchise_info.get('current_year', 1))
         
+        # Update season stage
+        season_stage = franchise_info.get('season_stage', 'Pre-Season')
+        index = self.season_stage_combo.findText(season_stage)
+        if index >= 0:
+            self.season_stage_combo.setCurrentIndex(index)
+        
         # Update difficulty
         difficulty = self.event_manager.get_difficulty()
         if difficulty == 'easy':
@@ -216,6 +243,19 @@ class FranchiseTab(QWidget):
         if hasattr(main_window, 'update_week_year_display'):
             main_window.update_week_year_display()
     
+    def _update_season_stage(self):
+        """Update the current season stage"""
+        season_stage = self.season_stage_combo.currentText()
+        
+        # Update the franchise info with season stage
+        if 'franchise_info' not in self.event_manager.config:
+            self.event_manager.config['franchise_info'] = {}
+        
+        self.event_manager.config['franchise_info']['season_stage'] = season_stage
+        self.event_manager.data_manager.save_config(self.event_manager.config)
+        
+        QMessageBox.information(self, "Success", f"Season stage updated to {season_stage}")
+    
     def _advance_week(self):
         """Advance to the next week"""
         week, year = self.event_manager.get_current_week_year()
@@ -223,9 +263,31 @@ class FranchiseTab(QWidget):
         # Advance to next week
         if week < 17:
             week += 1
+            
+            # Auto-update season stage
+            current_stage = self.season_stage_combo.currentText()
+            new_stage = current_stage
+            
+            if week == 8:
+                new_stage = "Trade Deadline (Week 8)"
+            elif week > 8 and week <= 18 and current_stage in ["Pre-Season", "Regular Season (Weeks 1-8)", "Trade Deadline (Week 8)"]:
+                new_stage = "Regular Season (Weeks 9-18)"
+            
+            if new_stage != current_stage:
+                index = self.season_stage_combo.findText(new_stage)
+                if index >= 0:
+                    self.season_stage_combo.setCurrentIndex(index)
+                    self._update_season_stage()
         else:
             week = 1
             year += 1
+            
+            # Reset to pre-season for new year
+            new_stage = "Pre-Season"
+            index = self.season_stage_combo.findText(new_stage)
+            if index >= 0:
+                self.season_stage_combo.setCurrentIndex(index)
+                self._update_season_stage()
         
         self.event_manager.update_franchise_info(week=week, year=year)
         self.week_spinner.setValue(week)

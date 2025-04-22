@@ -74,6 +74,7 @@ class DataManager:
                 "team_name": "",
                 "current_week": 1,
                 "current_year": 1,
+                "season_stage": "Pre-Season",
                 "save_file": ""
             },
             "roster": {},
@@ -105,7 +106,7 @@ class DataManager:
         """Save the franchise to a file
         
         Args:
-            config: The configuration to save
+            config: The configuration to save (should include event history)
             filename: Optional filename, if None one will be generated
             
         Returns:
@@ -125,13 +126,17 @@ class DataManager:
             
             save_path = os.path.join(self.saves_dir, filename)
             
-            # Save the config to the file
+            # Save the config to the file (including event history)
             with open(save_path, 'w') as f:
                 json.dump(config, f, indent=2)
             
             # Update the save file reference in the config
-            config['franchise_info']['save_file'] = filename
-            self.save_config(config)
+            config_without_history = config.copy()
+            if 'event_history' in config_without_history:
+                del config_without_history['event_history']
+            
+            config_without_history['franchise_info']['save_file'] = filename
+            self.save_config(config_without_history)
             
             return True, f"Franchise saved to {filename}"
         
@@ -145,27 +150,35 @@ class DataManager:
             filename: The filename to load
             
         Returns:
-            tuple: (success, message, config)
+            tuple: (success, message, config, event_history)
         """
         save_path = os.path.join(self.saves_dir, filename)
         
         if not os.path.exists(save_path):
-            return False, f"Save file {filename} does not exist", None
+            return False, f"Save file {filename} does not exist", None, []
         
         try:
             with open(save_path, 'r') as f:
-                config = json.load(f)
+                saved_data = json.load(f)
+            
+            # Extract event history
+            event_history = saved_data.get('event_history', [])
+            
+            # Create a copy without event history for the config
+            config = saved_data.copy()
+            if 'event_history' in config:
+                del config['event_history']
             
             # Update the save file reference
             config['franchise_info']['save_file'] = filename
             
-            # Save the config
+            # Save the config (without event history)
             self.save_config(config)
             
-            return True, f"Franchise loaded from {filename}", config
+            return True, f"Franchise loaded from {filename}", config, event_history
         
         except Exception as e:
-            return False, f"Error loading franchise: {str(e)}", None
+            return False, f"Error loading franchise: {str(e)}", None, []
     
     def create_new_franchise(self, team_name):
         """Create a new franchise
@@ -174,7 +187,7 @@ class DataManager:
             team_name: The name of the team
             
         Returns:
-            tuple: (success, message, config)
+            tuple: (success, message, config, event_history)
         """
         try:
             config = self._create_default_config()
@@ -187,9 +200,9 @@ class DataManager:
             success, message = self.save_franchise(config)
             
             if success:
-                return True, f"New franchise '{team_name}' created", config
+                return True, f"New franchise '{team_name}' created", config, []
             else:
-                return False, f"Created franchise but failed to save: {message}", config
+                return False, f"Created franchise but failed to save: {message}", config, []
         
         except Exception as e:
-            return False, f"Error creating new franchise: {str(e)}", None 
+            return False, f"Error creating new franchise: {str(e)}", None, [] 
