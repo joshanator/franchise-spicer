@@ -10,6 +10,7 @@ import os
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QCoreApplication
 from madden_franchise_qt.ui.main_window import MainWindow
+from madden_franchise_qt.utils.data_manager import DataManager
 
 
 def set_application_metadata():
@@ -37,6 +38,11 @@ def main():
     
     # Create application
     app = QApplication(sys.argv)
+    
+    # Reset config.json to defaults at startup
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    data_manager = DataManager(app_dir)
+    data_manager._create_default_config()  # Force reset config to defaults
     
     # Set application metadata
     set_application_metadata()

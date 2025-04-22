@@ -68,6 +68,16 @@ class DataManager:
         Returns:
             dict: The default configuration
         """
+        # If config.json exists, make a backup before overwriting
+        if os.path.exists(self.config_path):
+            try:
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                backup_path = os.path.join(self.data_dir, f'config_backup_{timestamp}.json')
+                shutil.copy2(self.config_path, backup_path)
+            except Exception:
+                # Continue even if backup fails
+                pass
+        
         default_config = {
             "difficulty": "medium",
             "auto_save": False,  # Auto-save is disabled by default
