@@ -70,6 +70,7 @@ class DataManager:
         """
         default_config = {
             "difficulty": "medium",
+            "auto_save": False,  # Auto-save is disabled by default
             "franchise_info": {
                 "team_name": "",
                 "current_week": 1,
@@ -113,18 +114,21 @@ class DataManager:
             tuple: (success, message)
         """
         try:
-            team_name = config.get('franchise_info', {}).get('team_name', 'Unnamed')
-            
-            # Generate filename if not provided
-            if not filename:
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                filename = f"{team_name}_{timestamp}.json"
-            
-            # Add extension if not present
-            if not filename.endswith('.json'):
-                filename += '.json'
-            
-            save_path = os.path.join(self.saves_dir, filename)
+            # If filename is provided and already has the .json extension, use it directly
+            if filename and filename.endswith('.json'):
+                save_path = os.path.join(self.saves_dir, filename)
+            else:
+                team_name = config.get('franchise_info', {}).get('team_name', 'Unnamed')
+                
+                # Generate filename if not provided
+                if not filename:
+                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    filename = f"{team_name}_{timestamp}.json"
+                # Add extension if not present
+                elif not filename.endswith('.json'):
+                    filename += '.json'
+                
+                save_path = os.path.join(self.saves_dir, filename)
             
             # Save the config to the file (including event history)
             with open(save_path, 'w') as f:
@@ -135,10 +139,10 @@ class DataManager:
             if 'event_history' in config_without_history:
                 del config_without_history['event_history']
             
-            config_without_history['franchise_info']['save_file'] = filename
+            config_without_history['franchise_info']['save_file'] = os.path.basename(save_path)
             self.save_config(config_without_history)
             
-            return True, f"Franchise saved to {filename}"
+            return True, f"Franchise saved to {os.path.basename(save_path)}"
         
         except Exception as e:
             return False, f"Error saving franchise: {str(e)}"

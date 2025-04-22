@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Early Retirement",
       "description": "A player has decided to retire early due to {reason}.",
-      "impact": "Remove player from roster",
+      "impact": "Remove player from roster and drop stats to 0",
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "C1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "reason_options": ["injury concerns", "family reasons", "career change", "mental health"],
       "difficulty_weights": {
@@ -63,7 +63,7 @@
       "title": "Sprinter Challenge",
       "description": "Player challenged a famous sprinter to a race and {result}!",
       "impact": "{impact_text}",
-      "target_options": ["RB1", "WR1", "WR2", "CB1", "FS1", "KR"],
+      "target_options": ["RB1", "WR1", "WR2", "CB1", "FS1"],
       "result_options": [
         {"result": "won", "impact_text": "Speed increases by 2", "probability": 0.3},
         {"result": "lost", "impact_text": "Speed decreases by 1", "probability": 0.7}

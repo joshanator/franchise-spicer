@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QSpinBox, QLineEdit, QGroupBox,
-    QRadioButton, QMessageBox, QButtonGroup, QComboBox
+    QRadioButton, QMessageBox, QButtonGroup, QComboBox,
+    QCheckBox
 )
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont
@@ -148,6 +149,12 @@ class FranchiseTab(QWidget):
         
         save_layout.addLayout(buttons_layout)
         
+        # Auto-save checkbox
+        self.auto_save_checkbox = QCheckBox("Auto-save when changes are made")
+        self.auto_save_checkbox.setToolTip("Automatically save the franchise file when making any changes")
+        self.auto_save_checkbox.stateChanged.connect(self._toggle_auto_save)
+        save_layout.addWidget(self.auto_save_checkbox)
+        
         # Current save file
         self.save_file_label = QLabel("No save file loaded")
         save_layout.addWidget(self.save_file_label)
@@ -187,6 +194,10 @@ class FranchiseTab(QWidget):
         self.team_name_edit.setText(franchise_info.get('team_name', ''))
         self.week_spinner.setValue(franchise_info.get('current_week', 1))
         self.year_spinner.setValue(franchise_info.get('current_year', 1))
+        
+        # Update auto-save checkbox
+        auto_save = self.event_manager.config.get('auto_save', False)
+        self.auto_save_checkbox.setChecked(auto_save)
         
         # Update season stage
         season_stage = franchise_info.get('season_stage', 'Pre-Season')
@@ -335,4 +346,36 @@ class FranchiseTab(QWidget):
         # Access main window method
         main_window = self.window()
         if hasattr(main_window, 'load_franchise'):
-            main_window.load_franchise() 
+            main_window.load_franchise()
+    
+    def _toggle_auto_save(self, state):
+        """Toggle auto-save feature
+        
+        Args:
+            state: The checkbox state
+        """
+        is_checked = state == Qt.Checked
+        self.event_manager.config['auto_save'] = is_checked
+        self.event_manager.data_manager.save_config(self.event_manager.config)
+        
+        if is_checked:
+            self._show_auto_save_notification(True)
+        
+    def _show_auto_save_notification(self, enabled):
+        """Show a notification about auto-save status
+        
+        Args:
+            enabled: Whether auto-save is enabled
+        """
+        if enabled:
+            QMessageBox.information(
+                self, 
+                "Auto-Save Enabled", 
+                "Auto-save is now enabled. Your franchise will be saved automatically when changes are made."
+            )
+        else:
+            QMessageBox.information(
+                self, 
+                "Auto-Save Disabled", 
+                "Auto-save is now disabled. Remember to save your franchise manually."
+            ) 
