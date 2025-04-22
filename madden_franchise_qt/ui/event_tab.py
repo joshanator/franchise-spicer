@@ -26,6 +26,13 @@ class EventTab(QWidget):
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
         
+        # Status message for feedback
+        self.status_message = QLabel("")
+        self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
+        self.status_message.setWordWrap(True)
+        self.status_message.setVisible(False)
+        main_layout.addWidget(self.status_message)
+        
         # Event generation section
         generator_group = QGroupBox("Generate Random Event")
         generator_layout = QVBoxLayout(generator_group)
@@ -127,6 +134,12 @@ class EventTab(QWidget):
         difficulty = self.event_manager.get_difficulty()
         self.difficulty_label.setText(difficulty.capitalize())
         
+        # Display current season stage
+        current_stage = self.event_manager.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
+        week, year = self.event_manager.get_current_week_year()
+        self.status_message.setText(f"Current season stage: {current_stage} - Week {week}, Year {year}")
+        self.status_message.setVisible(True)
+        
         # Clear event display if no current event
         if not hasattr(self, 'current_event') or not self.current_event:
             self.event_title.setText("No event rolled yet")
@@ -142,21 +155,50 @@ class EventTab(QWidget):
         event = self.event_manager.roll_event()
         
         if not event:
-            QMessageBox.information(
-                self, "No Events", 
-                "No eligible events found for the current difficulty."
+            self._show_status_message(
+                f"No eligible events found for the current difficulty and season stage ({self.event_manager.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')}).",
+                error=True
             )
             return
         
         self.current_event = event
         
+        # Check if this event has a target player without a name
+        has_unnamed_player = False
+        if event.get('target_options'):
+            # Get the selected target position
+            target_position = None
+            
+            # First check if we've already processed and stored the target position
+            if 'selected_target' in event:
+                # Extract position from "Name (Position)" format or just use as-is if no name
+                target_text = event.get('selected_target', '')
+                if '(' in target_text and ')' in target_text:
+                    # Extract position from parentheses
+                    target_position = target_text[target_text.find('(')+1:target_text.find(')')]
+                else:
+                    # Just the position
+                    target_position = target_text
+            
+            # If we couldn't extract from selected_target, get the original position
+            if not target_position and 'original_target_position' in event:
+                target_position = event.get('original_target_position')
+            
+            # If we have a position, check if it has a name
+            if target_position:
+                player_name = self.event_manager.config.get('roster', {}).get(target_position, "")
+                if not player_name or not player_name.strip():
+                    has_unnamed_player = True
+                    self.unnamed_player_position = target_position
+        
         # Update display
         self.event_title.setText(event.get('title', 'Unknown Event'))
         
-        self.description_text.setPlainText(
-            event.get('processed_description', event.get('description', ''))
-        )
+        # Display description without impact information
+        description = event.get('processed_description', event.get('description', ''))
+        self.description_text.setPlainText(description)
         
+        # Display impact separately
         self.impact_text.setPlainText(event.get('impact', ''))
         
         # Set target if available
@@ -169,6 +211,45 @@ class EventTab(QWidget):
         # Enable buttons
         self.accept_button.setEnabled(True)
         self.reroll_button.setEnabled(True)
+        
+        # If there's an unnamed player, show the add name button
+        if has_unnamed_player:
+            # Check if we already have the button, if not create it
+            if not hasattr(self, 'add_player_name_button'):
+                self.add_player_name_button = QPushButton("Add Player Name")
+                self.add_player_name_button.clicked.connect(self._add_player_name)
+            
+            # Find the buttons layout in the result group
+            for child in self.result_group.children():
+                if isinstance(child, QVBoxLayout):
+                    result_layout = child
+                    # Find the buttons layout
+                    for i in range(result_layout.count()):
+                        item = result_layout.itemAt(i)
+                        if isinstance(item, QHBoxLayout):
+                            # Check if our button is already in the layout
+                            button_found = False
+                            for j in range(item.count()):
+                                if item.itemAt(j).widget() == self.add_player_name_button:
+                                    button_found = True
+                                    break
+                            
+                            if not button_found:
+                                # Insert our button before the stretch
+                                item.insertWidget(item.count()-1, self.add_player_name_button)
+                            break
+            
+            self.add_player_name_button.setVisible(True)
+            
+            # Show a notification
+            self._show_status_message(
+                f"This event involves a player at position {self.unnamed_player_position} who doesn't have a name. " 
+                "Click 'Add Player Name' to assign a name before accepting.",
+                error=False
+            )
+        elif hasattr(self, 'add_player_name_button'):
+            # Hide the button if it exists
+            self.add_player_name_button.setVisible(False)
         
         # Animate the result (simple highlight effect)
         self._animate_result()
@@ -197,11 +278,7 @@ class EventTab(QWidget):
             return
         
         # Event is already added to history in the roll_event method of EventManager
-        QMessageBox.information(
-            self, "Event Accepted", 
-            "Event has been recorded in your franchise history.\n"
-            "Make sure to implement the effects in your Madden game!"
-        )
+        self._show_status_message("Event has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
         
         # Reset for next event
         self.current_event = None
@@ -211,4 +288,67 @@ class EventTab(QWidget):
         # Update history tab
         main_window = self.window()
         if hasattr(main_window, 'history_tab') and hasattr(main_window.history_tab, 'refresh'):
-            main_window.history_tab.refresh() 
+            main_window.history_tab.refresh()
+    
+    def _show_status_message(self, message, error=False):
+        """Show a status message
+        
+        Args:
+            message: The message to display
+            error: Whether this is an error message
+        """
+        if error:
+            self.status_message.setStyleSheet("QLabel { color: #D8000C; background-color: #FFBABA; padding: 8px; border-radius: 4px; }")
+        else:
+            self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
+        
+        self.status_message.setText(message)
+        self.status_message.setVisible(True)
+        
+        # Hide the message after 5 seconds
+        from PySide6.QtCore import QTimer
+        QTimer.singleShot(5000, lambda: self.status_message.setVisible(False))
+    
+    def _add_player_name(self):
+        """Add a name for an unnamed player"""
+        if not hasattr(self, 'unnamed_player_position') or not self.unnamed_player_position:
+            return
+            
+        # Create an input dialog to get the player name
+        from PySide6.QtWidgets import QInputDialog
+        player_name, ok = QInputDialog.getText(
+            self, 
+            "Add Player Name", 
+            f"Enter the name for the player at position {self.unnamed_player_position}:"
+        )
+        
+        if ok and player_name.strip():
+            # Update the roster with the new name
+            if self.event_manager.update_roster(self.unnamed_player_position, player_name):
+                # Update the event with the new name
+                if self.current_event:
+                    target_display = f"{player_name} ({self.unnamed_player_position})"
+                    
+                    # Update the target label
+                    self.target_label.setText(target_display)
+                    
+                    # Update description if it contains the position
+                    desc = self.description_text.toPlainText()
+                    if self.unnamed_player_position in desc:
+                        desc = desc.replace(self.unnamed_player_position, target_display)
+                        self.description_text.setPlainText(desc)
+                    
+                    # Update the current event
+                    self.current_event['selected_target'] = target_display
+                
+                # Hide the add name button
+                if hasattr(self, 'add_player_name_button'):
+                    self.add_player_name_button.setVisible(False)
+                
+                # Show success message
+                self._show_status_message(f"Successfully added name '{player_name}' for position {self.unnamed_player_position}")
+                
+                # Clear the saved position
+                del self.unnamed_player_position
+            else:
+                self._show_status_message("Failed to update the roster", error=True) 

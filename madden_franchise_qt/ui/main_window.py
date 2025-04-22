@@ -162,13 +162,14 @@ class MainWindow(QMainWindow):
         )
         
         if ok and team_name:
-            success, message, config = self.data_manager.create_new_franchise(team_name)
+            success, message, config, event_history = self.data_manager.create_new_franchise(team_name)
             
             if success:
                 QMessageBox.information(self, "Success", message)
                 
                 # Update the event manager with the new config
                 self.event_manager.reload_config()
+                self.event_manager.clear_event_history()  # Clear any previous history
                 
                 # Refresh all tabs
                 self.refresh_all_tabs()
@@ -188,13 +189,14 @@ class MainWindow(QMainWindow):
         )
         
         if ok and selected_file:
-            success, message, config = self.data_manager.load_franchise(selected_file)
+            success, message, config, event_history = self.data_manager.load_franchise(selected_file)
             
             if success:
                 QMessageBox.information(self, "Success", message)
                 
-                # Update the event manager with the new config
+                # Update the event manager with the new config and history
                 self.event_manager.reload_config()
+                self.event_manager.set_event_history(event_history)
                 
                 # Refresh all tabs
                 self.refresh_all_tabs()
@@ -208,8 +210,11 @@ class MainWindow(QMainWindow):
         )
         
         if ok:
+            # Get the config with event history included
+            config_with_history = self.event_manager.get_config_with_history()
+            
             success, message = self.data_manager.save_franchise(
-                self.event_manager.config, custom_name if custom_name else None
+                config_with_history, custom_name if custom_name else None
             )
             
             if success:
