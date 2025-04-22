@@ -8,7 +8,7 @@
   },
   "roster": {
     "QB1": "justin feilds",
-    "QB2": "",
+    "QB2": "daniel jones",
     "RB1": "",
     "RB2": "",
     "RB3": "",
@@ -36,12 +36,12 @@
     "FS": "",
     "SS": "",
     "K": "",
-    "P": "",
-    "C1": "cccca"
+    "P": ""
   },
   "coaches": {
     "HC": "",
     "OC": "",
     "DC": ""
-  }
+  },
+  "auto_save": false
 }
