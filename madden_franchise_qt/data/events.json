@@ -5,14 +5,15 @@
       "title": "Early Retirement",
       "description": "A player has decided to retire early due to {reason}.",
       "impact": "Remove player from roster",
-      "target_options": ["QB1", "RB1", "WR1", "TE1", "LT", "C", "RT", "DE1", "DT1", "MLB", "CB1", "FS", "SS"],
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "C1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "reason_options": ["injury concerns", "family reasons", "career change", "mental health"],
       "difficulty_weights": {
         "easy": 0.3,
         "medium": 0.5,
         "hard": 0.8
       },
-      "category": "roster"
+      "category": "roster",
+      "season_stages": ["pre-season", "free-agency"]
     },
     {
       "id": 2,
@@ -26,7 +27,8 @@
         "medium": 0.4,
         "hard": 0.6
       },
-      "category": "team"
+      "category": "team",
+      "season_stages": ["pre-season", "free-agency"]
     },
     {
       "id": 3,
@@ -39,27 +41,29 @@
         "medium": 0.6,
         "hard": 0.8
       },
-      "category": "contract"
+      "category": "contract",
+      "season_stages": ["pre-season"]
     },
     {
       "id": 4,
       "title": "Poor Conditioning",
       "description": "Player showed up to training camp in bad condition.",
       "impact": "Lower stamina by 5, speed/acceleration by 1, and raise weight by 10",
-      "target_options": ["RB1", "RB2", "WR1", "WR2", "WR3", "TE1", "LB1", "CB1", "CB2"],
+      "target_options": ["RB1", "RB2", "WR1", "WR2", "WR3", "TE1", "LOLB1", "MLB1", "ROLB1", "CB1", "CB2"],
       "difficulty_weights": {
         "easy": 0.5,
         "medium": 0.7,
         "hard": 0.9
       },
-      "category": "attribute"
+      "category": "attribute",
+      "season_stages": ["pre-season"]
     },
     {
       "id": 5,
       "title": "Sprinter Challenge",
       "description": "Player challenged a famous sprinter to a race and {result}!",
       "impact": "{impact_text}",
-      "target_options": ["RB1", "WR1", "WR2", "CB1", "FS", "KR"],
+      "target_options": ["RB1", "WR1", "WR2", "CB1", "FS1", "KR"],
       "result_options": [
         {"result": "won", "impact_text": "Speed increases by 2", "probability": 0.3},
         {"result": "lost", "impact_text": "Speed decreases by 1", "probability": 0.7}
@@ -69,7 +73,8 @@
         "medium": 0.5,
         "hard": 0.5
       },
-      "category": "attribute"
+      "category": "attribute",
+      "season_stages": ["pre-season", "free-agency"]
     },
     {
       "id": 6,
@@ -82,48 +87,52 @@
         "medium": 0.5,
         "hard": 0.4
       },
-      "category": "lineup"
+      "category": "lineup",
+      "season_stages": ["regular-season", "weeks-1-8", "weeks-9-18"]
     },
     {
       "id": 7,
       "title": "PED Suspension",
       "description": "Player suspended for {games} games due to performance enhancing drugs.",
       "impact": "Player unavailable for specified number of games",
-      "target_options": ["QB1", "RB1", "WR1", "TE1", "DE1", "DT1", "LB1", "CB1", "SS"],
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "LE1", "DT1", "MLB1", "CB1", "SS1"],
       "games_options": [2, 4, 6, 8],
       "difficulty_weights": {
         "easy": 0.3,
         "medium": 0.5,
         "hard": 0.7
       },
-      "category": "suspension"
+      "category": "suspension",
+      "season_stages": ["pre-season", "regular-season", "weeks-1-8", "weeks-9-18"]
     },
     {
       "id": 8,
       "title": "Betting Scandal",
       "description": "Player caught betting on games and suspended for {games} games.",
       "impact": "Player unavailable for specified number of games",
-      "target_options": ["QB1", "RB1", "WR1", "TE1", "OL1", "DE1", "DT1", "LB1", "CB1", "S1"],
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "LG1", "C1", "RG1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "games_options": [4, 8, 16, "season"],
       "difficulty_weights": {
         "easy": 0.2,
         "medium": 0.4,
         "hard": 0.6
       },
-      "category": "suspension"
+      "category": "suspension",
+      "season_stages": ["pre-season", "regular-season", "weeks-1-8", "weeks-9-18"]
     },
     {
       "id": 9,
       "title": "Bad Influence",
       "description": "Player caught hanging out with Antonio Brown, causing locker room disruption.",
       "impact": "Team morale decreased, -2 awareness for player",
-      "target_options": ["WR1", "WR2", "CB1", "S1", "RB1"],
+      "target_options": ["WR1", "WR2", "CB1", "FS1", "SS1", "RB1"],
       "difficulty_weights": {
         "easy": 0.4,
         "medium": 0.6,
         "hard": 0.8
       },
-      "category": "team"
+      "category": "team",
+      "season_stages": ["pre-season", "regular-season", "weeks-1-8", "weeks-9-18"]
     },
     {
       "id": 10,
@@ -133,9 +142,9 @@
       "matchups": [
         {"position1": "WR1", "opponent_position": "CB1"},
         {"position1": "CB1", "opponent_position": "WR1"},
-        {"position1": "QB1", "opponent_position": "MLB"},
-        {"position1": "RB1", "opponent_position": "DE1"},
-        {"position1": "TE1", "opponent_position": "SS"}
+        {"position1": "QB1", "opponent_position": "MLB1"},
+        {"position1": "RB1", "opponent_position": "LE1"},
+        {"position1": "TE1", "opponent_position": "SS1"}
       ],
       "opponent_teams": ["Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears", "Bengals", "Browns", "Cowboys", "Broncos", "Lions", "Packers", "Texans", "Colts", "Jaguars", "Chiefs", "Raiders", "Chargers", "Rams", "Dolphins", "Vikings", "Patriots", "Saints", "Giants", "Jets", "Eagles", "Steelers", "49ers", "Seahawks", "Buccaneers", "Titans", "Commanders"],
       "difficulty_weights": {
@@ -143,7 +152,8 @@
         "medium": 0.5,
         "hard": 0.5
       },
-      "category": "challenge"
+      "category": "challenge",
+      "season_stages": ["regular-season", "weeks-1-8", "weeks-9-18"]
     },
     {
       "id": 11,
@@ -156,7 +166,8 @@
         "medium": 0.5,
         "hard": 0.7
       },
-      "category": "challenge"
+      "category": "challenge",
+      "season_stages": ["pre-season"]
     }
   ]
 } 
