@@ -1,14 +1,14 @@
 {
-  "difficulty": "medium",
+  "difficulty": "easy",
   "franchise_info": {
-    "team_name": "",
+    "team_name": "Bears",
     "current_week": 1,
     "current_year": 1,
     "save_file": "example bears.json"
   },
   "roster": {
     "QB1": "justin feilds",
-    "QB2": "daniel jones",
+    "QB2": "",
     "RB1": "",
     "RB2": "",
     "RB3": "",
@@ -36,7 +36,8 @@
     "FS": "",
     "SS": "",
     "K": "",
-    "P": ""
+    "P": "",
+    "FS1": "kevin baerd"
   },
   "coaches": {
     "HC": "",
