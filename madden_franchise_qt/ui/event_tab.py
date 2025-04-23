@@ -178,6 +178,9 @@ class EventTab(QWidget):
             self._show_options_dialog(event)
             return
         
+        # Start update - freeze layout to prevent jumbled appearance
+        self.setUpdatesEnabled(False)
+        
         # Check if this event has a target player without a name
         has_unnamed_player = False
         if event.get('target_options'):
@@ -266,25 +269,38 @@ class EventTab(QWidget):
             # Hide the button if it exists
             self.add_player_name_button.setVisible(False)
         
-        # Animate the result (simple highlight effect)
+        # Re-enable updates and refresh the display
+        self.setUpdatesEnabled(True)
+        
+        # Animate the result (better highlight effect)
         self._animate_result()
     
     def _animate_result(self):
         """Animate the result with a highlight effect"""
-        # Flash the result group to draw attention
+        # Use property animation for smoother transition
+        animation = QPropertyAnimation(self.result_group, b"styleSheet")
+        animation.setDuration(300)  # 300ms duration
+        
+        # Original style
         original_style = self.result_group.styleSheet()
         
-        # Set highlight
-        self.result_group.setStyleSheet(
-            "QGroupBox { background-color: #e0f0ff; border: 2px solid #4477AA; }"
-        )
+        # Highlight style
+        highlight_style = "QGroupBox { background-color: #e0f0ff; border: 2px solid #4477AA; }"
         
-        # Reset after a delay
-        def reset_style():
-            self.result_group.setStyleSheet(original_style)
+        # Set start value
+        animation.setStartValue(original_style)
         
-        # Use single-shot timer to reset
-        QTimer.singleShot(300, reset_style)
+        # Set end value (highlight)
+        animation.setEndValue(highlight_style)
+        
+        # Use ease in-out curve for smoother transition
+        animation.setEasingCurve(QEasingCurve.InOutQuad)
+        
+        # Start animation
+        animation.start()
+        
+        # Return to original style after animation
+        QTimer.singleShot(500, lambda: self.result_group.setStyleSheet(original_style))
     
     def _accept_event(self):
         """Accept the current event"""
@@ -394,6 +410,9 @@ class EventTab(QWidget):
         event['selected_option_description'] = option_description
         event['selected_option_impact'] = option_impact
         
+        # Freeze updates while modifying content
+        self.setUpdatesEnabled(False)
+        
         # Update the display to show the selected option
         self.event_title.setText(f"{event.get('title', 'Unknown Event')} - Option Selected")
         
@@ -407,6 +426,9 @@ class EventTab(QWidget):
         # Keep buttons enabled so user can accept or re-roll
         self.accept_button.setEnabled(True)
         self.reroll_button.setEnabled(True)
+        
+        # Re-enable updates
+        self.setUpdatesEnabled(True)
         
         # Show a status message confirming the selection
         self._show_status_message(f"Option selected: {option_description}. Click 'Accept Event' to confirm or 'Re-roll Event' to try again.")
