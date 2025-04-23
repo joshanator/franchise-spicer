@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 from datetime import datetime
+from madden_franchise_qt.ui.franchise_tab import get_week_display
 
 
 class HistoryTab(QWidget):
@@ -114,7 +115,7 @@ class HistoryTab(QWidget):
             if 'year' in event:
                 years.add(str(event['year']))
             if 'week' in event:
-                weeks.add(str(event['week']))
+                weeks.add(event['week'])  # Store actual week number
         
         # Save current selections
         current_year = self.year_combo.currentText()
@@ -132,16 +133,25 @@ class HistoryTab(QWidget):
         for year in sorted(years):
             self.year_combo.addItem(year)
         
-        for week in sorted(weeks, key=int):
-            self.week_combo.addItem(week)
+        # Create a mapping of display values to actual week numbers
+        self.week_display_map = {}
+        
+        # Add sorted weeks with user-friendly display
+        for week in sorted(weeks):
+            week_display = get_week_display(week)
+            self.week_combo.addItem(week_display)
+            self.week_display_map[week_display] = week
         
         # Restore selections if they still exist
         year_index = self.year_combo.findText(current_year)
         if year_index >= 0:
             self.year_combo.setCurrentIndex(year_index)
         
+        # Try to find by week display or fall back to "All"
         week_index = self.week_combo.findText(current_week)
-        if week_index >= 0:
+        if week_index < 0:
+            self.week_combo.setCurrentIndex(0)  # Default to "All"
+        else:
             self.week_combo.setCurrentIndex(week_index)
     
     def _filter_history(self, history):
@@ -154,15 +164,22 @@ class HistoryTab(QWidget):
             list: The filtered history
         """
         year_filter = self.year_combo.currentText()
-        week_filter = self.week_combo.currentText()
+        week_display_filter = self.week_combo.currentText()
         
-        if year_filter == "All" and week_filter == "All":
+        if year_filter == "All" and week_display_filter == "All":
             return history
         
         filtered = []
         for event in history:
             year_match = year_filter == "All" or str(event.get('year', '')) == year_filter
-            week_match = week_filter == "All" or str(event.get('week', '')) == week_filter
+            
+            # Handle week filter using the display map
+            if week_display_filter == "All":
+                week_match = True
+            else:
+                # Get the actual week number for the selected display
+                week_num = self.week_display_map.get(week_display_filter)
+                week_match = event.get('week') == week_num if week_num is not None else False
             
             if year_match and week_match:
                 filtered.append(event)
@@ -182,10 +199,14 @@ class HistoryTab(QWidget):
         for event in reversed(history):  # Show newest first
             item = QTreeWidgetItem()
             
-            # Week/Year
+            # Week/Year with user-friendly week display
             week = event.get('week', '')
             year = event.get('year', '')
-            item.setText(0, f"W{week}/Y{year}")
+            if week:
+                week_display = get_week_display(week)
+                item.setText(0, f"{week_display}, Year {year}")
+            else:
+                item.setText(0, f"Y{year}")
             
             # Player/Position instead of Date
             player_position = event.get('player_position', '')
@@ -232,8 +253,8 @@ class HistoryTab(QWidget):
         
         # Build detail text
         detail_text = f"<h3>{current.text(2)}</h3>"  # Event title
+        detail_text += f"<p><b>Time:</b> {current.text(0)}</p>"
         detail_text += f"<p><b>Player/Position:</b> {current.text(1)}</p>"
-        detail_text += f"<p><b>Week/Year:</b> {current.text(0)}</p>"
         detail_text += f"<p><b>Description:</b> {current.text(3)}</p>"
         detail_text += f"<p><b>Impact:</b> {current.text(4)}</p>"
         

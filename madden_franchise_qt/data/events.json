@@ -645,6 +645,35 @@
       },
       "category": "team",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 40,
+      "title": "Playing Time Demand",
+      "description": "{target} is unhappy with their current playing time and demands more snaps.",
+      "target_options": ["WR2", "WR3", "RB2", "TE2", "CB2", "CB3", "SS2", "FS2", "MLB2", "LOLB2", "ROLB2", "DT2", "DE2"],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.5,
+        "pro": 0.6,
+        "all-madden": 0.7,
+        "diabolical": 0.8
+      },
+      "category": "roster",
+      "season_stages": ["regular-season-start", "regular-season-mid"],
+      "options": [
+        {
+          "description": "Start {target} for the next two games",
+          "impact": "Player receives +2 awareness and +1 to primary attribute due to motivation. Must start for next 2 games."
+        },
+        {
+          "description": "Ignore the request",
+          "impact": "Player receives -2 awareness and may request a trade later in the season."
+        },
+        {
+          "description": "Bench the player completely",
+          "impact": "Player receives -5 awareness and will request a trade immediately."
+        }
+      ]
     }
   ]
 } 

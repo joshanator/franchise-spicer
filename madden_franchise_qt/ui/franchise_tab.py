@@ -10,11 +10,19 @@ from PySide6.QtGui import QFont
 
 # Season stages
 PRE_SEASON = "Pre-Season"
-REGULAR_SEASON_START = "Regular Season (Weeks 1-8)"
-REGULAR_SEASON_MID = "Trade Deadline (Week 8)"
-REGULAR_SEASON_END = "Regular Season (Weeks 9-18)"
+REGULAR_SEASON_START = "regular-season-start"
+REGULAR_SEASON_MID = "regular-season-mid"
+REGULAR_SEASON_END = "regular-season-end"
 POST_SEASON = "Post-Season"
 OFF_SEASON = "Off-Season"
+
+# Display values for season stages
+PRE_SEASON_DISPLAY = "Pre-Season (Weeks 1-4)"
+REGULAR_SEASON_START_DISPLAY = "Regular Season (Weeks 1-8)"
+REGULAR_SEASON_MID_DISPLAY = "Trade Deadline (Week 8)"
+REGULAR_SEASON_END_DISPLAY = "Regular Season (Weeks 9-18)"
+POST_SEASON_DISPLAY = "Playoffs (Weeks 19-22)"
+OFF_SEASON_DISPLAY = "Off-Season (Week 23+)"
 
 # Week ranges for each season stage
 # Pre-season: 1-4
@@ -39,6 +47,51 @@ def get_season_stage_for_week(week):
     else:
         return OFF_SEASON
 
+def get_display_for_season_stage(stage):
+    """Convert backend season stage value to display value"""
+    if stage == PRE_SEASON:
+        return PRE_SEASON_DISPLAY
+    elif stage == REGULAR_SEASON_START:
+        return REGULAR_SEASON_START_DISPLAY
+    elif stage == REGULAR_SEASON_MID:
+        return REGULAR_SEASON_MID_DISPLAY
+    elif stage == REGULAR_SEASON_END:
+        return REGULAR_SEASON_END_DISPLAY
+    elif stage == POST_SEASON:
+        return POST_SEASON_DISPLAY
+    elif stage == OFF_SEASON:
+        return OFF_SEASON_DISPLAY
+    else:
+        return stage  # Fallback to the stage name itself
+
+def get_season_stage_from_display(display_value):
+    """Convert display value back to backend season stage value"""
+    if display_value == PRE_SEASON_DISPLAY:
+        return PRE_SEASON
+    elif display_value == REGULAR_SEASON_START_DISPLAY:
+        return REGULAR_SEASON_START
+    elif display_value == REGULAR_SEASON_MID_DISPLAY:
+        return REGULAR_SEASON_MID
+    elif display_value == REGULAR_SEASON_END_DISPLAY:
+        return REGULAR_SEASON_END
+    elif display_value == POST_SEASON_DISPLAY:
+        return POST_SEASON
+    elif display_value == OFF_SEASON_DISPLAY:
+        return OFF_SEASON
+    else:
+        return display_value  # Fallback to the value itself
+
+def get_week_display(week):
+    """Convert numeric week to user-friendly display string"""
+    if week <= 4:
+        return f"Pre-Season Week {week}"
+    elif week <= 22:
+        return f"Week {week - 4}"  # Regular season weeks are numbered 1-18 in-game
+    elif week <= 26:
+        return f"Playoff Week {week - 22}"  # Playoff weeks numbered 1-4
+    else:
+        return f"Off-Season"
+
 def get_week_for_season_stage(stage):
     """Map a season stage to a default week"""
     if stage == PRE_SEASON:
@@ -46,9 +99,9 @@ def get_week_for_season_stage(stage):
     elif stage == REGULAR_SEASON_START:
         return 5
     elif stage == REGULAR_SEASON_MID:
-        return 8
+        return 12
     elif stage == REGULAR_SEASON_END:
-        return 16
+        return 13
     elif stage == POST_SEASON:
         return 23
     elif stage == OFF_SEASON:
@@ -106,11 +159,15 @@ class FranchiseTab(QWidget):
         # Week
         week_layout = QHBoxLayout()
         week_layout.addWidget(QLabel("Current Week:"))
-        self.week_spinner = QSpinBox()
-        self.week_spinner.setMinimum(1)  # Start from pre-season week 1
-        self.week_spinner.setMaximum(27)  # Go through offseason (27)
-        self.week_spinner.valueChanged.connect(self._on_week_changed)
-        week_layout.addWidget(self.week_spinner)
+        
+        # Replace spinner with combo box for user-friendly display
+        self.week_combo = QComboBox()
+        self.week_combo.setMinimumHeight(30)
+        # Populate with all possible weeks and their display names
+        self._populate_week_combo()
+        self.week_combo.currentIndexChanged.connect(self._on_week_combo_changed)
+        week_layout.addWidget(self.week_combo)
+        
         week_year_layout.addLayout(week_layout)
         
         # Year
@@ -133,7 +190,14 @@ class FranchiseTab(QWidget):
         season_stage_layout = QHBoxLayout()
         season_stage_layout.addWidget(QLabel("Current Season Stage:"))
         self.season_stage_combo = QComboBox()
-        self.season_stage_combo.addItems([PRE_SEASON, REGULAR_SEASON_START, REGULAR_SEASON_MID, REGULAR_SEASON_END, POST_SEASON, OFF_SEASON])
+        self.season_stage_combo.addItems([
+            PRE_SEASON_DISPLAY,
+            REGULAR_SEASON_START_DISPLAY,
+            REGULAR_SEASON_MID_DISPLAY,
+            REGULAR_SEASON_END_DISPLAY,
+            POST_SEASON_DISPLAY,
+            OFF_SEASON_DISPLAY
+        ])
         self.season_stage_combo.currentTextChanged.connect(self._on_season_stage_changed)
         season_stage_layout.addWidget(self.season_stage_combo)
         
@@ -278,13 +342,48 @@ class FranchiseTab(QWidget):
         save_group.setStyleSheet("QGroupBox { font-weight: bold; font-size: 12px; }")
         instructions_group.setStyleSheet("QGroupBox { font-weight: bold; font-size: 12px; }")
     
+    def _populate_week_combo(self):
+        """Populate the week combo box with all possible weeks and their display names"""
+        self.week_combo.clear()
+        
+        # Maps display text to actual week number
+        self.week_map = {}
+        
+        # Add all possible weeks (1-27)
+        for week in range(1, 28):
+            display_text = get_week_display(week)
+            self.week_combo.addItem(display_text)
+            self.week_map[display_text] = week
+    
     def refresh(self):
         """Refresh tab with current data"""
         # Update franchise info
         franchise_info = self.event_manager.config.get('franchise_info', {})
         self.team_name_edit.setText(franchise_info.get('team_name', ''))
-        self.week_spinner.setValue(franchise_info.get('current_week', PRE_SEASON))
-        self.year_spinner.setValue(franchise_info.get('current_year', 1))
+        
+        # Get current week and year
+        current_week = franchise_info.get('current_week', 1)
+        current_year = franchise_info.get('current_year', 1)
+        
+        # Make sure the week combo is populated
+        if self.week_combo.count() == 0:
+            self._populate_week_combo()
+        
+        # Find and select the correct week
+        week_display = get_week_display(current_week)
+        index = self.week_combo.findText(week_display)
+        if index >= 0:
+            self.week_combo.blockSignals(True)
+            self.week_combo.setCurrentIndex(index)
+            self.week_combo.blockSignals(False)
+        
+        # Update year spinner
+        self.year_spinner.setValue(current_year)
+        
+        # Display user-friendly week in status message - but only during initial load
+        # Don't override existing messages that might be showing important info
+        if not self.status_message.isVisible():
+            self._show_status_message(f"Current: {week_display}, Year {current_year}", error=False)
         
         # Update auto-save checkbox
         auto_save = self.event_manager.config.get('auto_save', False)
@@ -298,8 +397,9 @@ class FranchiseTab(QWidget):
         self.auto_save_checkbox.setChecked(auto_save)
         
         # Update season stage
-        season_stage = get_season_stage_for_week(franchise_info.get('current_week', PRE_SEASON))
-        index = self.season_stage_combo.findText(season_stage)
+        season_stage = get_season_stage_for_week(current_week)
+        stage_display = get_display_for_season_stage(season_stage)
+        index = self.season_stage_combo.findText(stage_display)
         if index >= 0:
             self.season_stage_combo.setCurrentIndex(index)
         
@@ -323,8 +423,8 @@ class FranchiseTab(QWidget):
         if save_file:
             # Remove .json extension for display purposes
             display_name = save_file
-            # if display_name.lower().endswith('.json'):
-            #     display_name = display_name[:-5]  # Remove the .json extension
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]  # Remove the .json extension
                 
             if auto_save:
                 self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
@@ -342,6 +442,20 @@ class FranchiseTab(QWidget):
         else:
             self._show_status_message("Team name cannot be empty", error=True)
     
+    def _on_week_combo_changed(self, index):
+        """Handle week combo box selection change"""
+        if index < 0:
+            return
+            
+        # Get the display text
+        display_text = self.week_combo.currentText()
+        
+        # Get the actual week number
+        week = self.week_map.get(display_text, 1)
+        
+        # Update season stage based on week
+        self._on_week_changed(week)
+    
     def _on_week_changed(self, week):
         """Update season stage when week changes"""
         # Block signals temporarily to avoid recursive loop
@@ -349,22 +463,32 @@ class FranchiseTab(QWidget):
         
         # Update the season stage dropdown
         stage = get_season_stage_for_week(week)
-        index = self.season_stage_combo.findText(stage)
+        stage_display = get_display_for_season_stage(stage)
+        index = self.season_stage_combo.findText(stage_display)
         if index >= 0:
             self.season_stage_combo.setCurrentIndex(index)
             
         # Re-enable signals
         self.season_stage_combo.blockSignals(False)
     
-    def _on_season_stage_changed(self, stage):
+    def _on_season_stage_changed(self, stage_display):
         """Update week when season stage changes"""
+        # Convert display value to backend value
+        stage = get_season_stage_from_display(stage_display)
+        
         # Get the week corresponding to the selected season stage
         week = get_week_for_season_stage(stage)
         
         # Block signals temporarily to avoid recursive loop
-        self.week_spinner.blockSignals(True)
-        self.week_spinner.setValue(week)
-        self.week_spinner.blockSignals(False)
+        self.week_combo.blockSignals(True)
+        
+        # Update the week combo to match
+        week_display = get_week_display(week)
+        index = self.week_combo.findText(week_display)
+        if index >= 0:
+            self.week_combo.setCurrentIndex(index)
+        
+        self.week_combo.blockSignals(False)
         
         # Also update the franchise info if auto-save is enabled
         if self.event_manager.config.get('auto_save', False):
@@ -372,12 +496,16 @@ class FranchiseTab(QWidget):
                 self.event_manager.config['franchise_info'] = {}
             
             self.event_manager.config['franchise_info']['current_week'] = week
-            self.event_manager.config['franchise_info']['season_stage'] = stage
+            self.event_manager.config['franchise_info']['season_stage'] = stage  # Store internal value
             self.event_manager.data_manager.save_config(self.event_manager.config)
     
     def _update_week_year(self):
         """Update the current week and year in the configuration"""
-        week = self.week_spinner.value()
+        # Get the display text
+        display_text = self.week_combo.currentText()
+        
+        # Get the actual week number from our map
+        week = self.week_map.get(display_text, 1)
         year = self.year_spinner.value()
         
         if week < 1 or week > 27:
@@ -398,10 +526,11 @@ class FranchiseTab(QWidget):
         
         # Also update the season stage to match the week
         stage = get_season_stage_for_week(week)
-        self.event_manager.config['franchise_info']['season_stage'] = stage
+        self.event_manager.config['franchise_info']['season_stage'] = stage  # Store internal value
         
         # Update the season stage dropdown to reflect the change
-        index = self.season_stage_combo.findText(stage)
+        stage_display = get_display_for_season_stage(stage)
+        index = self.season_stage_combo.findText(stage_display)
         if index >= 0:
             self.season_stage_combo.setCurrentIndex(index)
         
@@ -411,34 +540,45 @@ class FranchiseTab(QWidget):
         # Emit signal for week/year change
         self.week_year_changed.emit(week, year)
         
-        self._show_status_message(f"Week updated to {week}, Year updated to {year}", error=False)
+        # Use user-friendly week display in status message
+        self._show_status_message(f"Updated to {display_text}, Year {year}", error=False)
     
     def _update_season_stage(self):
         """Update the season stage in the configuration"""
-        stage = self.season_stage_combo.currentText()
+        stage_display = self.season_stage_combo.currentText()
+        stage = get_season_stage_from_display(stage_display)
         
         # Get franchise info or create if it doesn't exist
         if 'franchise_info' not in self.event_manager.config:
             self.event_manager.config['franchise_info'] = {}
         
         # Update config
-        self.event_manager.config['franchise_info']['season_stage'] = stage
+        self.event_manager.config['franchise_info']['season_stage'] = stage  # Store internal value
         
         # Also update the week to match the season stage
         week = get_week_for_season_stage(stage)
         self.event_manager.config['franchise_info']['current_week'] = week
         
-        # Update the week spinner to reflect the change
-        self.week_spinner.setValue(week)
+        # Update the week combo to reflect the change
+        week_display = get_week_display(week)
+        index = self.week_combo.findText(week_display)
+        if index >= 0:
+            self.week_combo.blockSignals(True)
+            self.week_combo.setCurrentIndex(index)
+            self.week_combo.blockSignals(False)
         
         # Save config
         self.event_manager.data_manager.save_config(self.event_manager.config)
         
-        self._show_status_message(f"Season stage updated to {stage}", error=False)
+        self._show_status_message(f"Season stage updated to {stage_display}", error=False)
     
     def _advance_week(self):
         """Advance to the next week, handling year transitions"""
-        week = self.week_spinner.value()
+        # Get the display text
+        display_text = self.week_combo.currentText()
+        
+        # Get the actual week number from our map
+        week = self.week_map.get(display_text, 1)
         year = self.year_spinner.value()
         
         # Advance to next week
@@ -449,8 +589,15 @@ class FranchiseTab(QWidget):
             week = 1  # First week of pre-season
             year += 1
         
-        # Update spinners
-        self.week_spinner.setValue(week)
+        # Update week combo
+        week_display = get_week_display(week)
+        index = self.week_combo.findText(week_display)
+        if index >= 0:
+            self.week_combo.blockSignals(True)
+            self.week_combo.setCurrentIndex(index)
+            self.week_combo.blockSignals(False)
+        
+        # Update year spinner
         self.year_spinner.setValue(year)
         
         # Update config
@@ -462,10 +609,11 @@ class FranchiseTab(QWidget):
         
         # Update season stage
         stage = get_season_stage_for_week(week)
-        self.event_manager.config['franchise_info']['season_stage'] = stage
+        self.event_manager.config['franchise_info']['season_stage'] = stage  # Store internal value
         
         # Update UI
-        index = self.season_stage_combo.findText(stage)
+        stage_display = get_display_for_season_stage(stage)
+        index = self.season_stage_combo.findText(stage_display)
         if index >= 0:
             self.season_stage_combo.setCurrentIndex(index)
         
@@ -475,7 +623,8 @@ class FranchiseTab(QWidget):
         # Emit signal
         self.week_year_changed.emit(week, year)
         
-        self._show_status_message(f"Advanced to Week {week}, Year {year}", error=False)
+        # Use user-friendly week display in status message
+        self._show_status_message(f"Advanced to {week_display}, Year {year}", error=False)
     
     def _update_difficulty(self):
         """Update the difficulty level"""
@@ -588,16 +737,22 @@ class FranchiseTab(QWidget):
     def set_week_year(self, week, year):
         """Update the week/year spinners."""
         # Block signals temporarily to avoid triggering update cycles
-        self.week_spinner.blockSignals(True)
+        self.week_combo.blockSignals(True)
         self.year_spinner.blockSignals(True)
         
-        self.week_spinner.setValue(week)
+        # Find and select the correct week
+        week_display = get_week_display(week)
+        index = self.week_combo.findText(week_display)
+        if index >= 0:
+            self.week_combo.setCurrentIndex(index)
+            
         self.year_spinner.setValue(year)
         
         # Update season stage to match the week
         stage = get_season_stage_for_week(week)
-        self.season_stage_combo.setCurrentText(stage)
+        stage_display = get_display_for_season_stage(stage)
+        self.season_stage_combo.setCurrentText(stage_display)
         
         # Re-enable signals
-        self.week_spinner.blockSignals(False)
+        self.week_combo.blockSignals(False)
         self.year_spinner.blockSignals(False) 

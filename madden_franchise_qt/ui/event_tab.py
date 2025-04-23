@@ -3,8 +3,11 @@ from PySide6.QtWidgets import (
     QPushButton, QGroupBox, QTextEdit, QMessageBox,
     QFrame, QSizePolicy
 )
-from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QSize
+from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QSize, QTimer
 from PySide6.QtGui import QFont, QColor, QPalette
+
+# Import get_week_display function
+from madden_franchise_qt.ui.franchise_tab import get_week_display
 
 
 class EventTab(QWidget):
@@ -137,7 +140,12 @@ class EventTab(QWidget):
         # Display current season stage
         current_stage = self.event_manager.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
         week, year = self.event_manager.get_current_week_year()
-        self.status_message.setText(f"Current season stage: {current_stage} - Week {week}, Year {year}")
+        
+        # Convert week number to user-friendly display
+        week_display = get_week_display(week)
+        
+        # Include the internal stage name for debugging
+        self.status_message.setText(f"Current season stage: {current_stage} - {week_display}, Year {year}")
         self.status_message.setVisible(True)
         
         # Clear event display if no current event
@@ -155,8 +163,10 @@ class EventTab(QWidget):
         event = self.event_manager.roll_event()
         
         if not event:
+            current_stage = self.event_manager.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
             self._show_status_message(
-                f"No eligible events found for the current difficulty and season stage ({self.event_manager.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')}).",
+                f"No eligible events found for the current difficulty ({self.event_manager.get_difficulty()}) " +
+                f"and season stage ({current_stage}).",
                 error=True
             )
             return
@@ -269,7 +279,6 @@ class EventTab(QWidget):
             self.result_group.setStyleSheet(original_style)
         
         # Use single-shot timer to reset
-        from PySide6.QtCore import QTimer
         QTimer.singleShot(300, reset_style)
     
     def _accept_event(self):
@@ -309,7 +318,6 @@ class EventTab(QWidget):
         self.status_message.setVisible(True)
         
         # Hide the message after 5 seconds
-        from PySide6.QtCore import QTimer
         QTimer.singleShot(5000, lambda: self.status_message.setVisible(False))
     
     def _add_player_name(self):

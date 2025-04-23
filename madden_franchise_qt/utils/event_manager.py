@@ -117,21 +117,28 @@ class EventManager:
         difficulty = self.get_difficulty()
         eligible_events = []
         
-        # Get current season stage
+        # Get current season stage - ensure we're using the internal constant, not the display value
         current_season_stage = self.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
         
-        # Define season stage mapping (allows events to specify multiple stages)
+        # Define both internal stage names and their mappings
         stage_mapping = {
+            # Internal stage names
             "Pre-Season": ["pre-season", "any"],
+            "regular-season-start": ["regular-season", "regular-season-start", "any"],
+            "regular-season-mid": ["regular-season", "regular-season-mid", "any"],
+            "regular-season-end": ["regular-season", "regular-season-end", "any"],
+            "Post-Season": ["post-season", "playoffs", "any"],
+            "Off-Season": ["off-season", "offseason", "any"],
+            # Handle old display names for backward compatibility
             "Regular Season Start": ["regular-season", "regular-season-start", "any"],
             "Regular Season Mid": ["regular-season", "regular-season-mid", "any"],
-            "Regular Season End": ["regular-season", "regular-season-end", "any"],
-            "Post-Season": ["post-season", "playoffs", "any"],
-            "Off-Season": ["off-season", "offseason", "any"]
+            "Regular Season End": ["regular-season", "regular-season-end", "any"]
         }
         
         # Determine allowed season stages for the current stage
         allowed_stages = stage_mapping.get(current_season_stage, ["any"])
+        if allowed_stages == ["any"]:
+            print(f"WARNING: Unknown season stage '{current_season_stage}', defaulting to 'any'")
         
         # Filter events based on difficulty weights and season stage
         for event in self.events.get('events', []):
@@ -245,14 +252,33 @@ class EventManager:
                 description = description.replace('{opponent_team}', opponent_team)
                 processed_event['selected_opponent_team'] = opponent_team
         
+        # Handle user options in branching events
+        if 'options' in processed_event:
+            # Process each option to fill in placeholders
+            for option in processed_event['options']:
+                # Replace placeholders in option descriptions
+                option_description = option.get('description', '')
+                
+                # Replace target placeholder
+                if 'selected_target' in processed_event:
+                    option_description = option_description.replace('{target}', processed_event['selected_target'])
+                
+                # Replace reason placeholder
+                if 'selected_reason' in processed_event:
+                    option_description = option_description.replace('{reason}', processed_event['selected_reason'])
+                
+                # Store processed description
+                option['processed_description'] = option_description
+        
         processed_event['processed_description'] = description
         return processed_event
     
-    def _add_to_history(self, event):
+    def _add_to_history(self, event, selected_option=None):
         """Add an event to the history
         
         Args:
             event: The event to add to history
+            selected_option: The option selected by the user for branching events
         """
         history_entry = {
             'event_id': event['id'],
@@ -265,8 +291,39 @@ class EventManager:
             'selected_target': event.get('selected_target', 'N/A')  # Include player/position
         }
         
+        # Add selected option information if this was a branching event
+        if selected_option is not None:
+            history_entry['selected_option'] = {
+                'description': selected_option.get('processed_description', selected_option.get('description', '')),
+                'impact': selected_option.get('impact', '')
+            }
+        
         # Add to in-memory event history (not directly to config)
         self.event_history.append(history_entry)
+    
+    def select_event_option(self, event, option_index):
+        """Select an option for a branching event
+        
+        Args:
+            event: The event being responded to
+            option_index: The index of the option selected by user
+            
+        Returns:
+            dict: The processed option with impact details
+        """
+        if 'options' not in event or option_index >= len(event['options']):
+            return None
+        
+        # Get the selected option
+        selected_option = event['options'][option_index]
+        
+        # Add to history with the selected option
+        self._add_to_history(event, selected_option)
+        
+        # Auto-save if enabled
+        self._try_auto_save()
+        
+        return selected_option
     
     def get_event_history(self):
         """Get the event history
@@ -363,6 +420,9 @@ class EventManager:
         Returns:
             bool: True if successful
         """
-        self._add_to_history(event)
-        self._try_auto_save()  # Ignore return value, event acceptance is the main task
+        # For branching events, don't add to history here - wait for option selection
+        if 'options' not in event:
+            self._add_to_history(event)
+            self._try_auto_save()  # Ignore return value, event acceptance is the main task
+        
         return True 
