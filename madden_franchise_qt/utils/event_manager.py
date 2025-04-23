@@ -121,7 +121,7 @@ class EventManager:
             "Trade Deadline (Week 8)": ["trade-deadline", "regular-season", "any"],
             "Regular Season (Weeks 9-18)": ["regular-season", "weeks-9-18", "any"],
             "Playoffs": ["playoffs", "any"],
-            "Free Agency": ["free-agency", "any"]
+            "Offseason": ["offseason", "any"]
         }
         
         # Determine allowed season stages for the current stage
