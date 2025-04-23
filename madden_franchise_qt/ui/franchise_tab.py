@@ -88,7 +88,7 @@ class FranchiseTab(QWidget):
             "Trade Deadline (Week 8)",
             "Regular Season (Weeks 9-18)",
             "Playoffs",
-            "Free Agency"
+            "Offseason"
         ])
         season_stage_layout.addWidget(self.season_stage_combo)
         
