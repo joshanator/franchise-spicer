@@ -100,9 +100,20 @@ The difficulty setting affects the types of events that can occur:
 - Player callouts and challenges
 - Season-long performance challenges
 
+## Save File Location
+
+The application stores save files and configuration data in the following locations:
+
+- **When running from source code**: Files are stored in the `madden_franchise_qt/data` and `madden_franchise_qt/saves` directories within the project folder.
+
+- **When running as an executable**:
+  - **Windows**: `C:\Users\{username}\AppData\Local\MaddenTools\MaddenFranchiseGenerator`
+  - **macOS**: `/Users/{username}/Library/Application Support/MaddenTools/MaddenFranchiseGenerator`
+  - **Linux**: `~/.local/share/MaddenTools/MaddenFranchiseGenerator`
+
 ## Adding Custom Events
 
-You can add custom events by modifying the `events.json` file in the `madden_franchise_qt/data` directory.
+You can add custom events by modifying the `events.json` file in the data directory.
 
 ## Cross-Platform Support
 

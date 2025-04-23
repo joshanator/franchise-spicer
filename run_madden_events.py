@@ -20,6 +20,13 @@ try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "PySide6"])
         print("PySide6 successfully installed.")
     
+    # Check if appdirs is installed
+    if importlib.util.find_spec("appdirs") is None:
+        print("appdirs is not installed. Installing...")
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "appdirs"])
+        print("appdirs successfully installed.")
+    
     # Import and run the application
     from madden_franchise_qt.main import main
     main()

@@ -161,12 +161,20 @@ def build_executable():
                 f.write("To run the application:\n")
                 if system == "Windows":
                     f.write(f"- Double-click the '{app_name}.exe' file\n")
+                    save_location = r"C:\Users\{username}\AppData\Local\MaddenTools\MaddenFranchiseGenerator"
                 elif system == "Darwin":
                     f.write(f"- Double-click the '{app_name}.app' file\n")
                     f.write("- If you get a security warning, right-click the app and select 'Open'\n")
+                    save_location = r"/Users/{username}/Library/Application Support/MaddenTools/MaddenFranchiseGenerator"
                 else:
                     f.write(f"- Make the file executable: chmod +x '{app_name}'\n")
                     f.write(f"- Run it: ./{app_name}\n")
+                    save_location = r"~/.local/share/MaddenTools/MaddenFranchiseGenerator"
+                
+                f.write("\nSave files and configuration:\n")
+                f.write(f"- Your save files will be stored in: {save_location}\n")
+                f.write("- This location is created automatically when you run the application\n")
+                f.write("- If you need to backup your save files, this is where to find them\n")
             
             print(f"Created README at: {os.path.abspath(readme_path)}")
             
@@ -221,6 +229,12 @@ if __name__ == "__main__":
     
     # Check for PyInstaller
     check_pyinstaller()
+    
+    # Check if appdirs is installed
+    if importlib.util.find_spec("appdirs") is None:
+        print("appdirs is not installed. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "appdirs>=1.4.4"])
+        print("appdirs successfully installed.")
     
     # Build the executable
     build_executable() 
