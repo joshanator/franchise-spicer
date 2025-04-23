@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Launcher for Madden 25 Franchise Event Generator
+Launcher for Madden Franchise Event Generator
 """
 
 import os

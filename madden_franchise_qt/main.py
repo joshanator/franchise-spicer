@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Madden 25 Franchise Event Generator
+Madden Franchise Event Generator
 ----------------------------------
-A tool to create random events for Madden 25 franchise mode.
+A tool to create random events for Madden franchise mode.
 """
 
 import sys
@@ -15,7 +15,7 @@ from madden_franchise_qt.utils.data_manager import DataManager
 
 def set_application_metadata():
     """Set application metadata"""
-    QCoreApplication.setApplicationName("Madden 25 Franchise Event Generator")
+    QCoreApplication.setApplicationName("Madden Franchise Event Generator")
     QCoreApplication.setOrganizationName("Madden Tools")
     QCoreApplication.setApplicationVersion("1.0")
 
