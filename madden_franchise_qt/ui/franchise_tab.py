@@ -2,7 +2,7 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QSpinBox, QLineEdit, QGroupBox,
     QRadioButton, QMessageBox, QButtonGroup, QComboBox,
-    QCheckBox, QFormLayout
+    QCheckBox, QFormLayout, QScrollArea, QSizePolicy
 )
 from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QFont
@@ -138,58 +138,102 @@ class FranchiseTab(QWidget):
         self.status_message.setVisible(False)
         main_layout.addWidget(self.status_message)
         
+        # Create a scroll area to contain all content
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFrameShape(QScrollArea.NoFrame)  # Remove the frame
+        
+        # Create a container widget for the scroll area
+        scroll_content = QWidget()
+        scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setSpacing(15)
+        
         # Create franchise info section
         info_group = QGroupBox("Franchise Information")
         info_layout = QFormLayout()
+        info_layout.setSpacing(10)  # Add spacing between form rows
+        info_layout.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)  # Allow fields to expand
+        info_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)  # Align labels to the left
         info_group.setLayout(info_layout)
         
         # Team name
         team_layout = QHBoxLayout()
-        team_layout.addWidget(QLabel("Team Name:"))
+        team_layout.setSpacing(10)  # Add spacing between elements
         self.team_name_edit = QLineEdit()
-        team_layout.addWidget(self.team_name_edit)
+        self.team_name_edit.setMinimumHeight(30)  # Consistent height
+        team_layout.addWidget(self.team_name_edit, 1)  # Give the edit field stretch priority
         self.update_team_button = QPushButton("Update")
+        self.update_team_button.setMinimumHeight(30)  # Consistent height
+        self.update_team_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  # Don't stretch button
         self.update_team_button.clicked.connect(self._update_team_name)
         team_layout.addWidget(self.update_team_button)
-        info_layout.addRow(QLabel("Team Name:"), team_layout)
-        
-        # Week and year
-        week_year_layout = QHBoxLayout()
+        info_layout.addRow("Team Name:", team_layout)
+
+        # Week and year - Wrap in FlowLayout or make responsive
+        week_year_widget = QWidget()
+        week_year_layout = QVBoxLayout(week_year_widget)  # Changed to vertical for better small window handling
+        week_year_layout.setSpacing(10)
+        week_year_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
         
         # Week
         week_layout = QHBoxLayout()
-        week_layout.addWidget(QLabel("Current Week:"))
+        week_layout.setSpacing(5)
+        week_label = QLabel("Current Week:")
+        week_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        week_layout.addWidget(week_label)
         
         # Replace spinner with combo box for user-friendly display
         self.week_combo = QComboBox()
         self.week_combo.setMinimumHeight(30)
+        self.week_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         # Populate with all possible weeks and their display names
         self._populate_week_combo()
         self.week_combo.currentIndexChanged.connect(self._on_week_combo_changed)
         week_layout.addWidget(self.week_combo)
-        
         week_year_layout.addLayout(week_layout)
         
         # Year
         year_layout = QHBoxLayout()
-        year_layout.addWidget(QLabel("Current Year:"))
+        year_layout.setSpacing(5)
+        year_label = QLabel("Current Year:")
+        year_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        year_layout.addWidget(year_label)
         self.year_spinner = QSpinBox()
         self.year_spinner.setRange(1, 30)
         self.year_spinner.setValue(1)
+        self.year_spinner.setMinimumHeight(30)
+        self.year_spinner.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         year_layout.addWidget(self.year_spinner)
         week_year_layout.addLayout(year_layout)
         
-        # Update button
+        # Update button in its own row
+        update_layout = QHBoxLayout()
         self.update_week_year_button = QPushButton("Update Week/Year")
+        self.update_week_year_button.setMinimumHeight(30)
         self.update_week_year_button.clicked.connect(self._update_week_year)
-        week_year_layout.addWidget(self.update_week_year_button)
+        update_layout.addWidget(self.update_week_year_button)
+        update_layout.addStretch(1)  # Push button to the left
+        week_year_layout.addLayout(update_layout)
         
-        info_layout.addRow(QLabel("Current Week:"), week_year_layout)
+        info_layout.addRow("", week_year_widget)
         
         # Season stage dropdown
-        season_stage_layout = QHBoxLayout()
-        season_stage_layout.addWidget(QLabel("Current Season Stage:"))
+        season_stage_widget = QWidget()
+        season_stage_layout = QVBoxLayout(season_stage_widget)
+        season_stage_layout.setContentsMargins(0, 0, 0, 0)
+        season_stage_layout.setSpacing(10)
+        
+        # Label and dropdown in one row
+        stage_combo_layout = QHBoxLayout()
+        stage_combo_layout.setSpacing(10)
+        
+        season_stage_label = QLabel("Current Season Stage:")
+        season_stage_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        stage_combo_layout.addWidget(season_stage_label)
+        
         self.season_stage_combo = QComboBox()
+        self.season_stage_combo.setMinimumHeight(30)
+        self.season_stage_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.season_stage_combo.addItems([
             PRE_SEASON_DISPLAY,
             REGULAR_SEASON_START_DISPLAY,
@@ -199,21 +243,30 @@ class FranchiseTab(QWidget):
             OFF_SEASON_DISPLAY
         ])
         self.season_stage_combo.currentTextChanged.connect(self._on_season_stage_changed)
-        season_stage_layout.addWidget(self.season_stage_combo)
+        stage_combo_layout.addWidget(self.season_stage_combo)
+        season_stage_layout.addLayout(stage_combo_layout)
         
-        # Season stage update button
+        # Update button in its own row
+        stage_update_layout = QHBoxLayout()
         self.update_season_stage_button = QPushButton("Update Season Stage")
+        self.update_season_stage_button.setMinimumHeight(30)
         self.update_season_stage_button.clicked.connect(self._update_season_stage)
-        season_stage_layout.addWidget(self.update_season_stage_button)
+        stage_update_layout.addWidget(self.update_season_stage_button)
+        stage_update_layout.addStretch(1)
+        season_stage_layout.addLayout(stage_update_layout)
         
-        info_layout.addRow(QLabel("Current Season Stage:"), season_stage_layout)
+        info_layout.addRow("", season_stage_widget)
         
-        # Advance week button
+        # Advance week button - in its own row
+        advance_layout = QHBoxLayout()
         self.advance_button = QPushButton("Advance to Next Week")
+        self.advance_button.setMinimumHeight(30)
         self.advance_button.clicked.connect(self._advance_week)
-        info_layout.addWidget(self.advance_button)
+        advance_layout.addWidget(self.advance_button)
+        advance_layout.addStretch(1)  # Push button to the left
+        info_layout.addRow("", advance_layout)
         
-        main_layout.addWidget(info_group)
+        scroll_layout.addWidget(info_group)
         
         # Difficulty section
         difficulty_group = QGroupBox("Event Difficulty")
@@ -223,10 +276,12 @@ class FranchiseTab(QWidget):
         
         # Create horizontal layout for difficulty selection
         difficulty_selection_layout = QHBoxLayout()
+        difficulty_selection_layout.setSpacing(10)
         
         # Create dropdown for difficulty
         difficulty_label = QLabel("Select difficulty level:")
         difficulty_label.setFont(QFont("Arial", 10))
+        difficulty_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         difficulty_selection_layout.addWidget(difficulty_label)
         
         self.difficulty_combo = QComboBox()
@@ -238,24 +293,22 @@ class FranchiseTab(QWidget):
             "Diabolical - Extreme challenges"
         ])
         self.difficulty_combo.setMinimumHeight(30)
-        # Set a fixed width for the combobox to prevent it from stretching
-        self.difficulty_combo.setMinimumWidth(200)
-        self.difficulty_combo.setMaximumWidth(300)
+        self.difficulty_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         difficulty_selection_layout.addWidget(self.difficulty_combo)
-        
-        # Add stretch to push elements toward the middle/left
-        difficulty_selection_layout.addStretch(1)
         
         # Add the selection layout to the main difficulty layout
         difficulty_layout.addLayout(difficulty_selection_layout)
         
         # Update button
+        update_difficulty_layout = QHBoxLayout()
         self.update_difficulty_button = QPushButton("Update Difficulty")
         self.update_difficulty_button.setMinimumHeight(30)
         self.update_difficulty_button.clicked.connect(self._update_difficulty)
-        difficulty_layout.addWidget(self.update_difficulty_button)
+        update_difficulty_layout.addWidget(self.update_difficulty_button)
+        update_difficulty_layout.addStretch(1)  # Push button to the left
+        difficulty_layout.addLayout(update_difficulty_layout)
         
-        main_layout.addWidget(difficulty_group)
+        scroll_layout.addWidget(difficulty_group)
         
         # Save management section
         save_group = QGroupBox("Save Management")
@@ -263,25 +316,35 @@ class FranchiseTab(QWidget):
         save_layout.setSpacing(15)
         save_layout.setContentsMargins(15, 20, 15, 20)
         
-        # Buttons layout
-        buttons_layout = QHBoxLayout()
-        buttons_layout.setSpacing(10)
+        # Buttons layout - make buttons wrap when window is small
+        buttons_widget = QWidget()
+        buttons_flow_layout = QVBoxLayout(buttons_widget)  # Changed to vertical layout for better small window handling
+        buttons_flow_layout.setSpacing(10)
+        buttons_flow_layout.setContentsMargins(0, 0, 0, 0)
         
+        # First row of buttons
+        buttons_row1 = QHBoxLayout()
         self.new_franchise_button = QPushButton("New Franchise")
         self.new_franchise_button.clicked.connect(self._new_franchise)
-        buttons_layout.addWidget(self.new_franchise_button)
+        buttons_row1.addWidget(self.new_franchise_button)
         
         self.save_franchise_button = QPushButton("Save")
         self.save_franchise_button.clicked.connect(self._save_franchise)
-        buttons_layout.addWidget(self.save_franchise_button)
+        buttons_row1.addWidget(self.save_franchise_button)
+        buttons_row1.addStretch(1)
+        buttons_flow_layout.addLayout(buttons_row1)
         
+        # Second row of buttons
+        buttons_row2 = QHBoxLayout()
         self.save_as_franchise_button = QPushButton("Save As...")
         self.save_as_franchise_button.clicked.connect(self._save_franchise_as)
-        buttons_layout.addWidget(self.save_as_franchise_button)
+        buttons_row2.addWidget(self.save_as_franchise_button)
         
         self.load_franchise_button = QPushButton("Load Franchise")
         self.load_franchise_button.clicked.connect(self._load_franchise)
-        buttons_layout.addWidget(self.load_franchise_button)
+        buttons_row2.addWidget(self.load_franchise_button)
+        buttons_row2.addStretch(1)
+        buttons_flow_layout.addLayout(buttons_row2)
         
         # Make buttons consistent height
         self.new_franchise_button.setMinimumHeight(30)
@@ -289,9 +352,10 @@ class FranchiseTab(QWidget):
         self.save_as_franchise_button.setMinimumHeight(30)
         self.load_franchise_button.setMinimumHeight(30)
         
-        save_layout.addLayout(buttons_layout)
+        save_layout.addWidget(buttons_widget)
         
-        # Auto-save checkbox
+        # Auto-save checkbox layout
+        auto_save_layout = QHBoxLayout()
         self.auto_save_checkbox = QCheckBox("Auto-save when changes are made")
         self.auto_save_checkbox.setMinimumHeight(30)
         self.auto_save_checkbox.setToolTip("Automatically save the franchise file when making any changes")
@@ -300,13 +364,20 @@ class FranchiseTab(QWidget):
         self.auto_save_checkbox.setCheckState(Qt.Unchecked)  # Start unchecked
         # Connect to our handler
         self.auto_save_checkbox.stateChanged.connect(self._toggle_auto_save)
-        save_layout.addWidget(self.auto_save_checkbox)
+        auto_save_layout.addWidget(self.auto_save_checkbox)
+        auto_save_layout.addStretch(1)  # Push checkbox to the left
+        save_layout.addLayout(auto_save_layout)
         
-        # Current save file
+        # Current save file layout
+        save_file_layout = QHBoxLayout()
         self.save_file_label = QLabel("No save file loaded")
-        save_layout.addWidget(self.save_file_label)
+        self.save_file_label.setMinimumHeight(30)
+        self.save_file_label.setWordWrap(True)  # Allow long filenames to wrap
+        save_file_layout.addWidget(self.save_file_label)
+        save_file_layout.addStretch(1)  # Push label to the left
+        save_layout.addLayout(save_file_layout)
         
-        main_layout.addWidget(save_group)
+        scroll_layout.addWidget(save_group)
         
         # Instructions
         instructions_group = QGroupBox("Instructions")
@@ -326,12 +397,19 @@ class FranchiseTab(QWidget):
         
         instructions = QLabel(instructions_text)
         instructions.setWordWrap(True)
+        instructions.setFont(QFont("Arial", 10))
+        instructions.setStyleSheet("padding: 5px;")
+        instructions.setMinimumHeight(120)  # Give enough height for the text
         instructions_layout.addWidget(instructions)
         
-        main_layout.addWidget(instructions_group)
+        scroll_layout.addWidget(instructions_group)
         
-        # Stretch to fill space
-        main_layout.addStretch()
+        # Set the scroll content as the scroll area's widget
+        scroll_area.setWidget(scroll_content)
+        main_layout.addWidget(scroll_area)
+        
+        # Set minimum size for whole tab
+        self.setMinimumWidth(500)  # Minimum width that looks reasonable
         
         # Load current data
         self.refresh()
