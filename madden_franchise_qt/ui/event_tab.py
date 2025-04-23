@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QGroupBox, QTextEdit, QMessageBox,
-    QFrame, QSizePolicy
+    QFrame, QSizePolicy, QDialog, QScrollArea, QInputDialog
 )
 from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QSize, QTimer
 from PySide6.QtGui import QFont, QColor, QPalette
@@ -173,6 +173,11 @@ class EventTab(QWidget):
         
         self.current_event = event
         
+        # Check if this event has options - if so, immediately show the options dialog
+        if 'options' in event:
+            self._show_options_dialog(event)
+            return
+        
         # Check if this event has a target player without a name
         has_unnamed_player = False
         if event.get('target_options'):
@@ -286,11 +291,24 @@ class EventTab(QWidget):
         if not self.current_event:
             return
         
-        # Add the event to history only when accepted
-        if self.event_manager.accept_event(self.current_event):
-            self._show_status_message("Event has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
+        # For normal events, add directly to history
+        # For events with options, check if an option has been selected
+        has_selected_option = 'selected_option' in self.current_event
+        
+        if has_selected_option:
+            # For events with selected options, pass the option index
+            option_index = self.current_event.get('selected_option')
+            if self.event_manager.select_event_option(self.current_event, option_index):
+                option_desc = self.current_event.get('selected_option_description', '')
+                self._show_status_message(f"Event with option '{option_desc}' has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
+            else:
+                self._show_status_message("Failed to record event choice to history", error=True)
         else:
-            self._show_status_message("Failed to record event to history", error=True)
+            # For events without options, add directly to history
+            if self.event_manager.accept_event(self.current_event):
+                self._show_status_message("Event has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
+            else:
+                self._show_status_message("Failed to record event to history", error=True)
         
         # Reset for next event
         self.current_event = None
@@ -301,6 +319,100 @@ class EventTab(QWidget):
         main_window = self.window()
         if hasattr(main_window, 'history_tab') and hasattr(main_window.history_tab, 'refresh'):
             main_window.history_tab.refresh()
+    
+    def _show_options_dialog(self, event):
+        """Show a dialog with options for the user to choose from
+        
+        Args:
+            event: The event with options
+        """
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle(f"Choose an Option - {event.get('title', 'Event')}")
+        dialog.setMinimumWidth(500)
+        dialog.setMinimumHeight(300)
+        
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Add event description
+        description = QLabel(event.get('processed_description', event.get('description', '')))
+        description.setWordWrap(True)
+        description.setStyleSheet("font-size: 12px; margin-bottom: 10px;")
+        layout.addWidget(description)
+        
+        # Create scroll area for options
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll_content = QWidget()
+        options_layout = QVBoxLayout(scroll_content)
+        
+        # Add options as buttons
+        options = event.get('options', [])
+        for i, option in enumerate(options):
+            option_text = option.get('processed_description', option.get('description', f"Option {i+1}"))
+            impact_text = option.get('impact', '')
+            
+            option_button = QPushButton(option_text)
+            option_button.setStyleSheet("text-align: left; padding: 10px; font-size: 12px;")
+            option_button.setMinimumHeight(60)
+            
+            # Set tooltip to show impact
+            if impact_text:
+                option_button.setToolTip(f"Impact: {impact_text}")
+            
+            # Connect button to option selection
+            option_index = i  # Need to capture current value of i
+            option_button.clicked.connect(lambda checked=False, idx=option_index: self._select_option(event, idx, dialog))
+            
+            options_layout.addWidget(option_button)
+        
+        scroll.setWidget(scroll_content)
+        layout.addWidget(scroll)
+        
+        # Show dialog
+        dialog.exec()
+    
+    def _select_option(self, event, option_index, dialog):
+        """Handle option selection
+        
+        Args:
+            event: The event
+            option_index: The index of the selected option
+            dialog: The dialog to close
+        """
+        # Close the dialog
+        dialog.accept()
+        
+        # Get the selected option
+        option = event.get('options', [])[option_index]
+        option_description = option.get('processed_description', option.get('description', ''))
+        option_impact = option.get('impact', '')
+        
+        # Store the selected option in the event
+        event['selected_option'] = option_index
+        event['selected_option_description'] = option_description
+        event['selected_option_impact'] = option_impact
+        
+        # Update the display to show the selected option
+        self.event_title.setText(f"{event.get('title', 'Unknown Event')} - Option Selected")
+        
+        # Update description to include the chosen option
+        description = event.get('processed_description', event.get('description', ''))
+        self.description_text.setPlainText(f"{description}\n\nYou selected: {option_description}")
+        
+        # Update impact to show the option's impact
+        self.impact_text.setPlainText(option_impact)
+        
+        # Keep buttons enabled so user can accept or re-roll
+        self.accept_button.setEnabled(True)
+        self.reroll_button.setEnabled(True)
+        
+        # Show a status message confirming the selection
+        self._show_status_message(f"Option selected: {option_description}. Click 'Accept Event' to confirm or 'Re-roll Event' to try again.")
+        
+        # Animate the result to draw attention to the updated display
+        self._animate_result()
     
     def _show_status_message(self, message, error=False):
         """Show a status message
@@ -326,7 +438,6 @@ class EventTab(QWidget):
             return
             
         # Create an input dialog to get the player name
-        from PySide6.QtWidgets import QInputDialog
         player_name, ok = QInputDialog.getText(
             self, 
             "Add Player Name", 
