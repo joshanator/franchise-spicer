@@ -8,9 +8,11 @@
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "C1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "reason_options": ["injury concerns", "family reasons", "career change", "mental health"],
       "difficulty_weights": {
-        "easy": 0,
-        "medium": 0.05,
-        "hard": 0.1
+        "cupcake": 0,
+        "rookie": 0.02,
+        "pro": 0.05,
+        "all-madden": 0.08,
+        "diabolical": 0.1
       },
       "category": "roster",
       "season_stages": ["pre-season", "off-season"]
@@ -23,9 +25,11 @@
       "reason_options": ["salary cap violation", "tampering", "illegal practice sessions", "recruitment violations"],
       "round_options": ["1st", "2nd", "3rd", "4th"],
       "difficulty_weights": {
-        "easy": 0.2,
-        "medium": 0.4,
-        "hard": 0.6
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.8
       },
       "category": "team",
       "season_stages": ["pre-season", "off-season"]
@@ -37,9 +41,11 @@
       "impact": "Player unavailable for specified number of games",
       "games_options": [1, 2, 3, 4, 6, 8],
       "difficulty_weights": {
-        "easy": 0.4,
-        "medium": 0.6,
-        "hard": 0.8
+        "cupcake": 0.2,
+        "rookie": 0.4,
+        "pro": 0.6,
+        "all-madden": 0.8,
+        "diabolical": 1.0
       },
       "category": "contract",
       "season_stages": ["pre-season"]
@@ -51,9 +57,11 @@
       "impact": "Lower stamina by 5, speed/acceleration by 1, and raise weight by 10",
       "target_options": ["RB1", "RB2", "WR1", "WR2", "WR3", "TE1", "LOLB1", "MLB1", "ROLB1", "CB1", "CB2"],
       "difficulty_weights": {
-        "easy": 0.5,
-        "medium": 0.7,
-        "hard": 0.9
+        "cupcake": 0.3,
+        "rookie": 0.5,
+        "pro": 0.7,
+        "all-madden": 0.9,
+        "diabolical": 1.0
       },
       "category": "attribute",
       "season_stages": ["pre-season"]
@@ -69,9 +77,11 @@
         {"result": "lost", "impact_text": "Speed decreases by 1", "probability": 0.7}
       ],
       "difficulty_weights": {
-        "easy": 0.5,
-        "medium": 0.5,
-        "hard": 0.5
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
       },
       "category": "attribute",
       "season_stages": ["pre-season", "off-season"]
@@ -83,9 +93,11 @@
       "impact": "+1 permanent awareness boost and must start the next 2 weeks regardless of performance",
       "target_options": ["QB2", "RB2", "RB3", "WR3", "WR4", "TE2", "CB3", "FS2"],
       "difficulty_weights": {
-        "easy": 0.6,
-        "medium": 0.5,
-        "hard": 0.4
+        "cupcake": 0.7,
+        "rookie": 0.6,
+        "pro": 0.5,
+        "all-madden": 0.4, 
+        "diabolical": 0.3
       },
       "category": "lineup",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
@@ -98,9 +110,11 @@
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LE1", "DT1", "MLB1", "CB1", "SS1"],
       "games_options": [2, 4, 6, 8],
       "difficulty_weights": {
-        "easy": 0.3,
-        "medium": 0.5,
-        "hard": 0.7
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.7,
+        "diabolical": 0.9
       },
       "category": "suspension",
       "season_stages": ["pre-season", "regular-season-start", "regular-season-mid", "regular-season-end"]
@@ -113,9 +127,11 @@
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "LG1", "C1", "RG1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "games_options": [4, 8, 16, "season"],
       "difficulty_weights": {
-        "easy": 0.2,
-        "medium": 0.4,
-        "hard": 0.6
+        "cupcake": 0.05,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.8
       },
       "category": "suspension",
       "season_stages": ["pre-season", "regular-season-start", "regular-season-mid", "regular-season-end"]
@@ -127,9 +143,11 @@
       "impact": "Team morale decreased, -4 awareness for player",
       "target_options": ["WR1", "WR2", "CB1", "FS1", "SS1", "RB1"],
       "difficulty_weights": {
-        "easy": 0.4,
-        "medium": 0.6,
-        "hard": 0.8
+        "cupcake": 0.2,
+        "rookie": 0.4,
+        "pro": 0.6,
+        "all-madden": 0.8,
+        "diabolical": 1.0
       },
       "category": "team",
       "season_stages": ["pre-season", "regular-season-start", "regular-season-mid", "regular-season-end"]
@@ -147,9 +165,11 @@
         {"position1": "TE1", "opponent_position": "SS1"}
       ],
       "difficulty_weights": {
-        "easy": 0.5,
-        "medium": 0.5,
-        "hard": 0.5
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
       },
       "category": "challenge",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
@@ -161,9 +181,11 @@
       "impact": "If he doesn't reach 2,000 yards, drop dev trait by one level",
       "target_options": ["RB1"],
       "difficulty_weights": {
-        "easy": 0.3,
-        "medium": 0.5,
-        "hard": 0.7
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.7,
+        "diabolical": 0.9
       },
       "category": "challenge",
       "season_stages": ["pre-season"]
@@ -175,9 +197,11 @@
       "impact": "Add the player to trade finder and select an offer (no counter offers allowed). If no offers are available, the player must be cut or sit out the next 5 games.",
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "LG1", "C1", "RG1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "difficulty_weights": {
-        "easy": 0.3,
-        "medium": 0.5,
-        "hard": 0.7
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.7,
+        "diabolical": 0.9
       },
       "category": "trade",
       "season_stages": ["regular-season-mid"]

@@ -383,12 +383,12 @@ class MainWindow(QMainWindow):
     
     def set_difficulty(self):
         """Set the difficulty level"""
-        difficulties = ["easy", "medium", "hard"]
+        difficulties = ["cupcake", "rookie", "pro", "all-madden", "diabolical"]
         current = self.event_manager.get_difficulty()
         
         difficulty, ok = QInputDialog.getItem(
             self, "Set Difficulty", "Select difficulty level:", 
-            difficulties, difficulties.index(current), False
+            difficulties, difficulties.index(current) if current in difficulties else 2, False
         )
         
         if ok and difficulty:
@@ -422,9 +422,11 @@ class MainWindow(QMainWindow):
         </ol>
         <p><b>Event difficulty affects how challenging the events will be for your franchise.</b></p>
         <ul>
-            <li>Easy: More positive events, less negative</li>
-            <li>Medium: Balanced mix of events</li>
-            <li>Hard: More challenges and negative events</li>
+            <li>Cupcake: Very few negative events, more positive outcomes</li>
+            <li>Rookie: Fewer challenges, suitable for casual play</li>
+            <li>Pro: Balanced mix of events (default)</li>
+            <li>All-Madden: More challenges and negative events</li>
+            <li>Diabolical: Extreme challenges, for the masochistic player</li>
         </ul>
         """
         

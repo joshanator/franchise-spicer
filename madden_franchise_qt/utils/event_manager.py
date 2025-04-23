@@ -22,30 +22,36 @@ class EventManager:
         if 'event_history' in self.config:
             del self.config['event_history']
             # Don't save here since this will be stored in save files only
+        
+        # Set default difficulty if not set yet
+        if 'difficulty' not in self.config:
+            self.config['difficulty'] = 'pro'
+            self.data_manager.save_config(self.config)
     
     def get_difficulty(self):
-        """Get the current difficulty
+        """Get the current difficulty setting
         
         Returns:
-            str: The current difficulty level
+            str: The current difficulty (cupcake, rookie, pro, all-madden, or diabolical)
         """
-        return self.config.get('difficulty', 'medium')
+        return self.config.get('difficulty', 'pro')
     
     def set_difficulty(self, difficulty):
         """Set the difficulty level
         
         Args:
-            difficulty: The difficulty level to set
+            difficulty: The difficulty level to set (cupcake, rookie, pro, all-madden, or diabolical)
             
         Returns:
             bool: True if successful, False otherwise
         """
-        if difficulty in ['easy', 'medium', 'hard']:
-            self.config['difficulty'] = difficulty
-            self.data_manager.save_config(self.config)
-            self._try_auto_save()  # Ignore return value, config update is the main task
-            return True
-        return False
+        if difficulty not in ['cupcake', 'rookie', 'pro', 'all-madden', 'diabolical']:
+            return False
+        
+        self.config['difficulty'] = difficulty
+        self.data_manager.save_config(self.config)
+        self._try_auto_save()  # Ignore return value, config update is the main task
+        return True
     
     def update_franchise_info(self, team_name=None, week=None, year=None):
         """Update franchise information
