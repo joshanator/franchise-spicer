@@ -140,7 +140,7 @@
       "id": 9,
       "title": "Bad Influence",
       "description": "Player seen waving gun around on live with Antonio Brown, causing coach to address quesitons in next press conference.",
-      "impact": "Team morale decreased, -4 awareness for player",
+      "impact": "-4 awareness for player",
       "target_options": ["WR1", "WR2", "CB1", "FS1", "SS1", "RB1"],
       "difficulty_weights": {
         "cupcake": 0.2,
@@ -178,17 +178,17 @@
       "id": 11,
       "title": "Season Challenge",
       "description": "RB called himself 'Mr. 2K' and vowed to rush for 2,000 yards this season.",
-      "impact": "If he doesn't reach 2,000 yards, drop dev trait by one level",
+      "impact": "If he doesn't reach 2,000 total yards, drop development trait by one level. If he reaches 2,000 total yards but not 2,000 rushing yards, no change occurs. If he rushes for 2,000+ yards, increase development trait by one level. (if x-factor, raise a skill by 1)",
       "target_options": ["RB1"],
       "difficulty_weights": {
-        "cupcake": 0.1,
+        "cupcake": 0.15,
         "rookie": 0.3,
-        "pro": 0.5,
-        "all-madden": 0.7,
-        "diabolical": 0.9
+        "pro": 0.4,
+        "all-madden": 0.4,
+        "diabolical": 0.4
       },
       "category": "challenge",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "regular-season-start"]
     },
     {
       "id": 12,
@@ -205,6 +205,446 @@
       },
       "category": "trade",
       "season_stages": ["regular-season-mid"]
+    },
+    {
+      "id": 13,
+      "title": "Deflategate 2.0",
+      "description": "Your QB has been accused of tampering with game balls to gain a competitive advantage.",
+      "impact": "QB suspended for 4 games and team loses a 1st round draft pick",
+      "target_options": ["QB1"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.15
+      },
+      "category": "suspension",
+      "season_stages": ["regular-season-end"]
+    },
+    {
+      "id": 14,
+      "title": "Comeback Player",
+      "description": "{position} returned from a career-threatening situation and is showing signs of their former self.",
+      "impact": "Player gains +2 to all physical attributes and moves up one development trait",
+      "position_options": ["QB1", "RB1", "WR1", "TE1", "DE1", "LB1", "CB1", "S1"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.05,
+        "pro": 0.01,
+        "all-madden": 0.005,
+        "diabolical": 0.001
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 15,
+      "title": "TODO:: Russell Wilson Decline",
+      "description": "Your veteran QB is showing signs of rapid decline.",
+      "impact": "QB loses 3 points in throw power, accuracy, and awareness.",
+      "target_options": ["QB1"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.15
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 16,
+      "title": "Contract Holdout",
+      "description": "Star player refuses to play without a new contract and is sitting out.",
+      "impact": "Player unavailable until you offer a contract with at least 15% more money per year",
+      "target_options": ["QB1", "RB1", "WR1", "DE1", "CB1"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.7,
+        "diabolical": 0.9
+      },
+      "category": "contract",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 17,
+      "title": "Antonio Brown Exit",
+      "description": "Player has a public meltdown during game, leaving the field shirtless and waving to fans.",
+      "impact": "Player immediately released from team and cannot be re-signed",
+      "target_options": ["WR1", "WR2", "CB1", "RB1", "TE1"],
+      "difficulty_weights": {
+        "cupcake": 0.001,
+        "rookie": 0.005,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.2
+      },
+      "category": "roster",
+      "season_stages": ["regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 18,
+      "title": "Concussion Protocol",
+      "description": "Player has suffered multiple concussions and must sit out {games} games for health concerns.",
+      "impact": "Player unavailable for specified games. -1 to awareness permanently.",
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "MLB1", "FS1", "SS1"],
+      "games_options": [2, 3, 4, 5],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "injury",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 19,
+      "title": "Offseason Training",
+      "description": "{position} spent the offseason training with {trainer} and has shown remarkable improvement.",
+      "impact": "+1 to speed, strength, and position-specific attributes",
+      "position_options": ["QB1", "RB1", "WR1", "TE1", "LB1", "CB1"],
+      "trainer_options": ["Tom House", "Exos", "Randy Moss", "Von Miller", "a renowned sport scientist"],
+      "difficulty_weights": {
+        "cupcake": 0.8,
+        "rookie": 0.6,
+        "pro": 0.4,
+        "all-madden": 0.2,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 20,
+      "title": "Aaron Donald Training",
+      "description": "Defensive player worked on hand techniques with Aaron Donald in the offseason.",
+      "impact": "+3 to block shedding, +2 power moves, +1 finesse moves",
+      "target_options": ["LE1", "RE1", "DT1", "LOLB1", "ROLB1"],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.2,
+        "pro": 0.15,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 21,
+      "title": "TODO:: Social Media Drama",
+      "description": "Player has been liking tweets criticizing the coaching staff and team management.",
+      "impact": "Team chemistry -5, must sit for first quarter of next game",
+      "target_options": ["QB1", "RB1", "WR1", "WR2", "TE1", "CB1", "FS1"],
+      "difficulty_weights": {
+        "cupcake": 0.3,
+        "rookie": 0.4,
+        "pro": 0.5,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "team",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 22,
+      "title": "TODO:: Harrison Butker Controversy",
+      "description": "Kicker made controversial political statements at a graduation ceremony causing team distraction.",
+      "impact": "Kicker accuracy -3 for next 2 games due to pressure",
+      "target_options": ["K1"],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.3,
+        "pro": 0.4,
+        "all-madden": 0.5,
+        "diabolical": 0.6
+      },
+      "category": "team",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 23,
+      "title": "TODO::Cooper Kupp Chemistry",
+      "description": "QB and WR1 spent entire offseason training together and building chemistry.",
+      "impact": "+5 to QB and WR1 awareness for the season",
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.6,
+        "pro": 0.5,
+        "all-madden": 0.4,
+        "diabolical": 0.3
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 24,
+      "title": "Hard Knocks Focus",
+      "description": "Player has been featured prominently on Hard Knocks, bringing extra attention and pressure.",
+      "impact": "50% chance of +2 to all attributes or -2 to all attributes for first 4 games",
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "DE1", "MLB1", "CB1"],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 25,
+      "title": "TODO:: Jim Irsay Meddling",
+      "description": "Team owner has demanded {position} be benched for the next game regardless of performance.",
+      "impact": "Must bench specified player for next game",
+      "position_options": ["QB1", "RB1", "WR1", "CB1"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "lineup",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 26,
+      "title": "Patrick Mahomes Voice",
+      "description": "QB is suffering from voice issues and can't call audibles in the next game.",
+      "impact": "-10 awareness for next game, no hot routes or audibles allowed",
+      "target_options": ["QB1"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 27,
+      "title": "TODO:: Urban Meyer Scandal",
+      "description": "Head coach caught in inappropriate behavior at a restaurant after not traveling with team.",
+      "impact": "All players -2 awareness for 3 games",
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.3,
+        "pro": 0.4,
+        "all-madden": 0.5,
+        "diabolical": 0.6
+      },
+      "category": "team",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 28,
+      "title": "Prime Workout",
+      "description": "Player trained at Deion Sanders' camp in the offseason.",
+      "impact": "+1 speed, +1 agility, +2 man coverage, +1 zone coverage",
+      "target_options": ["CB1", "CB2", "FS1", "SS1"],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.3,
+        "pro": 0.2,
+        "all-madden": 0.15,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 29,
+      "title": "TODO:: Aaron Rodgers Ayahuasca",
+      "description": "QB took a spiritual journey in the offseason and claims to see the field in a new way.",
+      "impact": "+3 awareness, +2 throw under pressure, but 20% chance of -10 awareness in any random game",
+      "target_options": ["QB1"],
+      "difficulty_weights": {
+        "cupcake": 0.3,
+        "rookie": 0.4,
+        "pro": 0.5,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 30,
+      "title": "TODO:: Taylor Swift Effect",
+      "description": "Tight end is dating a celebrity and gaining mainstream attention.",
+      "impact": "-2 to awareness due to distraction for 4 games",
+      "target_options": ["TE1"],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 31,
+      "title": "Tyreek Hill Speed Challenge",
+      "description": "WR challenged Tyreek Hill to a race and {result}.",
+      "impact": "{impact_text}",
+      "target_options": ["WR1", "WR2", "RB1", "CB1", "FS1"],
+      "result_options": [
+        {"result": "won", "impact_text": "+3 speed, +2 acceleration", "probability": 0.2},
+        {"result": "lost but was close", "impact_text": "+1 speed, +1 acceleration", "probability": 0.3},
+        {"result": "lost badly", "impact_text": "-1 speed, -1 acceleration", "probability": 0.5}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.4,
+        "diabolical": 0.3
+      },
+      "category": "challenge",
+      "season_stages": ["pre-season", "off-season"]
+    },
+    {
+      "id": 32,
+      "title": "Deshaun Watson Suspension",
+      "description": "Player involved in off-field misconduct and facing league suspension.",
+      "impact": "Player suspended for 11 games and team fined $5 million (subtract from available cap)",
+      "target_options": ["QB1", "WR1", "RB1", "TE1", "DE1", "CB1"],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "suspension",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 33,
+      "title": "TODO:: Bill Belichick Influence",
+      "description": "Defensive coordinator studied under Belichick and has implemented advanced schemes.",
+      "impact": "All defensive players +2 awareness for season, but -1 speed due to complex responsibilities",
+      "difficulty_weights": {
+        "cupcake": 0.6,
+        "rookie": 0.5,
+        "pro": 0.4,
+        "all-madden": 0.3,
+        "diabolical": 0.2
+      },
+      "category": "team",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 34,
+      "title": "Andy Reid BBQ",
+      "description": "Coach took entire offense to famous BBQ restaurant for team bonding.",
+      "impact": "Starting Offensive line +3 to run/pass block, starting skill positions -1 speed due to weight gain",
+      "difficulty_weights": {
+        "cupcake": 0.6,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.4,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": ["regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 35,
+      "title": "T.J. Watt Effect",
+      "description": "Edge rusher studied film with T.J. Watt and has improved pass rush moves.",
+      "impact": "+3 to finesse moves, +2 to power moves, +2 to block shedding",
+      "target_options": ["LE1", "RE1", "LOLB1", "ROLB1"],
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.6,
+        "pro": 0.5,
+        "all-madden": 0.4,
+        "diabolical": 0.3
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 36,
+      "title": "Travis Kelce Podcast",
+      "description": "Tight end launched a podcast and is spending time recording instead of studying film.",
+      "impact": "-2 awareness",
+      "target_options": ["TE1"],
+      "difficulty_weights": {
+        "cupcake": 0.3,
+        "rookie": 0.4,
+        "pro": 0.5,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 37,
+      "title": "Justin Tucker Challenge",
+      "description": "Kicker challenged to make a 65+ yard field goal in practice with team watching.",
+      "impact": "{impact_text}",
+      "target_options": ["K1"],
+      "result_options": [
+        {"result": "made it", "impact_text": "+3 kick power, +2 accuracy", "probability": 0.2},
+        {"result": "DOINK", "impact_text": "+1 kick power, -2 awareness", "probability": 0.1},
+        {"result": "Had the distance but missed it", "impact_text": "+1 kick power, -2 accuracy", "probability": 0.3},
+        {"result": "missed it", "impact_text": "-3 kick power, -2 accuracy", "probability": 0.4}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
+      },
+      "category": "challenge",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 38,
+      "title": "TODO:: Matthew Stafford Injury",
+      "description": "QB playing through undisclosed injury that affects throwing motion.",
+      "impact": "-3 to throw power for 4 games, then returns to normal if rested or -1 throw power permanently if played",
+      "target_options": ["QB1"],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "injury",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 39,
+      "title": "Dan Campbell Intensity",
+      "description": "Head coach gave motivational speech that has players ready to 'bite kneecaps'.",
+      "impact": "Add +1 hit power, tackle to 3 players on the defense.",
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.6,
+        "pro": 0.5,
+        "all-madden": 0.4,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     }
   ]
 } 
