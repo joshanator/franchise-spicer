@@ -154,27 +154,40 @@ class FranchiseTab(QWidget):
         # Difficulty section
         difficulty_group = QGroupBox("Event Difficulty")
         difficulty_layout = QVBoxLayout(difficulty_group)
+        difficulty_layout.setSpacing(15)
+        difficulty_layout.setContentsMargins(15, 20, 15, 20)
         
-        # Create radio buttons for difficulty
-        self.difficulty_buttons = QButtonGroup(self)
+        # Create horizontal layout for difficulty selection
+        difficulty_selection_layout = QHBoxLayout()
         
-        self.easy_radio = QRadioButton("Easy - More positive events")
-        self.medium_radio = QRadioButton("Medium - Balanced events")
-        self.hard_radio = QRadioButton("Hard - More challenging events")
+        # Create dropdown for difficulty
+        difficulty_label = QLabel("Select difficulty level:")
+        difficulty_label.setFont(QFont("Arial", 10))
+        difficulty_selection_layout.addWidget(difficulty_label)
         
-        self.difficulty_buttons.addButton(self.easy_radio, 0)
-        self.difficulty_buttons.addButton(self.medium_radio, 1)
-        self.difficulty_buttons.addButton(self.hard_radio, 2)
+        self.difficulty_combo = QComboBox()
+        self.difficulty_combo.addItems([
+            "Cupcake - Very few negative events",
+            "Rookie - Fewer challenges",
+            "Pro - Balanced events",
+            "All-Madden - More challenges",
+            "Diabolical - Extreme challenges"
+        ])
+        self.difficulty_combo.setMinimumHeight(30)
+        # Set a fixed width for the combobox to prevent it from stretching
+        self.difficulty_combo.setMinimumWidth(200)
+        self.difficulty_combo.setMaximumWidth(300)
+        difficulty_selection_layout.addWidget(self.difficulty_combo)
         
-        difficulty_layout.addWidget(self.easy_radio)
-        difficulty_layout.addWidget(self.medium_radio)
-        difficulty_layout.addWidget(self.hard_radio)
+        # Add stretch to push elements toward the middle/left
+        difficulty_selection_layout.addStretch(1)
         
-        # Set default
-        self.medium_radio.setChecked(True)
+        # Add the selection layout to the main difficulty layout
+        difficulty_layout.addLayout(difficulty_selection_layout)
         
         # Update button
         self.update_difficulty_button = QPushButton("Update Difficulty")
+        self.update_difficulty_button.setMinimumHeight(30)
         self.update_difficulty_button.clicked.connect(self._update_difficulty)
         difficulty_layout.addWidget(self.update_difficulty_button)
         
@@ -183,9 +196,12 @@ class FranchiseTab(QWidget):
         # Save management section
         save_group = QGroupBox("Save Management")
         save_layout = QVBoxLayout(save_group)
+        save_layout.setSpacing(15)
+        save_layout.setContentsMargins(15, 20, 15, 20)
         
         # Buttons layout
         buttons_layout = QHBoxLayout()
+        buttons_layout.setSpacing(10)
         
         self.new_franchise_button = QPushButton("New Franchise")
         self.new_franchise_button.clicked.connect(self._new_franchise)
@@ -203,10 +219,17 @@ class FranchiseTab(QWidget):
         self.load_franchise_button.clicked.connect(self._load_franchise)
         buttons_layout.addWidget(self.load_franchise_button)
         
+        # Make buttons consistent height
+        self.new_franchise_button.setMinimumHeight(30)
+        self.save_franchise_button.setMinimumHeight(30)
+        self.save_as_franchise_button.setMinimumHeight(30)
+        self.load_franchise_button.setMinimumHeight(30)
+        
         save_layout.addLayout(buttons_layout)
         
         # Auto-save checkbox
         self.auto_save_checkbox = QCheckBox("Auto-save when changes are made")
+        self.auto_save_checkbox.setMinimumHeight(30)
         self.auto_save_checkbox.setToolTip("Automatically save the franchise file when making any changes")
         # Make sure we set the initial state correctly
         self.auto_save_checkbox.setTristate(False)  # Make it a two-state checkbox (not tristate)
@@ -224,6 +247,8 @@ class FranchiseTab(QWidget):
         # Instructions
         instructions_group = QGroupBox("Instructions")
         instructions_layout = QVBoxLayout(instructions_group)
+        instructions_layout.setSpacing(15)
+        instructions_layout.setContentsMargins(15, 20, 15, 20)
         
         instructions_text = """
         1. Create a new franchise or load an existing one
@@ -246,6 +271,12 @@ class FranchiseTab(QWidget):
         
         # Load current data
         self.refresh()
+        
+        # Ensure group boxes have better visual separation
+        info_group.setStyleSheet("QGroupBox { font-weight: bold; font-size: 12px; }")
+        difficulty_group.setStyleSheet("QGroupBox { font-weight: bold; font-size: 12px; }")
+        save_group.setStyleSheet("QGroupBox { font-weight: bold; font-size: 12px; }")
+        instructions_group.setStyleSheet("QGroupBox { font-weight: bold; font-size: 12px; }")
     
     def refresh(self):
         """Refresh tab with current data"""
@@ -274,12 +305,18 @@ class FranchiseTab(QWidget):
         
         # Update difficulty
         difficulty = self.event_manager.get_difficulty()
-        if difficulty == 'easy':
-            self.easy_radio.setChecked(True)
-        elif difficulty == 'medium':
-            self.medium_radio.setChecked(True)
-        elif difficulty == 'hard':
-            self.hard_radio.setChecked(True)
+        difficulty_index = 2  # Default to Pro
+        if difficulty == 'cupcake':
+            difficulty_index = 0
+        elif difficulty == 'rookie':
+            difficulty_index = 1
+        elif difficulty == 'pro':
+            difficulty_index = 2
+        elif difficulty == 'all-madden':
+            difficulty_index = 3
+        elif difficulty == 'diabolical':
+            difficulty_index = 4
+        self.difficulty_combo.setCurrentIndex(difficulty_index)
         
         # Update save file info - hide the .json extension from display
         save_file = franchise_info.get('save_file', '')
@@ -442,13 +479,9 @@ class FranchiseTab(QWidget):
     
     def _update_difficulty(self):
         """Update the difficulty level"""
-        difficulty = 'medium'
-        if self.easy_radio.isChecked():
-            difficulty = 'easy'
-        elif self.medium_radio.isChecked():
-            difficulty = 'medium'
-        elif self.hard_radio.isChecked():
-            difficulty = 'hard'
+        index = self.difficulty_combo.currentIndex()
+        difficulty_map = ['cupcake', 'rookie', 'pro', 'all-madden', 'diabolical']
+        difficulty = difficulty_map[index]
         
         self.event_manager.set_difficulty(difficulty)
         self._show_status_message(f"Difficulty set to {difficulty}")
