@@ -12,12 +12,32 @@ from PySide6.QtCore import QCoreApplication
 from madden_franchise_qt.ui.main_window import MainWindow
 from madden_franchise_qt.utils.data_manager import DataManager
 
+# Get version from version.py or version.txt
+def get_version():
+    """Get version from version.py (created during builds) or version.txt file"""
+    try:
+        # First try to import version.py if it exists (created by build script)
+        try:
+            from madden_franchise_qt.version import VERSION
+            return VERSION
+        except ImportError:
+            pass
+        
+        # Then try reading from version.txt
+        version_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'version.txt')
+        with open(version_path, 'r') as f:
+            version = f.read().strip()
+        return version
+    except:
+        return "0.1"  # Default fallback version
+
 
 def set_application_metadata():
     """Set application metadata"""
+    version = get_version()
     QCoreApplication.setApplicationName("Madden Franchise Event Generator")
     QCoreApplication.setOrganizationName("Madden Tools")
-    QCoreApplication.setApplicationVersion("1.0")
+    QCoreApplication.setApplicationVersion(version)
 
 
 def setup_environment():

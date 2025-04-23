@@ -16,6 +16,25 @@ from .event_tab import EventTab
 from .roster_tab import RosterTab
 from .history_tab import HistoryTab
 
+# Get version
+def get_version():
+    """Get version from version.py (created during builds) or version.txt file"""
+    try:
+        # First try to import version.py if it exists (created by build script)
+        try:
+            from ..version import VERSION
+            return VERSION
+        except ImportError:
+            pass
+        
+        # Then try reading from version.txt
+        version_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'version.txt')
+        with open(version_path, 'r') as f:
+            version = f.read().strip()
+        return version
+    except:
+        return "0.1"  # Default fallback version
+
 
 class MainWindow(QMainWindow):
     """Main application window"""
@@ -23,8 +42,11 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         
+        # Get version
+        self.version = get_version()
+        
         # Set window properties
-        self.setWindowTitle("Madden Franchise Event Generator")
+        self.setWindowTitle(f"Madden 25 Franchise Event Generator v{self.version}")
         self.setMinimumSize(QSize(900, 700))
         
         # Initialize data managers
@@ -54,10 +76,15 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(10, 10, 10, 10)
         
         # Create header
-        header_label = QLabel("MADDEN FRANCHISE EVENT GENERATOR")
+        header_label = QLabel("MADDEN 25 FRANCHISE EVENT GENERATOR")
         header_label.setFont(QFont("Arial", 16, QFont.Bold))
         header_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(header_label)
+        
+        # Version label
+        version_label = QLabel(f"Version {self.version}")
+        version_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(version_label)
         
         # Tab widget
         self.tab_widget = QTabWidget()
@@ -372,10 +399,10 @@ class MainWindow(QMainWindow):
     
     def show_about(self):
         """Show the about dialog"""
-        about_text = """
-        <h3>Madden Franchise Event Generator</h3>
-        <p>Version 1.0</p>
-        <p>This tool generates random events for your Madden franchise mode to 
+        about_text = f"""
+        <h3>Madden 25 Franchise Event Generator</h3>
+        <p>Version {self.version}</p>
+        <p>This tool generates random events for your Madden 25 franchise mode to 
         make the experience more dynamic and unpredictable. Events can affect 
         players, coaches, and team circumstances.</p>
         """

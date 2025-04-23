@@ -1,2 +1,31 @@
-# No external dependencies beyond standard Python libraries
-# Python 3.6+ is required for f-strings and other features 
+# Madden Franchise Event Generator Dependencies
+# ========================================
+
+# UI Framework
+PySide6>=6.4.0  # Qt for Python
+
+# Development Dependencies (not needed for regular use)
+# PyInstaller>=5.6.0  # For creating standalone executables
+
+# Note: Python 3.6+ is required for f-strings and other features
+# All other dependencies are standard library modules:
+# - json, os, sys, random, datetime, shutil
+
+# Installation instructions:
+# -------------------------
+# 1. Install with pip:
+#    pip install -r requirements.txt
+#
+# 2. Or run the application directly:
+#    python3 run_madden_events.py
+#    (This will automatically install PySide6 if needed)
+#
+# Creating Executables:
+# --------------------
+# 1. Install PyInstaller: 
+#    pip install PyInstaller
+#
+# 2. Create executable:
+#    pyinstaller --name "Madden Franchise Generator" --windowed --onefile --icon=app_icon.ico run_madden_events.py
+#    
+#    Note: Replace app_icon.ico with your icon file if available 
