@@ -154,7 +154,7 @@
     },
     {
       "id": 10,
-      "title": "Player Callout",
+      "title": "TODO:: Player Callout",
       "description": "{position1} called out {opponent_position} on your next opponent and said 'he ain't shit'",
       "impact": "If your player outperforms the opponent, +1 to a relevant stat. If not, -1 to a relevant stat. Opponent awareness temporarily raised by 10 for this game.",
       "matchups": [
@@ -178,7 +178,6 @@
       "id": 11,
       "title": "Season Challenge",
       "description": "RB called himself 'Mr. 2K' and vowed to rush for 2,000 yards this season.",
-      "impact": "If he doesn't reach 2,000 total yards, drop development trait by one level. If he reaches 2,000 total yards but not 2,000 rushing yards, no change occurs. If he rushes for 2,000+ yards, increase development trait by one level. (if x-factor, raise a skill by 1)",
       "target_options": ["RB1"],
       "difficulty_weights": {
         "cupcake": 0.15,
@@ -188,13 +187,26 @@
         "diabolical": 0.4
       },
       "category": "challenge",
-      "season_stages": ["pre-season", "regular-season-start"]
+      "season_stages": ["pre-season", "regular-season-start"],
+      "options": [
+        {
+          "description": "Support the challenge",
+          "impact": "If player reaches 2,000+ rushing yards, increase development trait by one level. If he reaches 2,000+ total yards but not rushing yards, no change. If he fails to reach 2,000 total yards, drop development trait by one level."
+        },
+        {
+          "description": "'More like Mr. 1K' - Set more realistic expectations",
+          "impact": "If player reaches 1,000+ rushing yards, they receive +1 Break Tackle and +1 Speed. If not, player gets -2 Speed and -2 Acceleration"
+        },
+        {
+          "description": "Discourage the challenge completely", 
+          "impact": "Player becomes disgruntled and loses 2 Awareness"
+        }
+      ]
     },
     {
       "id": 12,
       "title": "Trade Deadline",
       "description": "Your player has stated that they no longer want to play for the team. They have demanded a trade.",
-      "impact": "Add the player to trade finder and select an offer (no counter offers allowed). If no offers are available, the player must be cut or sit out the next 5 games.",
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "LG1", "C1", "RG1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "difficulty_weights": {
         "cupcake": 0.1,
@@ -204,7 +216,25 @@
         "diabolical": 0.9
       },
       "category": "trade",
-      "season_stages": ["regular-season-mid"]
+      "season_stages": ["regular-season-mid"],
+      "options": [
+        {
+          "description": "Trade the player",
+          "impact": "Find the best available trade offer and accept it without countering"
+        },
+        {
+          "description": "Convince player to stay",
+          "impact": "Player stays on team but loses a step: -1 speed, -1 awareness"
+        },
+        {
+          "description": "Bench the player",
+          "impact": "Player sits out for atleast 5 games, then returns with -2 primary attribute, -2 awareness. Backup player receives +2 primary attribute, +1 awareness, +1 speed."
+        },
+        {
+          "description": "Release the player",
+          "impact": "Player is immediately cut from the team, incurring any cap penalties. Backup player receives +2 primary attribute, +1 awareness."
+        }
+      ]
     },
     {
       "id": 13,
@@ -257,18 +287,39 @@
     {
       "id": 16,
       "title": "Contract Holdout",
-      "description": "Star player refuses to play without a new contract and is sitting out.",
-      "impact": "Player unavailable until you offer a contract with at least 15% more money per year",
+      "description": "Star player refuses to play without a raise and is sitting out.",
       "target_options": ["QB1", "RB1", "WR1", "DE1", "CB1"],
       "difficulty_weights": {
         "cupcake": 0.1,
-        "rookie": 0.3,
-        "pro": 0.5,
-        "all-madden": 0.7,
-        "diabolical": 0.9
+        "rookie": 0.25,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.7
       },
       "category": "contract",
-      "season_stages": ["pre-season", "regular-season-start"]
+      "season_stages": ["pre-season", "regular-season-start"],
+      "options": [
+        {
+          "description": "Pay the player what they want",
+          "impact": "Player returns to team with a new contract at 20% higher salary and a pep to their step: +1 speed, +1 awareness"
+        },
+        {
+          "description": "Negotiate a smaller increase",
+          "impact": "Player returns with 10% higher salary"
+        },
+        {
+          "description": "Refuse to negotiate",
+          "impact": "Player sits out for 4 games, then returns with -5 awareness for remainder of season"
+        },
+        {
+          "description": "Trade the player",
+          "impact": "Must trade player immediately for best available offer"
+        },
+        {
+          "description": "Release the player",
+          "impact": "Player is immediately released from team, incurring any cap penalties. Backup player receives +1 primary attribute, +1 awareness."
+        }
+      ]
     },
     {
       "id": 17,
@@ -338,10 +389,9 @@
     },
     {
       "id": 21,
-      "title": "TODO:: Social Media Drama",
+      "title": "Social Media Drama",
       "description": "Player has been liking tweets criticizing the coaching staff and team management.",
-      "impact": "Team chemistry -5, must sit for first quarter of next game",
-      "target_options": ["QB1", "RB1", "WR1", "WR2", "TE1", "CB1", "FS1"],
+      "target_options": ["all-players"],
       "difficulty_weights": {
         "cupcake": 0.3,
         "rookie": 0.4,
@@ -350,7 +400,25 @@
         "diabolical": 0.7
       },
       "category": "team",
-      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"],
+      "options": [
+        {
+          "description": "Team meeting to address concerns",
+          "impact": "As a show of discipline, the player is benched for the next two games"
+        },
+        {
+          "description": "Fine the player",
+          "impact": "Player gets -2 to two primary attributes for 3 games"
+        },
+        {
+          "description": "Ignore the situation",
+          "impact": "Choose 2 random starters and give them -2 awareness."
+        },
+        {
+          "description": "One-on-one meeting with coach",
+          "impact": "Player receives +1 to Awareness. A random player on the team loses respect for the coaches and receives -3 to Awareness."
+        }
+      ]
     },
     {
       "id": 22,
@@ -619,7 +687,6 @@
       "id": 38,
       "title": "TODO:: Matthew Stafford Injury",
       "description": "QB playing through undisclosed injury that affects throwing motion.",
-      "impact": "-3 to throw power for 4 games, then returns to normal if rested or -1 throw power permanently if played",
       "target_options": ["QB1"],
       "difficulty_weights": {
         "cupcake": 0.05,
@@ -629,7 +696,25 @@
         "diabolical": 0.3
       },
       "category": "injury",
-      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"],
+      "options": [
+        {
+          "description": "Rest the player for 4 games",
+          "impact": "player is benched for 4 games, but returns at full strength."
+        },
+        {
+          "description": "Play through the injury",
+          "impact": "-1 to throw power permanently, but player remains available for all games"
+        },
+        {
+          "description": "Get a second opinion",
+          "impact": "50% chance of avoiding permanent injury with only 1 game missed, 50% chance of worsening to -2 throw power permanently"
+        },
+        {
+          "description": "Experimental treatment",
+          "impact": "70% chance of recovery with no games missed, 30% chance of season-ending injury"
+        }
+      ]
     },
     {
       "id": 39,

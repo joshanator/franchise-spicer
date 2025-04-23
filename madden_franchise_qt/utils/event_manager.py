@@ -181,7 +181,17 @@ class EventManager:
         
         # Handle target options
         if 'target_options' in processed_event:
-            target_position = random.choice(processed_event['target_options'])
+            # Special case: "All players" means choose any player from the roster
+            if len(processed_event['target_options']) == 1 and processed_event['target_options'][0] == "all-players":
+                # Get all positions from the roster
+                all_positions = list(self.config.get('roster', {}).keys())
+                if all_positions:
+                    target_position = random.choice(all_positions)
+                else:
+                    # Fallback if roster is empty
+                    target_position = "Unknown"
+            else:
+                target_position = random.choice(processed_event['target_options'])
             
             # Store the original target position for later reference
             processed_event['original_target_position'] = target_position
