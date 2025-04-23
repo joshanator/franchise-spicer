@@ -16,7 +16,9 @@ A Python application that generates random events for Madden franchise mode to m
 - Python 3.6+
 - PySide6 (Qt for Python)
 
-## Installation
+## Installation Options
+
+### Option 1: Run with Python
 
 1. Clone or download this repository
 2. Navigate to the project directory
@@ -32,6 +34,43 @@ python3 run_madden_events.py
 ```
 
 This will automatically install PySide6 if needed and launch the application.
+
+### Option 2: Standalone Executable
+
+For users who prefer not to install Python, we provide standalone executable options:
+
+1. Download the latest release for your platform from the [Releases](https://github.com/yourusername/franchise-spicer/releases) page
+2. Extract the archive (if applicable)
+3. Run the executable:
+   - Windows: Double-click `Madden Franchise Generator.exe`
+   - macOS: Double-click `Madden Franchise Generator.app`
+   - Linux: Run `./Madden Franchise Generator`
+
+### Option 3: Build Your Own Executable
+
+If you want to build your own executable:
+
+1. Make sure Python and pip are installed
+2. Install PyInstaller (if you don't have it already):
+
+```bash
+python3 -m pip install PyInstaller
+```
+
+3. Run the build script:
+
+```bash
+python3 build_executable.py
+```
+
+4. The executable will be created in the `dist` directory
+
+#### Notes for macOS Users:
+- You may need to give the app permission to run by right-clicking and selecting "Open"
+- If you encounter issues with the build script, you can run PyInstaller directly:
+  ```bash
+  python3 -m PyInstaller --name "Madden Franchise Generator" --windowed --onefile run_madden_events.py
+  ```
 
 ## How to Use
 

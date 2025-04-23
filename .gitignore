@@ -8,6 +8,11 @@ dist/
 build/
 *.egg-info/
 
+# PyInstaller specific
+*.spec
+# builds/
+madden_franchise_qt/version.py
+
 # Virtual environments
 venv/
 env/
@@ -24,6 +29,7 @@ madden_franchise_qt/data/*.json
 madden_franchise_qt/data/config.json
 madden_franchise_qt/data/config_backup_*.json
 madden_franchise_qt/saves/*.json
+madden_franchise_qt/saves/example\ bears.json
 # *.save
 # *.backup
 
@@ -34,4 +40,11 @@ madden_franchise_qt/saves/*.json
 .DS_Store
 .AppleDouble
 .LSOverride
-._* 
+._*
+
+# Resources folder (except specific icon files that should be included)
+resources/*
+# Uncomment the following lines when you add icons
+# !resources/app_icon.ico
+# !resources/app_icon.icns
+# !resources/app_icon.png 

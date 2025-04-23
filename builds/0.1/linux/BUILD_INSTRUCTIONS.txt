@@ -1,0 +1,11 @@
+Madden Franchise Generator v0.1 - Linux Build Instructions
+======================================================================
+
+This directory is a placeholder for the Linux build.
+
+To create the executable for this platform:
+1. Copy this project to a Linux machine
+2. Run: python3 build_executable.py
+3. The Linux executable will be created in this directory
+
+Note: You must build on the target platform, as cross-compilation is not supported by PyInstaller.
