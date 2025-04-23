@@ -8,9 +8,9 @@
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "C1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "reason_options": ["injury concerns", "family reasons", "career change", "mental health"],
       "difficulty_weights": {
-        "easy": 0.3,
-        "medium": 0.5,
-        "hard": 0.8
+        "easy": 0,
+        "medium": 0.05,
+        "hard": 0.1
       },
       "category": "roster",
       "season_stages": ["pre-season", "off-season"]
@@ -137,7 +137,7 @@
     {
       "id": 10,
       "title": "Player Callout",
-      "description": "{position1} called out {opponent_position} on the {opponent_team} and said 'he ain't shit'",
+      "description": "{position1} called out {opponent_position} on your next opponent and said 'he ain't shit'",
       "impact": "If your player outperforms the opponent, +1 to a relevant stat. If not, -1 to a relevant stat. Opponent awareness temporarily raised by 10 for this game.",
       "matchups": [
         {"position1": "WR1", "opponent_position": "CB1"},
@@ -146,7 +146,6 @@
         {"position1": "RB1", "opponent_position": "LE1"},
         {"position1": "TE1", "opponent_position": "SS1"}
       ],
-      "opponent_teams": ["Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears", "Bengals", "Browns", "Cowboys", "Broncos", "Lions", "Packers", "Texans", "Colts", "Jaguars", "Chiefs", "Raiders", "Chargers", "Rams", "Dolphins", "Vikings", "Patriots", "Saints", "Giants", "Jets", "Eagles", "Steelers", "49ers", "Seahawks", "Buccaneers", "Titans", "Commanders"],
       "difficulty_weights": {
         "easy": 0.5,
         "medium": 0.5,
@@ -168,6 +167,20 @@
       },
       "category": "challenge",
       "season_stages": ["pre-season"]
+    },
+    {
+      "id": 12,
+      "title": "Trade Deadline",
+      "description": "Your player has stated that they no longer want to play for the team. They have demanded a trade.",
+      "impact": "Add the player to trade finder and select an offer (no counter offers allowed). If no offers are available, the player must be cut or sit out the next 5 games.",
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "LG1", "C1", "RG1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
+      "difficulty_weights": {
+        "easy": 0.3,
+        "medium": 0.5,
+        "hard": 0.7
+      },
+      "category": "trade",
+      "season_stages": ["regular-season-mid"]
     }
   ]
 } 
