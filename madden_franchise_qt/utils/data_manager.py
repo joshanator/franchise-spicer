@@ -152,7 +152,12 @@ class DataManager:
             config_without_history['franchise_info']['save_file'] = os.path.basename(save_path)
             self.save_config(config_without_history)
             
-            return True, f"Franchise saved to {os.path.basename(save_path)}"
+            # Get display name without .json extension
+            display_name = os.path.basename(save_path)
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]
+            
+            return True, f"Franchise saved to {display_name}"
         
         except Exception as e:
             return False, f"Error saving franchise: {str(e)}"
@@ -198,7 +203,12 @@ class DataManager:
             # Print debug info
             print(f"Loaded config with auto_save={config.get('auto_save')}")
             
-            return True, f"Franchise loaded from {filename}", config, event_history
+            # Get display name without .json extension
+            display_name = filename
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]
+            
+            return True, f"Franchise loaded from {display_name}", config, event_history
         
         except Exception as e:
             return False, f"Error loading franchise: {str(e)}", None, []
