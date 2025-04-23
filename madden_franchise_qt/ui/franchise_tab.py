@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QRadioButton, QMessageBox, QButtonGroup, QComboBox,
     QCheckBox
 )
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QFont
 
 
@@ -28,6 +28,13 @@ class FranchiseTab(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
+        
+        # Status message for feedback
+        self.status_message = QLabel("")
+        self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
+        self.status_message.setWordWrap(True)
+        self.status_message.setVisible(False)
+        main_layout.addWidget(self.status_message)
         
         # Create franchise info section
         info_group = QGroupBox("Franchise Information")
@@ -234,9 +241,9 @@ class FranchiseTab(QWidget):
         team_name = self.team_name_edit.text().strip()
         if team_name:
             self.event_manager.update_franchise_info(team_name=team_name)
-            QMessageBox.information(self, "Success", f"Team name updated to {team_name}")
+            self._show_status_message(f"Team name updated to {team_name}")
         else:
-            QMessageBox.warning(self, "Error", "Team name cannot be empty")
+            self._show_status_message("Team name cannot be empty", error=True)
     
     def _update_week_year(self):
         """Update the week and year"""
@@ -244,15 +251,15 @@ class FranchiseTab(QWidget):
         year = self.year_spinner.value()
         
         if week < 1 or week > 17:
-            QMessageBox.warning(self, "Error", "Week must be between 1 and 17")
+            self._show_status_message("Week must be between 1 and 17", error=True)
             return
         
         if year < 1:
-            QMessageBox.warning(self, "Error", "Year must be positive")
+            self._show_status_message("Year must be positive", error=True)
             return
         
         self.event_manager.update_franchise_info(week=week, year=year)
-        QMessageBox.information(self, "Success", f"Updated to Week {week}, Year {year}")
+        self._show_status_message(f"Updated to Week {week}, Year {year}")
         
         # Emit signal for main window to update status bar
         self.week_year_changed.emit(week, year)
@@ -273,7 +280,7 @@ class FranchiseTab(QWidget):
         self.event_manager.config['franchise_info']['season_stage'] = season_stage
         self.event_manager.data_manager.save_config(self.event_manager.config)
         
-        QMessageBox.information(self, "Success", f"Season stage updated to {season_stage}")
+        self._show_status_message(f"Season stage updated to {season_stage}")
     
     def _advance_week(self):
         """Advance to the next week"""
@@ -296,7 +303,8 @@ class FranchiseTab(QWidget):
                 index = self.season_stage_combo.findText(new_stage)
                 if index >= 0:
                     self.season_stage_combo.setCurrentIndex(index)
-                    self._update_season_stage()
+                    self.event_manager.config['franchise_info']['season_stage'] = new_stage
+                    self.event_manager.data_manager.save_config(self.event_manager.config)
         else:
             week = 1
             year += 1
@@ -306,13 +314,14 @@ class FranchiseTab(QWidget):
             index = self.season_stage_combo.findText(new_stage)
             if index >= 0:
                 self.season_stage_combo.setCurrentIndex(index)
-                self._update_season_stage()
+                self.event_manager.config['franchise_info']['season_stage'] = new_stage
+                self.event_manager.data_manager.save_config(self.event_manager.config)
         
         self.event_manager.update_franchise_info(week=week, year=year)
         self.week_spinner.setValue(week)
         self.year_spinner.setValue(year)
         
-        QMessageBox.information(self, "Success", f"Advanced to Week {week}, Year {year}")
+        self._show_status_message(f"Advanced to Week {week}, Year {year}")
         
         # Emit signal for main window to update status bar
         self.week_year_changed.emit(week, year)
@@ -333,7 +342,7 @@ class FranchiseTab(QWidget):
             difficulty = 'hard'
         
         self.event_manager.set_difficulty(difficulty)
-        QMessageBox.information(self, "Success", f"Difficulty set to {difficulty}")
+        self._show_status_message(f"Difficulty set to {difficulty}")
     
     def _new_franchise(self):
         """Create a new franchise"""
@@ -386,42 +395,51 @@ class FranchiseTab(QWidget):
             success, message = self.event_manager._try_auto_save()
             
             if success:
-                self._show_auto_save_notification(True)
+                self._show_auto_save_status(True)
                 
                 # Update save file label to indicate auto-save is on
                 save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
                 if save_file:
                     self.save_file_label.setText(f"Current save file: {save_file} (Auto-save ON)")
             else:
-                QMessageBox.warning(
-                    self,
-                    "Auto-Save Warning",
-                    f"Auto-save is enabled but couldn't perform initial save: {message}\n\n"
-                    "Please save your franchise manually first before relying on auto-save."
+                self._show_status_message(
+                    f"Auto-save is enabled but couldn't perform initial save: {message}. "
+                    "Please save your franchise manually first.",
+                    error=True
                 )
         else:
-            self._show_auto_save_notification(False)
+            self._show_auto_save_status(False)
             
             # Update save file label to indicate auto-save is off
             save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
             if save_file:
                 self.save_file_label.setText(f"Current save file: {save_file}")
     
-    def _show_auto_save_notification(self, enabled):
-        """Show a notification about auto-save status
+    def _show_auto_save_status(self, enabled):
+        """Show in-UI auto-save status message
         
         Args:
             enabled: Whether auto-save is enabled
         """
         if enabled:
-            QMessageBox.information(
-                self, 
-                "Auto-Save Enabled", 
-                "Auto-save is now enabled. Your franchise will be saved automatically when changes are made."
-            )
+            self._show_status_message("Auto-save is now enabled. Your franchise will be saved automatically when changes are made.")
         else:
-            QMessageBox.information(
-                self, 
-                "Auto-Save Disabled", 
-                "Auto-save is now disabled. Remember to save your franchise manually."
-            ) 
+            self._show_status_message("Auto-save is now disabled. Remember to save your franchise manually.")
+    
+    def _show_status_message(self, message, error=False):
+        """Show a status message
+        
+        Args:
+            message: The message to display
+            error: Whether this is an error message
+        """
+        if error:
+            self.status_message.setStyleSheet("QLabel { color: #D8000C; background-color: #FFBABA; padding: 8px; border-radius: 4px; }")
+        else:
+            self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
+        
+        self.status_message.setText(message)
+        self.status_message.setVisible(True)
+        
+        # Hide the message after 5 seconds
+        QTimer.singleShot(5000, lambda: self.status_message.setVisible(False)) 

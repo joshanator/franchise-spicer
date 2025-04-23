@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLineEdit, QTabWidget, QScrollArea,
     QMessageBox, QFormLayout, QGridLayout, QGroupBox
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont
 
 
@@ -30,6 +30,13 @@ class RosterTab(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
+        
+        # Status message for feedback
+        self.status_message = QLabel("")
+        self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
+        self.status_message.setWordWrap(True)
+        self.status_message.setVisible(False)
+        main_layout.addWidget(self.status_message)
         
         # Create inner tab widget
         roster_tabs = QTabWidget()
@@ -305,6 +312,24 @@ class RosterTab(QWidget):
         for pos_code, entry in self.coaches_entries.items():
             entry.setText(coaches.get(pos_code, ''))
     
+    def _show_status_message(self, message, error=False):
+        """Show a status message
+        
+        Args:
+            message: The message to display
+            error: Whether this is an error message
+        """
+        if error:
+            self.status_message.setStyleSheet("QLabel { color: #D8000C; background-color: #FFBABA; padding: 8px; border-radius: 4px; }")
+        else:
+            self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
+        
+        self.status_message.setText(message)
+        self.status_message.setVisible(True)
+        
+        # Hide the message after 5 seconds
+        QTimer.singleShot(5000, lambda: self.status_message.setVisible(False))
+    
     def _update_player(self, position, entry):
         """Update a player in the roster
         
@@ -315,13 +340,13 @@ class RosterTab(QWidget):
         player_name = entry.text().strip()
         
         if not player_name:
-            QMessageBox.warning(self, "Warning", f"Please enter a name for {position}")
+            self._show_status_message(f"Please enter a name for {position}", error=True)
             return
         
         if self.event_manager.update_roster(position, player_name):
-            QMessageBox.information(self, "Success", f"Updated {position} to {player_name}")
+            self._show_status_message(f"Updated {position} to {player_name}")
         else:
-            QMessageBox.critical(self, "Error", f"Failed to update {position}")
+            self._show_status_message(f"Failed to update {position}", error=True)
     
     def _update_coach(self, position, entry):
         """Update a coach in the roster
@@ -333,10 +358,10 @@ class RosterTab(QWidget):
         coach_name = entry.text().strip()
         
         if not coach_name:
-            QMessageBox.warning(self, "Warning", f"Please enter a name for {position}")
+            self._show_status_message(f"Please enter a name for {position}", error=True)
             return
         
         if self.event_manager.update_coach(position, coach_name):
-            QMessageBox.information(self, "Success", f"Updated {position} to {coach_name}")
+            self._show_status_message(f"Updated {position} to {coach_name}")
         else:
-            QMessageBox.critical(self, "Error", f"Failed to update {position}") 
+            self._show_status_message(f"Failed to update {position}", error=True) 
