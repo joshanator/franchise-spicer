@@ -23,9 +23,9 @@ ENV/
 madden_franchise_qt/data/*.json
 madden_franchise_qt/data/config.json
 madden_franchise_qt/data/config_backup_*.json
-madden_franchise_qt/saves/
-*.save
-*.backup
+madden_franchise_qt/saves/*.json
+# *.save
+# *.backup
 
 # Keep events.json template in the repo
 !madden_franchise_qt/data/events.json
