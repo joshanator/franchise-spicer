@@ -1,10 +1,10 @@
-# Madden 25 Franchise Event Generator
+# Madden Franchise Event Generator
 
-A Python application that generates random events for Madden 25 franchise mode to make gameplay more dynamic and unpredictable.
+A Python application that generates random events for Madden franchise mode to make gameplay more dynamic and unpredictable.
 
 ## Features
 
-- Generate random events that affect your Madden 25 franchise
+- Generate random events that affect your Madden franchise
 - Events impact players, coaches, and team circumstances
 - Adjustable difficulty levels to control event severity
 - Save and load franchise configurations

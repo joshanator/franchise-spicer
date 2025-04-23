@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         
         # Set window properties
-        self.setWindowTitle("Madden 25 Franchise Event Generator")
+        self.setWindowTitle("Madden Franchise Event Generator")
         self.setMinimumSize(QSize(900, 700))
         
         # Initialize data managers
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(10, 10, 10, 10)
         
         # Create header
-        header_label = QLabel("MADDEN 25 FRANCHISE EVENT GENERATOR")
+        header_label = QLabel("MADDEN FRANCHISE EVENT GENERATOR")
         header_label.setFont(QFont("Arial", 16, QFont.Bold))
         header_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(header_label)
@@ -167,7 +167,7 @@ class MainWindow(QMainWindow):
     def show_startup_dialog(self):
         """Show startup dialog requiring user to create or load a franchise"""
         dialog = QDialog(self)
-        dialog.setWindowTitle("Welcome to Madden 25 Franchise Event Generator")
+        dialog.setWindowTitle("Welcome to Madden Franchise Event Generator")
         dialog.setModal(True)
         dialog.setMinimumWidth(400)
         
@@ -177,7 +177,7 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(dialog)
         
         # Add logo or title
-        title = QLabel("Welcome to Madden 25 Franchise Event Generator")
+        title = QLabel("Welcome to Madden Franchise Event Generator")
         title.setAlignment(Qt.AlignCenter)
         title.setFont(QFont("Arial", 14, QFont.Bold))
         layout.addWidget(title)
@@ -373,9 +373,9 @@ class MainWindow(QMainWindow):
     def show_about(self):
         """Show the about dialog"""
         about_text = """
-        <h3>Madden 25 Franchise Event Generator</h3>
+        <h3>Madden Franchise Event Generator</h3>
         <p>Version 1.0</p>
-        <p>This tool generates random events for your Madden 25 franchise mode to 
+        <p>This tool generates random events for your Madden franchise mode to 
         make the experience more dynamic and unpredictable. Events can affect 
         players, coaches, and team circumstances.</p>
         """
