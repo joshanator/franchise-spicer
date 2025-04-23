@@ -163,6 +163,10 @@ class FranchiseTab(QWidget):
         # Auto-save checkbox
         self.auto_save_checkbox = QCheckBox("Auto-save when changes are made")
         self.auto_save_checkbox.setToolTip("Automatically save the franchise file when making any changes")
+        # Make sure we set the initial state correctly
+        self.auto_save_checkbox.setTristate(False)  # Make it a two-state checkbox (not tristate)
+        self.auto_save_checkbox.setCheckState(Qt.Unchecked)  # Start unchecked
+        # Connect to our handler
         self.auto_save_checkbox.stateChanged.connect(self._toggle_auto_save)
         save_layout.addWidget(self.auto_save_checkbox)
         
@@ -209,6 +213,12 @@ class FranchiseTab(QWidget):
         # Update auto-save checkbox
         auto_save = self.event_manager.config.get('auto_save', False)
         print(f"Refresh: auto_save={auto_save}")
+        # Set the checkbox state explicitly using setCheckState
+        if auto_save:
+            self.auto_save_checkbox.setCheckState(Qt.Checked)
+        else:
+            self.auto_save_checkbox.setCheckState(Qt.Unchecked)
+        # The line below is kept for backward compatibility
         self.auto_save_checkbox.setChecked(auto_save)
         
         # Update season stage
@@ -383,7 +393,12 @@ class FranchiseTab(QWidget):
         Args:
             state: The checkbox state
         """
-        is_checked = state == Qt.Checked
+        # Debug the actual state value we're receiving
+        print(f"Raw state value: {state}, Qt.Checked value: {Qt.Checked}")
+        
+        # In Qt, Checked=2, Unchecked=0, PartiallyChecked=1
+        # Sometimes the comparison state == Qt.Checked fails, so we check the raw value
+        is_checked = (state == Qt.Checked or state == 2)
         
         # Debug print
         print(f"Auto-save checkbox toggled to: {is_checked}")
@@ -395,21 +410,26 @@ class FranchiseTab(QWidget):
         # More debug info
         print(f"Config auto_save value after toggle: {self.event_manager.config.get('auto_save')}")
         
+        # Update save file label
+        save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
+        if save_file:
+            # Remove .json extension for display purposes
+            display_name = save_file
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]  # Remove the .json extension
+                
+            if is_checked:
+                self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
+            else:
+                self.save_file_label.setText(f"Current save file: {display_name}")
+        
+        # Always show the appropriate message based on the checkbox state
         if is_checked:
-            # Trigger an immediate auto-save to verify it's working
+            # If enabled, try an immediate save
             success, message = self.event_manager._try_auto_save()
             
             if success:
-                self._show_auto_save_status(True)
-                
-                # Update save file label to indicate auto-save is on
-                save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
-                if save_file:
-                    # Remove .json extension for display purposes
-                    display_name = save_file
-                    if display_name.lower().endswith('.json'):
-                        display_name = display_name[:-5]  # Remove the .json extension
-                    self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
+                self._show_status_message("Auto-save is now enabled. Your franchise will be saved automatically when changes are made.")
             else:
                 self._show_status_message(
                     f"Auto-save is enabled but couldn't perform initial save: {message}. "
@@ -417,26 +437,7 @@ class FranchiseTab(QWidget):
                     error=True
                 )
         else:
-            self._show_auto_save_status(False)
-            
-            # Update save file label to indicate auto-save is off
-            save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
-            if save_file:
-                # Remove .json extension for display purposes
-                display_name = save_file
-                if display_name.lower().endswith('.json'):
-                    display_name = display_name[:-5]  # Remove the .json extension
-                self.save_file_label.setText(f"Current save file: {display_name}")
-    
-    def _show_auto_save_status(self, enabled):
-        """Show in-UI auto-save status message
-        
-        Args:
-            enabled: Whether auto-save is enabled
-        """
-        if enabled:
-            self._show_status_message("Auto-save is now enabled. Your franchise will be saved automatically when changes are made.")
-        else:
+            # Auto-save was disabled
             self._show_status_message("Auto-save is now disabled. Remember to save your franchise manually.")
     
     def _show_status_message(self, message, error=False):
