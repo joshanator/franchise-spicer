@@ -270,23 +270,34 @@ class DataManager:
                 
                 # If running as executable, the file might be in a different location
                 if getattr(sys, 'frozen', False):
-                    # PyInstaller places data files relative to the executable
-                    if hasattr(sys, '_MEIPASS'):
-                        # PyInstaller's temp folder with bundled data
-                        bundled_events_path = os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'events.json')
-                        if os.path.exists(bundled_events_path):
-                            shutil.copy2(bundled_events_path, self.events_path)
+                    # For PyInstaller onedir mode
+                    exe_path = os.path.abspath(sys.executable)
+                    exe_dir = os.path.dirname(exe_path)
+                    
+                    # Try various locations
+                    possible_paths = [
+                        # PyInstaller's temp folder with bundled data (for onefile mode)
+                        os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'events.json') if hasattr(sys, '_MEIPASS') else None,
+                        # Adjacent to executable in the same directory (for onedir mode)
+                        os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'events.json'),
+                        # In parent directory (for macOS app bundles)
+                        os.path.join(os.path.dirname(exe_dir), 'madden_franchise_qt', 'data', 'events.json'),
+                        # Directly in the executable directory
+                        os.path.join(exe_dir, 'events.json')
+                    ]
+                    
+                    # Try each path
+                    for path in possible_paths:
+                        if path and os.path.exists(path):
+                            shutil.copy2(path, self.events_path)
+                            print(f"Copied events.json from {path}")
                             return
                     
-                    # Try relative to the executable
-                    exe_dir = os.path.dirname(sys.executable)
-                    exe_events_path = os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'events.json')
-                    if os.path.exists(exe_events_path):
-                        shutil.copy2(exe_events_path, self.events_path)
-                        return
+                    print(f"Warning: Could not find events.json in any of the expected locations: {possible_paths}")
             except Exception as e:
                 print(f"Warning: Could not copy events.json template: {e}")
             
             # If we couldn't find the template, create a minimal one
+            print("Creating a minimal empty events.json file")
             with open(self.events_path, 'w') as f:
                 json.dump({"events": []}, f) 

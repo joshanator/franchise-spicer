@@ -40,11 +40,13 @@ This will automatically install PySide6 if needed and launch the application.
 For users who prefer not to install Python, we provide standalone executable options:
 
 1. Download the latest release for your platform from the [Releases](https://github.com/yourusername/franchise-spicer/releases) page
-2. Extract the archive (if applicable)
-3. Run the executable:
-   - Windows: Double-click `Madden Franchise Generator.exe`
-   - macOS: Double-click `Madden Franchise Generator.app`
-   - Linux: Run `./Madden Franchise Generator`
+2. Extract the ZIP archive to any location
+3. Run the application:
+   - Windows: Open the extracted folder and double-click the `.exe` file
+   - macOS: Double-click the extracted `.app` file (right-click and select "Open" if you get a security warning)
+   - Linux: Navigate to the extracted folder and run the executable (`chmod +x` first if needed)
+
+The application is fully portable - you can copy the extracted folder to any location, including a USB drive, and it will run properly. Your save files will always be stored in your user data directory (see [Save File Location](#save-file-location) section).
 
 ### Option 3: Build Your Own Executable
 
@@ -54,7 +56,7 @@ If you want to build your own executable:
 2. Install PyInstaller (if you don't have it already):
 
 ```bash
-python3 -m pip install PyInstaller
+python3 -m pip install PyInstaller appdirs
 ```
 
 3. Run the build script:
@@ -63,7 +65,10 @@ python3 -m pip install PyInstaller
 python3 build_executable.py
 ```
 
-4. The executable will be created in the `dist` directory
+4. The executable will be created in the `builds/{version}/{platform}/` directory
+5. A ZIP archive will also be created for easy distribution
+
+The build script creates executables for all platforms, generating build instructions for platforms other than your current one. To create a complete distribution, run the script on Windows, macOS, and Linux systems.
 
 #### Notes for macOS Users:
 - You may need to give the app permission to run by right-clicking and selecting "Open"
@@ -128,4 +133,4 @@ This project is open source and available under the MIT License.
 
 ## Acknowledgments
 
-This tool is designed for use with EA's Madden NFL 25 game but is not affiliated with or endorsed by EA Sports or the NFL.
+This tool is designed for use with EA's Madden NFL game but is not affiliated with or endorsed by EA Sports or the NFL.

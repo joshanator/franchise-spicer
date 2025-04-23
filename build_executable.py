@@ -110,7 +110,7 @@ def build_executable():
         "-m", "PyInstaller",
         "--name", app_name,
         "--windowed",
-        "--onefile",
+        "--onedir",
         f"--distpath={build_dir}"
     ]
     
@@ -144,37 +144,79 @@ def build_executable():
         
         # Provide output location information
         if system == "Windows":
-            exe_path = os.path.join(build_dir, f"{app_name}.exe")
+            exe_dir = os.path.join(build_dir, app_name)
+            exe_path = os.path.join(exe_dir, f"{app_name}.exe")
         elif system == "Darwin":
-            exe_path = os.path.join(build_dir, f"{app_name}.app")
+            exe_dir = os.path.join(build_dir, f"{app_name}.app")
+            exe_path = exe_dir  # For macOS, the .app folder is the executable
         else:
-            exe_path = os.path.join(build_dir, app_name)
+            exe_dir = os.path.join(build_dir, app_name)
+            exe_path = os.path.join(exe_dir, app_name)
         
-        if os.path.exists(exe_path):
-            print(f"\nBuild successful! Executable created at: {os.path.abspath(exe_path)}")
+        if os.path.exists(exe_dir):
+            print(f"\nBuild successful! Application created at: {os.path.abspath(exe_dir)}")
+            
+            # Create a ZIP archive for easy distribution
+            zip_name = f"{app_name}_{platform_name}.zip"
+            zip_path = os.path.join(build_dir, zip_name)
+            
+            print(f"Creating ZIP archive: {zip_path}")
+            if system == "Windows":
+                import zipfile
+                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    for root, dirs, files in os.walk(exe_dir):
+                        for file in files:
+                            file_path = os.path.join(root, file)
+                            arcname = os.path.relpath(file_path, build_dir)
+                            zipf.write(file_path, arcname)
+            else:
+                # Use shutil make_archive for Unix systems
+                shutil.make_archive(
+                    os.path.join(build_dir, app_name + "_" + platform_name),
+                    'zip',
+                    build_dir,
+                    os.path.basename(exe_dir)
+                )
+            
+            print(f"ZIP archive created at: {os.path.abspath(zip_path)}")
             
             # Create a README in the build directory
             readme_path = os.path.join(build_dir, "README.txt")
             with open(readme_path, 'w') as f:
                 f.write(f"Madden Franchise Generator v{version}\n")
                 f.write(f"Built on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for {system}\n\n")
-                f.write("To run the application:\n")
+                f.write("TO RUN THE APPLICATION:\n")
+                f.write("=======================\n")
                 if system == "Windows":
-                    f.write(f"- Double-click the '{app_name}.exe' file\n")
+                    f.write(f"1. Extract the ZIP archive '{zip_name}' to any location\n")
+                    f.write(f"2. Open the extracted folder and double-click '{app_name}.exe'\n")
+                elif system == "Darwin":
+                    f.write(f"1. Extract the ZIP archive '{zip_name}' to any location\n")
+                    f.write(f"2. Double-click the extracted '{app_name}.app' file\n")
+                    f.write("3. If you get a security warning, right-click the app and select 'Open'\n")
+                else:
+                    f.write(f"1. Extract the ZIP archive '{zip_name}' to any location\n")
+                    f.write(f"2. Open the extracted folder and run: ./{app_name}\n")
+                    f.write(f"   (You may need to make it executable first: chmod +x {app_name})\n")
+                
+                f.write("\nPORTABILITY NOTES:\n")
+                f.write("=================\n")
+                f.write("This application is designed to be portable and can be run from any location:\n")
+                f.write("- You can copy the entire extracted folder to a USB drive or any directory\n")
+                f.write("- The application will always store save files in the user data directory\n\n")
+                
+                f.write("SAVE FILES AND CONFIGURATION:\n")
+                f.write("===========================\n")
+                if system == "Windows":
                     save_location = r"C:\Users\{username}\AppData\Local\MaddenTools\MaddenFranchiseGenerator"
                 elif system == "Darwin":
-                    f.write(f"- Double-click the '{app_name}.app' file\n")
-                    f.write("- If you get a security warning, right-click the app and select 'Open'\n")
                     save_location = r"/Users/{username}/Library/Application Support/MaddenTools/MaddenFranchiseGenerator"
                 else:
-                    f.write(f"- Make the file executable: chmod +x '{app_name}'\n")
-                    f.write(f"- Run it: ./{app_name}\n")
                     save_location = r"~/.local/share/MaddenTools/MaddenFranchiseGenerator"
                 
-                f.write("\nSave files and configuration:\n")
-                f.write(f"- Your save files will be stored in: {save_location}\n")
-                f.write("- This location is created automatically when you run the application\n")
-                f.write("- If you need to backup your save files, this is where to find them\n")
+                f.write(f"Your save files will be stored in: {save_location}\n")
+                f.write("This location is created automatically when you run the application\n")
+                f.write("If you need to backup your save files, this is where to find them\n")
             
             print(f"Created README at: {os.path.abspath(readme_path)}")
             
