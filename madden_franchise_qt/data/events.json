@@ -79,8 +79,8 @@
     {
       "id": 6,
       "title": "Coach's Pet",
-      "description": "Player has become the coach's favorite.",
-      "impact": "+1 awareness boost and must start the next 2 weeks regardless of performance",
+      "description": "Player seen giving coach a back rub and telling him how great he is.",
+      "impact": "+1 permanent awareness boost and must start the next 2 weeks regardless of performance",
       "target_options": ["QB2", "RB2", "RB3", "WR3", "WR4", "TE2", "CB3", "FS2"],
       "difficulty_weights": {
         "easy": 0.6,
@@ -123,8 +123,8 @@
     {
       "id": 9,
       "title": "Bad Influence",
-      "description": "Player caught hanging out with Antonio Brown, causing locker room disruption.",
-      "impact": "Team morale decreased, -2 awareness for player",
+      "description": "Player seen waving gun around on live with Antonio Brown, causing coach to address quesitons in next press conference.",
+      "impact": "Team morale decreased, -4 awareness for player",
       "target_options": ["WR1", "WR2", "CB1", "FS1", "SS1", "RB1"],
       "difficulty_weights": {
         "easy": 0.4,
