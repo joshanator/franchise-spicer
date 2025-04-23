@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         self.version = get_version()
         
         # Set window properties
-        self.setWindowTitle(f"Madden 25 Franchise Event Generator v{self.version}")
+        self.setWindowTitle(f"Madden Franchise Event Generator v{self.version}")
         self.setMinimumSize(QSize(900, 700))
         
         # Initialize data managers
@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(10, 10, 10, 10)
         
         # Create header
-        header_label = QLabel("MADDEN 25 FRANCHISE EVENT GENERATOR")
+        header_label = QLabel("MADDEN FRANCHISE EVENT GENERATOR")
         header_label.setFont(QFont("Arial", 16, QFont.Bold))
         header_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(header_label)
@@ -400,9 +400,9 @@ class MainWindow(QMainWindow):
     def show_about(self):
         """Show the about dialog"""
         about_text = f"""
-        <h3>Madden 25 Franchise Event Generator</h3>
+        <h3>Madden Franchise Event Generator</h3>
         <p>Version {self.version}</p>
-        <p>This tool generates random events for your Madden 25 franchise mode to 
+        <p>This tool generates random events for your Madden franchise mode to 
         make the experience more dynamic and unpredictable. Events can affect 
         players, coaches, and team circumstances.</p>
         """

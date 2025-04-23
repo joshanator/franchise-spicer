@@ -2,7 +2,7 @@ Madden Franchise Generator v0.1 - Build Status
 ==================================================
 
 ❌ Windows: Not built yet. Run build_executable.py on a Windows machine.
-✅ Macos: Built successfully on 2025-04-23 10:09:11
+✅ Macos: Built successfully on 2025-04-23 10:20:03
 ❌ Linux: Not built yet. Run build_executable.py on a Linux machine.
 
 To complete all builds, run this script on each platform type.

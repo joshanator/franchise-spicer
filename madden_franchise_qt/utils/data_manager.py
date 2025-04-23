@@ -1,6 +1,8 @@
 import json
 import os
 import shutil
+import sys
+import appdirs
 from datetime import datetime
 
 class DataManager:
@@ -12,9 +14,17 @@ class DataManager:
         Args:
             base_dir: The base directory of the application
         """
-        self.base_dir = base_dir
-        self.data_dir = os.path.join(base_dir, 'data')
-        self.saves_dir = os.path.join(base_dir, 'saves')
+        # Determine if we're running from a PyInstaller bundle
+        if getattr(sys, 'frozen', False):
+            # Running as executable - use user's home directory
+            self.base_dir = appdirs.user_data_dir("MaddenFranchiseGenerator", "MaddenTools")
+        else:
+            # Running from source code - use provided directory
+            self.base_dir = base_dir
+            
+        # Define data and saves directories
+        self.data_dir = os.path.join(self.base_dir, 'data')
+        self.saves_dir = os.path.join(self.base_dir, 'saves')
         
         # Ensure directories exist
         os.makedirs(self.data_dir, exist_ok=True)
@@ -22,6 +32,9 @@ class DataManager:
         
         self.config_path = os.path.join(self.data_dir, 'config.json')
         self.events_path = os.path.join(self.data_dir, 'events.json')
+        
+        # Set up events.json if it doesn't exist
+        self._ensure_events_file_exists(base_dir)
     
     def load_config(self):
         """Load the configuration file
@@ -238,4 +251,42 @@ class DataManager:
                 return False, f"Created franchise but failed to save: {message}", config, []
         
         except Exception as e:
-            return False, f"Error creating new franchise: {str(e)}", None, [] 
+            return False, f"Error creating new franchise: {str(e)}", None, []
+    
+    def _ensure_events_file_exists(self, source_dir):
+        """Make sure events.json exists in the data directory
+        
+        Args:
+            source_dir: Original source directory to copy from if needed
+        """
+        if not os.path.exists(self.events_path):
+            # Try to copy from the source directory or bundled resources
+            try:
+                # First check in the source directory
+                source_events_path = os.path.join(source_dir, 'data', 'events.json')
+                if os.path.exists(source_events_path):
+                    shutil.copy2(source_events_path, self.events_path)
+                    return
+                
+                # If running as executable, the file might be in a different location
+                if getattr(sys, 'frozen', False):
+                    # PyInstaller places data files relative to the executable
+                    if hasattr(sys, '_MEIPASS'):
+                        # PyInstaller's temp folder with bundled data
+                        bundled_events_path = os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'events.json')
+                        if os.path.exists(bundled_events_path):
+                            shutil.copy2(bundled_events_path, self.events_path)
+                            return
+                    
+                    # Try relative to the executable
+                    exe_dir = os.path.dirname(sys.executable)
+                    exe_events_path = os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'events.json')
+                    if os.path.exists(exe_events_path):
+                        shutil.copy2(exe_events_path, self.events_path)
+                        return
+            except Exception as e:
+                print(f"Warning: Could not copy events.json template: {e}")
+            
+            # If we couldn't find the template, create a minimal one
+            with open(self.events_path, 'w') as f:
+                json.dump({"events": []}, f) 
