@@ -117,11 +117,11 @@ class EventManager:
         # Define season stage mapping (allows events to specify multiple stages)
         stage_mapping = {
             "Pre-Season": ["pre-season", "any"],
-            "Regular Season (Weeks 1-8)": ["regular-season", "weeks-1-8", "any"],
-            "Trade Deadline (Week 8)": ["trade-deadline", "regular-season", "any"],
-            "Regular Season (Weeks 9-18)": ["regular-season", "weeks-9-18", "any"],
-            "Playoffs": ["playoffs", "any"],
-            "Offseason": ["offseason", "any"]
+            "Regular Season Start": ["regular-season", "regular-season-start", "any"],
+            "Regular Season Mid": ["regular-season", "regular-season-mid", "any"],
+            "Regular Season End": ["regular-season", "regular-season-end", "any"],
+            "Post-Season": ["post-season", "playoffs", "any"],
+            "Off-Season": ["off-season", "offseason", "any"]
         }
         
         # Determine allowed season stages for the current stage

@@ -13,7 +13,7 @@
         "hard": 0.8
       },
       "category": "roster",
-      "season_stages": ["pre-season", "free-agency"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 2,
@@ -28,7 +28,7 @@
         "hard": 0.6
       },
       "category": "team",
-      "season_stages": ["pre-season", "free-agency"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 3,
@@ -74,7 +74,7 @@
         "hard": 0.5
       },
       "category": "attribute",
-      "season_stages": ["pre-season", "free-agency"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 6,
@@ -88,12 +88,12 @@
         "hard": 0.4
       },
       "category": "lineup",
-      "season_stages": ["regular-season", "weeks-1-8", "weeks-9-18"]
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     },
     {
       "id": 7,
       "title": "PED Suspension",
-      "description": "Player suspended for {games} games due to performance enhancing drugs.",
+      "description": "Player suspended for {games} games after testing positive for performance enhancing drugs.",
       "impact": "Player unavailable for specified number of games",
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LE1", "DT1", "MLB1", "CB1", "SS1"],
       "games_options": [2, 4, 6, 8],
@@ -103,7 +103,7 @@
         "hard": 0.7
       },
       "category": "suspension",
-      "season_stages": ["pre-season", "regular-season", "weeks-1-8", "weeks-9-18"]
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid", "regular-season-end"]
     },
     {
       "id": 8,
@@ -118,7 +118,7 @@
         "hard": 0.6
       },
       "category": "suspension",
-      "season_stages": ["pre-season", "regular-season", "weeks-1-8", "weeks-9-18"]
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid", "regular-season-end"]
     },
     {
       "id": 9,
@@ -132,7 +132,7 @@
         "hard": 0.8
       },
       "category": "team",
-      "season_stages": ["pre-season", "regular-season", "weeks-1-8", "weeks-9-18"]
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid", "regular-season-end"]
     },
     {
       "id": 10,
@@ -153,7 +153,7 @@
         "hard": 0.5
       },
       "category": "challenge",
-      "season_stages": ["regular-season", "weeks-1-8", "weeks-9-18"]
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     },
     {
       "id": 11,
