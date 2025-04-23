@@ -226,13 +226,18 @@ class FranchiseTab(QWidget):
         elif difficulty == 'hard':
             self.hard_radio.setChecked(True)
         
-        # Update save file info
+        # Update save file info - hide the .json extension from display
         save_file = franchise_info.get('save_file', '')
         if save_file:
+            # Remove .json extension for display purposes
+            display_name = save_file
+            # if display_name.lower().endswith('.json'):
+            #     display_name = display_name[:-5]  # Remove the .json extension
+                
             if auto_save:
-                self.save_file_label.setText(f"Current save file: {save_file} (Auto-save ON)")
+                self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
             else:
-                self.save_file_label.setText(f"Current save file: {save_file}")
+                self.save_file_label.setText(f"Current save file: {display_name}")
         else:
             self.save_file_label.setText("No save file loaded")
     
@@ -400,7 +405,11 @@ class FranchiseTab(QWidget):
                 # Update save file label to indicate auto-save is on
                 save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
                 if save_file:
-                    self.save_file_label.setText(f"Current save file: {save_file} (Auto-save ON)")
+                    # Remove .json extension for display purposes
+                    display_name = save_file
+                    if display_name.lower().endswith('.json'):
+                        display_name = display_name[:-5]  # Remove the .json extension
+                    self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
             else:
                 self._show_status_message(
                     f"Auto-save is enabled but couldn't perform initial save: {message}. "
@@ -413,7 +422,11 @@ class FranchiseTab(QWidget):
             # Update save file label to indicate auto-save is off
             save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
             if save_file:
-                self.save_file_label.setText(f"Current save file: {save_file}")
+                # Remove .json extension for display purposes
+                display_name = save_file
+                if display_name.lower().endswith('.json'):
+                    display_name = display_name[:-5]  # Remove the .json extension
+                self.save_file_label.setText(f"Current save file: {display_name}")
     
     def _show_auto_save_status(self, enabled):
         """Show in-UI auto-save status message

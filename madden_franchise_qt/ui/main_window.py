@@ -268,11 +268,25 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "No Saves", "No save files found.")
             return False
         
-        selected_file, ok = QInputDialog.getItem(
-            self, "Load Franchise", "Select save file:", save_files, 0, False
+        # Create a mapping of display names (without .json) to actual filenames
+        display_names = []
+        name_to_file_map = {}
+        
+        for save_file in save_files:
+            display_name = save_file
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]
+            display_names.append(display_name)
+            name_to_file_map[display_name] = save_file
+        
+        selected_display, ok = QInputDialog.getItem(
+            self, "Load Franchise", "Select save file:", display_names, 0, False
         )
         
-        if ok and selected_file:
+        if ok and selected_display:
+            # Map the selected display name back to the actual filename
+            selected_file = name_to_file_map[selected_display]
+            
             success, message, config, event_history = self.data_manager.load_franchise(selected_file)
             
             if success:
@@ -307,7 +321,11 @@ class MainWindow(QMainWindow):
         )
         
         if success:
-            self.status_message.setText(f"Saved to {current_save_file}")
+            # Hide .json extension in status message
+            display_name = current_save_file
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]
+            self.status_message.setText(f"Saved to {display_name}")
             return True
         else:
             QMessageBox.critical(self, "Error", f"Failed to save: {message}")
