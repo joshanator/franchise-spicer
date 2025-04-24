@@ -35,6 +35,7 @@ madden_franchise_qt/saves/example\ bears.json
 
 # Keep events.json template in the repo
 !madden_franchise_qt/data/events.json
+!madden_franchise_qt/data/unrealistic_events.json
 
 # macOS specific files
 .DS_Store

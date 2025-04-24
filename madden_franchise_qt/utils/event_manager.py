@@ -15,6 +15,9 @@ class EventManager:
         self.config = data_manager.load_config()
         self.events = data_manager.load_events()
         
+        # Load unrealistic events
+        self.unrealistic_events = data_manager.load_unrealistic_events()
+        
         # Keep event history in memory, only stored in save files
         self.event_history = self.config.get('event_history', [])
         
@@ -26,6 +29,11 @@ class EventManager:
         # Set default difficulty if not set yet
         if 'difficulty' not in self.config:
             self.config['difficulty'] = 'pro'
+            self._save_config()
+            
+        # Set default unrealistic events setting if not set yet
+        if 'unrealistic_events_enabled' not in self.config:
+            self.config['unrealistic_events_enabled'] = False
             self._save_config()
     
     def _save_config(self):
@@ -54,6 +62,27 @@ class EventManager:
             return False
         
         self.config['difficulty'] = difficulty
+        self._save_config()
+        return True
+    
+    def are_unrealistic_events_enabled(self):
+        """Check if unrealistic events are enabled
+        
+        Returns:
+            bool: True if unrealistic events are enabled, False otherwise
+        """
+        return self.config.get('unrealistic_events_enabled', False)
+    
+    def set_unrealistic_events_enabled(self, enabled):
+        """Enable or disable unrealistic events
+        
+        Args:
+            enabled: Boolean indicating whether unrealistic events should be enabled
+            
+        Returns:
+            bool: True if successful
+        """
+        self.config['unrealistic_events_enabled'] = bool(enabled)
         self._save_config()
         return True
     
@@ -132,7 +161,7 @@ class EventManager:
         current_season_stage = self.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
         allowed_stages = self._get_allowed_stages(current_season_stage)
         
-        # Filter events based on difficulty weights and season stage
+        # Filter standard events based on difficulty weights and season stage
         for event in self.events.get('events', []):
             # Check difficulty weight
             weight = event.get('difficulty_weights', {}).get(difficulty, 0.5)
@@ -144,6 +173,20 @@ class EventManager:
             # If this event matches both difficulty and season stage, add to eligible events
             if random.random() < weight and stage_match:
                 eligible_events.append(event)
+        
+        # Add unrealistic events if enabled
+        if self.config.get('unrealistic_events_enabled', False):
+            for event in self.unrealistic_events.get('unrealistic_events', []):
+                # Check difficulty weight
+                weight = event.get('difficulty_weights', {}).get(difficulty, 0.5)
+                
+                # Check season stage eligibility
+                event_stages = event.get('season_stages', ["any"])
+                stage_match = any(stage in allowed_stages for stage in event_stages)
+                
+                # If this event matches both difficulty and season stage, add to eligible events
+                if random.random() < weight and stage_match:
+                    eligible_events.append(event)
         
         if not eligible_events:
             return None
@@ -386,6 +429,7 @@ class EventManager:
     def reload_events(self):
         """Reload the events data"""
         self.events = self.data_manager.load_events()
+        self.unrealistic_events = self.data_manager.load_unrealistic_events()
         
     def get_config_with_history(self):
         """Get a copy of the config with event history included

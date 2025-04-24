@@ -1,0 +1,53 @@
+{
+    "unrealistic_events": [
+        {
+            "id": 1,
+            "title": "A sketchy opportunity",
+            "description": "A shady figure dressed in a trench coat approaches your {target} at a signature event and asks them to come see something in private. Your player looks to you for approval.",
+            "impact": "Go with him and the shady figure to see what he has?",
+            "options": [
+                {
+                    "description": "Nod and go with them.",
+                    "impact": "You and your player go with the shady figure to see what he has. He opens a breifcase and shows you a series of syringes.",
+                    "options": [
+                        {
+                            "description": "Red syringe: The elixir of Immediate Gratification",
+                            "impact": "Your player sacrifices their youth for an immediate boost. Permanently gains +1 to every stat and +2 to his age."
+                        },
+                        {
+                            "description": "Blue syringe: The elixir of Envy",
+                            "impact": "Your player may trade their dev trait with another starter on the team. The other player must not be older than them."
+                        },
+                        {
+                            "description": "Green syringe: The elixir of Youth",
+                            "impact": "Your player trades their development for a return to youth. Downgrade the players dev trait to normal and remove -1 from age for every level of dev trait they lose. If at the end of the season this player gains a dev trait it must be reset to normal."
+                        }
+                    ]
+                },
+                {
+                    "description": "Call security and have the shady figure escorted out of the event.",
+                    "impact": "The figure is escorted out of the event. I wonder what that was about."
+                }
+            ],
+            "target_options": [
+                "all-players"
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.5,
+                "rookie": 0.4,
+                "pro": 0.3,
+                "all-madden": 0.2,
+                "diabolical": 0.1
+            },
+            "category": "roster",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end",
+                "playoffs",
+                "off-season"
+            ]
+        }
+    ]
+}

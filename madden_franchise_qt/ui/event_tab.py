@@ -172,8 +172,11 @@ class EventTab(QWidget):
         # Convert week number to user-friendly display
         week_display = get_week_display(week)
         
+        # Check if unrealistic events are enabled
+        unrealistic_events = "ON" if self.event_manager.config.get('unrealistic_events_enabled', False) else "OFF"
+        
         # Include the internal stage name for debugging
-        self.status_message.setText(f"Current season stage: {current_stage} - {week_display}, Year {year}")
+        self.status_message.setText(f"Current season stage: {current_stage} - {week_display}, Year {year} | Unrealistic events: {unrealistic_events}")
         self.status_message.setVisible(True)
         
         # Clear event display if no current event

@@ -299,6 +299,18 @@ class FranchiseTab(QWidget):
         # Add the selection layout to the main difficulty layout
         difficulty_layout.addLayout(difficulty_selection_layout)
         
+        # Add unrealistic events checkbox
+        unrealistic_events_layout = QHBoxLayout()
+        self.unrealistic_events_checkbox = QCheckBox("Enable unrealistic events")
+        self.unrealistic_events_checkbox.setMinimumHeight(30)
+        self.unrealistic_events_checkbox.setToolTip("Include wacky, 'unrealistic' events in the event pool")
+        self.unrealistic_events_checkbox.setTristate(False)  # Make it a two-state checkbox
+        self.unrealistic_events_checkbox.setCheckState(Qt.Unchecked)  # Start unchecked
+        self.unrealistic_events_checkbox.stateChanged.connect(self._toggle_unrealistic_events)
+        unrealistic_events_layout.addWidget(self.unrealistic_events_checkbox)
+        unrealistic_events_layout.addStretch(1)  # Push checkbox to the left
+        difficulty_layout.addLayout(unrealistic_events_layout)
+        
         # Update button
         update_difficulty_layout = QHBoxLayout()
         self.update_difficulty_button = QPushButton("Update Difficulty")
@@ -447,36 +459,40 @@ class FranchiseTab(QWidget):
         if self.week_combo.count() == 0:
             self._populate_week_combo()
         
-        # Find and select the correct week
+        # Update week display
         week_display = get_week_display(current_week)
         index = self.week_combo.findText(week_display)
         if index >= 0:
+            # Block signals to prevent triggering the update callback
             self.week_combo.blockSignals(True)
             self.week_combo.setCurrentIndex(index)
             self.week_combo.blockSignals(False)
         
-        # Update year spinner
+        # Update year display - block signals here too
+        self.year_spinner.blockSignals(True)
         self.year_spinner.setValue(current_year)
+        self.year_spinner.blockSignals(False)
         
-        # Display user-friendly week in status message - but only during initial load
-        # Don't override existing messages that might be showing important info
-        if not self.status_message.isVisible():
-            self._show_status_message(f"Current: {week_display}, Year {current_year}", error=False)
-        
-        # Update auto-save checkbox
+        # Get auto-save status for later
         auto_save = self.event_manager.config.get('auto_save', False)
-        print(f"Refresh: auto_save={auto_save}")
-        # Set the checkbox state explicitly using setCheckState
-        if auto_save:
-            self.auto_save_checkbox.setCheckState(Qt.Checked)
-        else:
-            self.auto_save_checkbox.setCheckState(Qt.Unchecked)
-        # The line below is kept for backward compatibility
-        self.auto_save_checkbox.setChecked(auto_save)
         
-        # Update season stage
-        season_stage = get_season_stage_for_week(current_week)
-        stage_display = get_display_for_season_stage(season_stage)
+        # Get unrealistic events status
+        unrealistic_events_enabled = self.event_manager.config.get('unrealistic_events_enabled', False)
+        
+        # Set auto-save checkbox based on config
+        # Don't block signals as we want this to trigger display update
+        self.auto_save_checkbox.setCheckState(Qt.Checked if auto_save else Qt.Unchecked)
+        
+        # Set unrealistic events checkbox based on config
+        self.unrealistic_events_checkbox.setCheckState(Qt.Checked if unrealistic_events_enabled else Qt.Unchecked)
+        
+        # Update season stage display
+        current_stage = franchise_info.get('season_stage', 'Pre-Season')
+        stage_display = get_display_for_season_stage(current_stage)
+        
+        # Block signals to prevent triggering the update callback
+        self.season_stage_combo.blockSignals(True)
+        
         index = self.season_stage_combo.findText(stage_display)
         if index >= 0:
             self.season_stage_combo.setCurrentIndex(index)
@@ -504,10 +520,22 @@ class FranchiseTab(QWidget):
             if display_name.lower().endswith('.json'):
                 display_name = display_name[:-5]  # Remove the .json extension
                 
+            label_text = f"Current save file: {display_name}"
+            
+            # Add status flags
+            status_flags = []
             if auto_save:
-                self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
+                status_flags.append("Auto-save ON")
             else:
-                self.save_file_label.setText(f"Current save file: {display_name}")
+                status_flags.append("Auto-save OFF")
+                
+            if unrealistic_events_enabled:
+                status_flags.append("Unrealistic events ON")
+                
+            if status_flags:
+                label_text += f" ({', '.join(status_flags)})"
+                
+            self.save_file_label.setText(label_text)
         else:
             self.save_file_label.setText("No save file loaded")
     
@@ -747,22 +775,12 @@ class FranchiseTab(QWidget):
         Args:
             state: The checkbox state
         """
-        # Debug the actual state value we're receiving
-        print(f"Raw state value: {state}, Qt.Checked value: {Qt.Checked}")
-        
         # In Qt, Checked=2, Unchecked=0, PartiallyChecked=1
-        # Sometimes the comparison state == Qt.Checked fails, so we check the raw value
-        is_checked = (state == Qt.Checked or state == 2)
-        
-        # Debug print
-        print(f"Auto-save checkbox toggled to: {is_checked}")
+        is_checked = (state == 2)
         
         # Update the config
         self.event_manager.config['auto_save'] = is_checked
         self.event_manager.data_manager.save_config(self.event_manager.config)
-        
-        # More debug info
-        print(f"Config auto_save value after toggle: {self.event_manager.config.get('auto_save')}")
         
         # Update save file label
         save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
@@ -771,28 +789,32 @@ class FranchiseTab(QWidget):
             display_name = save_file
             if display_name.lower().endswith('.json'):
                 display_name = display_name[:-5]  # Remove the .json extension
-                
-            if is_checked:
-                self.save_file_label.setText(f"Current save file: {display_name} (Auto-save ON)")
-            else:
-                self.save_file_label.setText(f"Current save file: {display_name}")
-        
-        # Always show the appropriate message based on the checkbox state
-        if is_checked:
-            # If enabled, try an immediate save
-            success, message = self.event_manager._try_auto_save()
             
-            if success:
-                self._show_status_message("Auto-save is now enabled. Your franchise will be saved automatically when changes are made.")
+            # Get unrealistic events status
+            unrealistic_events_enabled = self.event_manager.config.get('unrealistic_events_enabled', False)
+            
+            label_text = f"Current save file: {display_name}"
+            
+            # Add status flags
+            status_flags = []
+            if is_checked:
+                status_flags.append("Auto-save ON")
             else:
-                self._show_status_message(
-                    f"Auto-save is enabled but couldn't perform initial save: {message}. "
-                    "Please save your franchise manually first.",
-                    error=True
-                )
+                status_flags.append("Auto-save OFF")
+                
+            if unrealistic_events_enabled:
+                status_flags.append("Unrealistic events ON")
+                
+            if status_flags:
+                label_text += f" ({', '.join(status_flags)})"
+                
+            self.save_file_label.setText(label_text)
+        
+        # Show status message
+        if is_checked:
+            self._show_status_message("Auto-save is now enabled.")
         else:
-            # Auto-save was disabled
-            self._show_status_message("Auto-save is now disabled. Remember to save your franchise manually.")
+            self._show_status_message("Auto-save is now disabled.")
     
     def _show_status_message(self, message, error=False):
         """Show a status message
@@ -833,4 +855,51 @@ class FranchiseTab(QWidget):
         
         # Re-enable signals
         self.week_combo.blockSignals(False)
-        self.year_spinner.blockSignals(False) 
+        self.year_spinner.blockSignals(False)
+
+    def _toggle_unrealistic_events(self, state):
+        """Toggle unrealistic events feature
+        
+        Args:
+            state: The checkbox state
+        """
+        # In Qt, Checked=2, Unchecked=0, PartiallyChecked=1
+        is_checked = (state == 2)
+        
+        # Update the config directly
+        self.event_manager.config['unrealistic_events_enabled'] = is_checked
+        self.event_manager.data_manager.save_config(self.event_manager.config)
+        
+        # Update save file label
+        save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
+        if save_file:
+            # Remove .json extension for display purposes
+            display_name = save_file
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]  # Remove the .json extension
+            
+            # Get auto-save status
+            auto_save = self.event_manager.config.get('auto_save', False)
+            
+            label_text = f"Current save file: {display_name}"
+            
+            # Add status flags
+            status_flags = []
+            if auto_save:
+                status_flags.append("Auto-save ON")
+            else:
+                status_flags.append("Auto-save OFF")
+                
+            if is_checked:
+                status_flags.append("Unrealistic events ON")
+                
+            if status_flags:
+                label_text += f" ({', '.join(status_flags)})"
+                
+            self.save_file_label.setText(label_text)
+        
+        # Show status message
+        if is_checked:
+            self._show_status_message("Unrealistic events are now enabled.")
+        else:
+            self._show_status_message("Unrealistic events are now disabled.") 

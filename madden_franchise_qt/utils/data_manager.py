@@ -32,6 +32,7 @@ class DataManager:
         
         self.config_path = os.path.join(self.data_dir, 'config.json')
         self.events_path = os.path.join(self.data_dir, 'events.json')
+        self.unrealistic_events_path = os.path.join(self.data_dir, 'unrealistic_events.json')
         
         # Set up events.json if it doesn't exist
         self._ensure_events_file_exists(base_dir)
@@ -65,6 +66,21 @@ class DataManager:
                 return json.load(f)
         except json.JSONDecodeError:
             return {"events": []}
+    
+    def load_unrealistic_events(self):
+        """Load the unrealistic events file
+        
+        Returns:
+            dict: The unrealistic events data
+        """
+        if not os.path.exists(self.unrealistic_events_path):
+            return {"unrealistic_events": []}
+        
+        try:
+            with open(self.unrealistic_events_path, 'r') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return {"unrealistic_events": []}
     
     def save_config(self, config):
         """Save the configuration data
