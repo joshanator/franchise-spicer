@@ -973,6 +973,36 @@
       },
       "category": "contract",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 50,
+      "title": "No love for short Kings",
+      "description": "your player {target} has grown insecure about their height after a girl refused to go on a date with them. His friend told him about a surgery where they break your shins and extend your legs, sounds painful. Now he wants to have it done.",
+      "impact": "Can I do it coach?",
+      "options": [
+        {
+          "description": "Yea why not",
+          "impact": "Player is out for the rest of the season. they return next year with 2 inches added to their height, -2 SPD, -2 AGL, -2 ACC, -2 JMP"
+        },
+        {
+          "description": "No way! Are you stupid?",
+          "impact": "Player loses -5 awareness for the next 2 games, while he mopes around the locker room."
+        },
+        {
+          "description": "Say no but with a kind pep talk, 'There's a great girl out there for you and she wont care that you're short'",
+          "impact": "Player is encouraged and lets the issue drop."
+        }
+      ],
+      "target_options": ["all-players"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     }
   ]
 } 
