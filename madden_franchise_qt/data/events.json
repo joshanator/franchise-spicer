@@ -1003,6 +1003,65 @@
       },
       "category": "attribute",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 51,
+      "title": "QBs need role models",
+      "description": "Your {target} wants to improve their throwing motion. They ready to watch some tape, and put in the work.",
+      "impact": "Your player wants to know whose tape they should watch to improve their game. What player should your QB try to emulate?", 
+      "target_options": ["QB1", "QB2"],
+      "options": [
+        {
+          "description": "Tom Brady",
+          "impact": "Your player will watch Tom Brady's tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Brady's throwing motion. Update their throwing motion to match Brady's, and add +1 to Play Action, +1 Awareness.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Brady's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Brady's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Brady's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        },
+        {
+          "description": "Patrick Mahomes",
+          "impact": "Your player will watch Patrick Mahomes' tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Mahomes' throwing motion. Update their throwing motion to match Mahomes's, and add +1 to Throw on Run, +1 Throw Power.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Mahomes's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Mahomes's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Mahomes's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        },
+        {
+          "description": "Aaron Rodgers",
+          "impact": "Your player will watch Aaron Rodgers' tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Rodgers' throwing motion. Update their throwing motion to match Rodgers's, and add +1 to deep and medium accuracies, +1 Awareness.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Rodgers's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Rodgers's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Rodgers's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        },
+        {
+          "description": "Josh Allen",
+          "impact": "Your player will watch Josh Allen's tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Allen's throwing motion. Update their throwing motion to match Allen's, and add +1 to breaksack, +1 throw power.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Allen's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Allen's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Allen's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        }
+        
+      ],
+      "difficulty_weights": { 
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "off-season"]
     }
   ]
 } 
