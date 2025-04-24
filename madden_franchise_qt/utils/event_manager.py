@@ -416,20 +416,15 @@ class EventManager:
         Returns:
             tuple: (success, message) - Success flag and explanation message
         """
-        # Debug output to check what's happening
-        print(f"_try_auto_save called, auto_save config value: {self.config.get('auto_save')}")
-        
         auto_save = self.config.get('auto_save', False)
         save_file = self.config.get('franchise_info', {}).get('save_file', '')
         
         # Check if auto-save is enabled
         if not auto_save:
-            print("Auto-save is disabled, returning False")
             return False, "Auto-save is disabled"
             
         # Check if a save file exists
         if not save_file:
-            print("No save file exists, returning False")
             return False, "No save file exists - please save manually first"
         
         # Get the config with event history included
@@ -439,12 +434,7 @@ class EventManager:
         config_with_history['auto_save'] = True
         
         # Save without user interaction
-        success, message = self.data_manager.save_franchise(config_with_history, save_file)
-        
-        # Print for debugging
-        print(f"Auto-save attempted: {success}, Message: {message}")
-        
-        return success, message
+        return self.data_manager.save_franchise(config_with_history, save_file)
     
     def accept_event(self, event):
         """Accept an event and add it to history

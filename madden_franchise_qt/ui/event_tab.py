@@ -440,19 +440,13 @@ class EventTab(QWidget):
         options = event.get('options', [])
         for i, option in enumerate(options):
             option_text = option.get('processed_description', option.get('description', f"Option {i+1}"))
-            impact_text = option.get('impact', '')
             
             option_button = QPushButton(option_text)
             option_button.setStyleSheet("text-align: left; padding: 10px; font-size: 12px;")
             option_button.setMinimumHeight(60)
             
-            # Set tooltip to show impact
-            # TODO: should we keep tooltip disabled? Its a small spoiler
-            # if impact_text:
-            #     option_button.setToolTip(f"Impact: {impact_text}")
-            
             # Connect button to option selection
-            option_index = i  # Need to capture current value of i
+            option_index = i
             option_button.clicked.connect(lambda checked=False, idx=option_index: on_option_selected(idx))
             
             options_layout.addWidget(option_button)
@@ -491,36 +485,38 @@ class EventTab(QWidget):
             else:
                 # No more nested options
                 event['options'] = None
+                
+                # Store the selected option in the event
+                event['description'] = option_description
+                event['impact'] = option_impact
             
-            # Store the selected option in the event
-            event['description'] = option_description
-            event['impact'] = option_impact
-            
-
-            # TODO: Do i need rest of this function?
-
-            # Freeze updates while modifying content
-            self.setUpdatesEnabled(False)
-            
-            # Update the display
+            # Only update the UI if this is the final option (no nested options)
             if event['options'] is None:
-                # Final option selected
+                # Freeze updates while modifying content
+                self.setUpdatesEnabled(False)
+                
+                # Update the display to show the selected option
                 self.event_title.setText(f"{event.get('title', 'Unknown Event')} - Option Selected")
-                self.description_text.setPlainText(event['processed_description'])
+                
+                # Update description to include the chosen option
+                description = event.get('processed_description', event.get('description', ''))
+                self.description_text.setPlainText(f"{description}\n\nYou selected: {option_description}")
+                
+                # Update impact to show the option's impact
                 self.impact_text.setPlainText(option_impact)
                 
                 # Keep buttons enabled so user can accept or re-roll
                 self.accept_button.setEnabled(True)
                 self.reroll_button.setEnabled(True)
                 
-                # Show a status message
+                # Re-enable updates
+                self.setUpdatesEnabled(True)
+                
+                # Show a status message confirming the selection
                 self._show_status_message(f"Option selected: {option_description}. Click 'Accept Event' to confirm or 'Re-roll Event' to try again.")
                 
-                # Animate the result
+                # Animate the result to draw attention to the updated display
                 self._animate_result()
-            
-            # Re-enable updates
-            self.setUpdatesEnabled(True)
         
         return event
     
