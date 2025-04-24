@@ -871,6 +871,93 @@
           ]
         }
       ]
+    },
+    {
+      "id": 45,
+      "title": "Is that Kadarius Toney out there?",
+      "description": "{target} was absolutely cooking in last weeks game. Atleast until the ball was thrown to him.",
+      "impact": "{target} recieves +2 to all route running attributes, but -3 to all catching attributes.",
+      "target_options": ["WR1", "WR2", "WR3", "WR4"],
+      "difficulty_weights": {
+        "cupcake": 0.25,
+        "rookie": 0.25,
+        "pro": 0.25,
+        "all-madden": 0.25,
+        "diabolical": 0.25
+      },
+      "category": "attribute" ,
+      "season_stages": ["regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 46,
+      "title": "Sue Stomp",
+      "description": "Haven't seen someone stomp on a player like that since Ndamukong Suh.",
+      "impact": "{target} is suspended for 6 games due to stomping on an opponent head after a tackle. Brutal.",
+      "target_options": ["DT1", "DT2", "DT3", "LE1", "LE2", "RE1", "RE2"],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "suspension",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 47,
+      "title": "Cody Parkey Curse",
+      "description": "Your Kicker has been seeing Cody Parkey in his nightmares. He's not himself, at practice this week he doinked 5 straight field goals.",
+      "impact": "Kicker has -10 to accuracy for the next 2 games. if in that time the kicker misses 2 or more field goals, the curse is permanent. else he returns to form and gains +3 permanent accuracy (added to original accuracy).",
+      "target_options": ["K"],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-end", "playoffs"]
+    },
+    {
+      "id": 48,
+      "title": "At practice this week, your team exposes that {target} went on a date with your daughter. Word is he might have gotten lucky.",
+      "description": "What will you do?",
+      "impact": "",
+      "options": [
+        {
+          "description": "Let it slide. Your daughter is a grown woman and can date who she wants.",
+          "impact": "Nothing happens"
+        },
+        {
+          "description": "Fight him. Right there at practice. You can take him.",
+          "impact": "{target} is suspended for 4 games. Team loses morale and -1 to all attributes for the next 2 games.",
+          "impact_random_options": {
+            "You win the fight. {target} is injured and out for a game. Your ego is intact.": 0.4,
+            "You dont just lose the fight, you get demolished. Your ego is bruised and so are your ribs. You have to sit out the next game. For the next game you must either sim, or pick only the first play suggested to you no matter what.": 0.4,
+            "The players break it up just in time. They're all laughing and joking about it. Your ego is bruised, but you're still the boss.": 0.2
+          }
+        },
+        {
+          "description": "Bench him. He aint getting lucky on the field thats for sure.",
+          "impact": "{target} is benched for the next 2 games."
+        },
+        {
+          "description": "Cut him. You dont need him, and you certaintly dont need him around your daughter.",
+          "impact": "{target} is cut immediately. He will not resign with your team as long as you are still in charge."
+        }
+      ],
+      "target_options": ["all-players"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "roster",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     }
   ]
 } 
