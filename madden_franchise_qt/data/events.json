@@ -3,8 +3,8 @@
     {
       "id": 1,
       "title": "Early Retirement",
-      "description": "A player has decided to retire early due to {reason}.",
-      "impact": "Remove player from roster and drop stats to 0",
+      "description": "{target} has decided to retire early due to {reason}.",
+      "impact": "Cut {target} from roster and drop stats to 0. (You may edit their contract beforehand to remove any remaining contract obligations)",
       "target_options": ["QB1", "RB1", "WR1", "TE1", "LT1", "C1", "RT1", "LE1", "DT1", "MLB1", "CB1", "FS1", "SS1"],
       "reason_options": ["injury concerns", "family reasons", "career change", "mental health"],
       "difficulty_weights": {
@@ -25,43 +25,42 @@
       "reason_options": ["salary cap violation", "tampering", "illegal practice sessions", "recruitment violations"],
       "round_options": ["1st", "2nd", "3rd", "4th"],
       "difficulty_weights": {
-        "cupcake": 0.1,
-        "rookie": 0.2,
-        "pro": 0.4,
-        "all-madden": 0.6,
-        "diabolical": 0.8
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.4,
+        "diabolical": 0.6
       },
       "category": "team",
-      "season_stages": ["pre-season", "off-season"]
+      "season_stages": ["playoffs", "off-season"]
     },
     {
       "id": 3,
       "title": "Franchise Tag Holdout",
-      "description": "Franchise tagged player is holding out for {games} games until a new contract is negotiated.",
-      "impact": "Player unavailable for specified number of games",
-      "games_options": [1, 2, 3, 4, 6, 8],
+      "description": "Your player is pissed he was franchise tagged. They believe they deserve a new contract and they wont play until they get one.",
+      "impact": "If you have a player on a franchise tag they cannot play until a new contract is negotiated or they leave the team.",
       "difficulty_weights": {
-        "cupcake": 0.2,
-        "rookie": 0.4,
-        "pro": 0.6,
-        "all-madden": 0.8,
-        "diabolical": 1.0
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.6,
+        "diabolical": 0.9
       },
       "category": "contract",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "regular-season-start"]
     },
     {
       "id": 4,
       "title": "Poor Conditioning",
-      "description": "Player showed up to training camp in bad condition.",
+      "description": "Player showed up to training camp with his belly hanging out and oreo crumbs on his practice jersey.",
       "impact": "Lower stamina by 5, speed/acceleration by 1, and raise weight by 10",
-      "target_options": ["RB1", "RB2", "WR1", "WR2", "WR3", "TE1", "LOLB1", "MLB1", "ROLB1", "CB1", "CB2"],
+      "target_options": ["all-players"],
       "difficulty_weights": {
-        "cupcake": 0.3,
-        "rookie": 0.5,
-        "pro": 0.7,
-        "all-madden": 0.9,
-        "diabolical": 1.0
+        "cupcake": 0.05,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.9
       },
       "category": "attribute",
       "season_stages": ["pre-season"]
@@ -77,11 +76,11 @@
         {"result": "lost", "impact_text": "Speed decreases by 1", "probability": 0.7}
       ],
       "difficulty_weights": {
-        "cupcake": 0.5,
-        "rookie": 0.5,
-        "pro": 0.5,
-        "all-madden": 0.5,
-        "diabolical": 0.5
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.15,
+        "diabolical": 0.15
       },
       "category": "attribute",
       "season_stages": ["pre-season", "off-season"]
@@ -957,6 +956,22 @@
         "diabolical": 0.1
       },
       "category": "roster",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 49,
+      "title": "My agent says we can't be friends",
+      "description": "The agent for your {target} has informed you that they will not accept any negotiations this season.",
+      "impact": "if {target} is up for any extensions this season they will ignore all offers. You can still franchise tag them if you want.",
+      "target_options": ["all-players"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "contract",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     }
   ]
