@@ -26,7 +26,12 @@ class EventManager:
         # Set default difficulty if not set yet
         if 'difficulty' not in self.config:
             self.config['difficulty'] = 'pro'
-            self.data_manager.save_config(self.config)
+            self._save_config()
+    
+    def _save_config(self):
+        """Helper method to save config and attempt auto-save"""
+        self.data_manager.save_config(self.config)
+        self._try_auto_save()  # Ignore return value
     
     def get_difficulty(self):
         """Get the current difficulty setting
@@ -49,8 +54,7 @@ class EventManager:
             return False
         
         self.config['difficulty'] = difficulty
-        self.data_manager.save_config(self.config)
-        self._try_auto_save()  # Ignore return value, config update is the main task
+        self._save_config()
         return True
     
     def update_franchise_info(self, team_name=None, week=None, year=None):
@@ -61,14 +65,26 @@ class EventManager:
             week: The week to set
             year: The year to set
         """
+        if 'franchise_info' not in self.config:
+            self.config['franchise_info'] = {}
+            
         if team_name:
             self.config['franchise_info']['team_name'] = team_name
         if week is not None:
             self.config['franchise_info']['current_week'] = week
         if year is not None:
             self.config['franchise_info']['current_year'] = year
-        self.data_manager.save_config(self.config)
-        self._try_auto_save()  # Ignore return value, config update is the main task
+        
+        self._save_config()
+    
+    def _ensure_dict_key(self, key):
+        """Ensure a dictionary key exists in config
+        
+        Args:
+            key: The key to ensure exists
+        """
+        if key not in self.config:
+            self.config[key] = {}
     
     def update_roster(self, position, player_name):
         """Update a roster position
@@ -80,12 +96,9 @@ class EventManager:
         Returns:
             bool: True if successful, False otherwise
         """
-        if 'roster' not in self.config:
-            self.config['roster'] = {}
-        
+        self._ensure_dict_key('roster')
         self.config['roster'][position] = player_name
-        self.data_manager.save_config(self.config)
-        self._try_auto_save()  # Ignore return value, roster update is the main task
+        self._save_config()
         return True
     
     def update_coach(self, position, coach_name):
@@ -98,15 +111,13 @@ class EventManager:
         Returns:
             bool: True if successful, False otherwise
         """
-        if 'coaches' not in self.config:
-            self.config['coaches'] = {}
-        
-        if position in ['HC', 'OC', 'DC']:
-            self.config['coaches'][position] = coach_name
-            self.data_manager.save_config(self.config)
-            self._try_auto_save()  # Ignore return value, coach update is the main task
-            return True
-        return False
+        if position not in ['HC', 'OC', 'DC']:
+            return False
+            
+        self._ensure_dict_key('coaches')
+        self.config['coaches'][position] = coach_name
+        self._save_config()
+        return True
     
     def roll_event(self):
         """Roll for a random event
@@ -117,28 +128,9 @@ class EventManager:
         difficulty = self.get_difficulty()
         eligible_events = []
         
-        # Get current season stage - ensure we're using the internal constant, not the display value
+        # Get current season stage and allowed stages
         current_season_stage = self.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
-        
-        # Define both internal stage names and their mappings
-        stage_mapping = {
-            # Internal stage names
-            "Pre-Season": ["pre-season", "any"],
-            "regular-season-start": ["regular-season", "regular-season-start", "any"],
-            "regular-season-mid": ["regular-season", "regular-season-mid", "any"],
-            "regular-season-end": ["regular-season", "regular-season-end", "any"],
-            "Post-Season": ["post-season", "playoffs", "any"],
-            "Off-Season": ["off-season", "offseason", "any"],
-            # Handle old display names for backward compatibility
-            "Regular Season Start": ["regular-season", "regular-season-start", "any"],
-            "Regular Season Mid": ["regular-season", "regular-season-mid", "any"],
-            "Regular Season End": ["regular-season", "regular-season-end", "any"]
-        }
-        
-        # Determine allowed season stages for the current stage
-        allowed_stages = stage_mapping.get(current_season_stage, ["any"])
-        if allowed_stages == ["any"]:
-            print(f"WARNING: Unknown season stage '{current_season_stage}', defaulting to 'any'")
+        allowed_stages = self._get_allowed_stages(current_season_stage)
         
         # Filter events based on difficulty weights and season stage
         for event in self.events.get('events', []):
@@ -164,6 +156,49 @@ class EventManager:
         
         # No longer adding to history here - will do it when user accepts
         return processed_event
+    
+    def _get_allowed_stages(self, current_stage):
+        """Get allowed stages for the current season stage
+        
+        Args:
+            current_stage: The current season stage
+            
+        Returns:
+            list: Allowed stage names for event filtering
+        """
+        # Define both internal stage names and their mappings
+        stage_mapping = {
+            # Internal stage names
+            "Pre-Season": ["pre-season", "any"],
+            "regular-season-start": ["regular-season", "regular-season-start", "any"],
+            "regular-season-mid": ["regular-season", "regular-season-mid", "any"],
+            "regular-season-end": ["regular-season", "regular-season-end", "any"],
+            "Post-Season": ["post-season", "playoffs", "any"],
+            "Off-Season": ["off-season", "offseason", "any"],
+            # Handle old display names for backward compatibility
+            "Regular Season Start": ["regular-season", "regular-season-start", "any"],
+            "Regular Season Mid": ["regular-season", "regular-season-mid", "any"],
+            "Regular Season End": ["regular-season", "regular-season-end", "any"]
+        }
+        
+        allowed_stages = stage_mapping.get(current_stage, ["any"])
+        if allowed_stages == ["any"] and current_stage != "any":
+            print(f"WARNING: Unknown season stage '{current_stage}', defaulting to 'any'")
+            
+        return allowed_stages
+    
+    def _replace_placeholder(self, text, placeholder, value):
+        """Replace a placeholder in text with a value
+        
+        Args:
+            text: The text containing placeholders
+            placeholder: The placeholder to replace (without {})
+            value: The value to replace with
+            
+        Returns:
+            str: The text with placeholders replaced
+        """
+        return text.replace(f"{{{placeholder}}}", str(value))
     
     def _process_event(self, event):
         """Process an event by filling in placeholders
@@ -206,26 +241,16 @@ class EventManager:
                 # Just use position if no name available
                 target_display = target_position
                 
-            description = description.replace('{target}', target_display)
+            description = self._replace_placeholder(description, 'target', target_display)
             processed_event['selected_target'] = target_display
         
-        # Handle reason options
-        if 'reason_options' in processed_event:
-            reason = random.choice(processed_event['reason_options'])
-            description = description.replace('{reason}', reason)
-            processed_event['selected_reason'] = reason
-        
-        # Handle round options for draft picks
-        if 'round_options' in processed_event:
-            round_pick = random.choice(processed_event['round_options'])
-            description = description.replace('{round}', round_pick)
-            processed_event['selected_round'] = round_pick
-        
-        # Handle games options for suspensions
-        if 'games_options' in processed_event:
-            games = random.choice(processed_event['games_options'])
-            description = description.replace('{games}', str(games))
-            processed_event['selected_games'] = games
+        # Handle simple random selection fields
+        for field_type in ['reason_options', 'round_options', 'games_options']:
+            if field_type in processed_event:
+                chosen_value = random.choice(processed_event[field_type])
+                field_name = field_type.replace('_options', '')
+                description = self._replace_placeholder(description, field_name, chosen_value)
+                processed_event[f'selected_{field_name}'] = chosen_value
         
         # Handle result options (like for the sprinter challenge)
         if 'result_options' in processed_event:
@@ -243,23 +268,23 @@ class EventManager:
                     break
             
             if selected_result:
-                description = description.replace('{result}', selected_result['result'])
+                description = self._replace_placeholder(description, 'result', selected_result['result'])
                 impact = processed_event.get('impact', '')
-                impact = impact.replace('{impact_text}', selected_result['impact_text'])
+                impact = self._replace_placeholder(impact, 'impact_text', selected_result['impact_text'])
                 processed_event['impact'] = impact
                 processed_event['selected_result'] = selected_result['result']
         
         # Handle matchups for player callouts
         if 'matchups' in processed_event:
             matchup = random.choice(processed_event['matchups'])
-            description = description.replace('{position1}', matchup['position1'])
-            description = description.replace('{opponent_position}', matchup['opponent_position'])
+            description = self._replace_placeholder(description, 'position1', matchup['position1'])
+            description = self._replace_placeholder(description, 'opponent_position', matchup['opponent_position'])
             processed_event['selected_matchup'] = matchup
             
             # Handle opponent team
             if 'opponent_teams' in processed_event:
                 opponent_team = random.choice(processed_event['opponent_teams'])
-                description = description.replace('{opponent_team}', opponent_team)
+                description = self._replace_placeholder(description, 'opponent_team', opponent_team)
                 processed_event['selected_opponent_team'] = opponent_team
         
         # Handle user options in branching events
@@ -271,11 +296,11 @@ class EventManager:
                 
                 # Replace target placeholder
                 if 'selected_target' in processed_event:
-                    option_description = option_description.replace('{target}', processed_event['selected_target'])
+                    option_description = self._replace_placeholder(option_description, 'target', processed_event['selected_target'])
                 
                 # Replace reason placeholder
                 if 'selected_reason' in processed_event:
-                    option_description = option_description.replace('{reason}', processed_event['selected_reason'])
+                    option_description = self._replace_placeholder(option_description, 'reason', processed_event['selected_reason'])
                 
                 # Store processed description
                 option['processed_description'] = option_description
