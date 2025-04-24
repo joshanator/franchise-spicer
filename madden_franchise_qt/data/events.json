@@ -827,6 +827,50 @@
       },
       "category": "free-agency",
       "season_stages": ["off-season"]
+    },
+    {
+      "id":44,
+      "title": "TODO:: Test deep options",
+      "description": "Test deep options",
+      "impact": "Deep options test.",
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 1
+      },
+      "category": "test",
+      "options": [
+        {
+          "description": "Option 1",
+          "impact": "Option 1 impact"
+        },
+        {
+          "description": "Option 2",
+          "impact": "Option 2 impact",
+          "options": [
+            {
+              "description": "Option 2.1",
+              "impact": "Option 2.1 impact"
+            },
+            {
+              "description": "Option 2.2",
+              "impact": "Option 2.2 impact",
+              "options": [
+                {
+                  "description": "Option 2.2.1",
+                  "impact": "Option 2.2.1 impact"
+                },
+                {
+                  "description": "Option 2.2.2",
+                  "impact": "Option 2.2.2 impact"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 } 

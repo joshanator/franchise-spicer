@@ -201,14 +201,16 @@ class EventTab(QWidget):
         
         self.current_event = event
         
-        # Check if this event has options - if so, immediately show the options dialog
-        if 'options' in event:
-            self._show_options_dialog(event)
-            return
+        # Handle options recursively until no more options need to be selected
+        while 'options' in event and event['options']:
+            event = self._show_options_dialog(event)
+            self.current_event = event
         
         # Start update - freeze layout to prevent jumbled appearance
         self.setUpdatesEnabled(False)
         
+
+        # TODO: pull out into a function that updates current_event for all target references
         # Check if this event has a target player without a name
         has_unnamed_player = False
         if event.get('target_options'):
@@ -364,11 +366,46 @@ class EventTab(QWidget):
         if hasattr(main_window, 'history_tab') and hasattr(main_window.history_tab, 'refresh'):
             main_window.history_tab.refresh()
     
+    def _process_impact_random_options(self, option):
+        """Process random impact options from an option
+        
+        Args:
+            option: The option with random impact options
+            
+        Returns:
+            The selected impact text
+        """
+        import random
+        
+        # Get the random impact options (dictionary with impact text as keys and probabilities as values)
+        impact_options = option.get('impact_random_options', {})
+        
+        # If no impact options are available, return the standard impact
+        if not impact_options:
+            return option.get('impact', '')
+        
+        # Extract the options and their weights
+        options = list(impact_options.keys())
+        weights = list(impact_options.values())
+        
+        # Select a random impact based on the provided weights
+        # random.choices returns a list, so we take the first item
+        selected_impact = random.choices(population=options, weights=weights, k=1)[0]
+        
+        # Show a status message with the randomly selected impact
+        self._show_status_message(f"Random outcome: {selected_impact}")
+        
+        # Return the selected impact
+        return selected_impact
+        
     def _show_options_dialog(self, event):
-        """Show a dialog with options for the user to choose from
+        """Show a dialog with options for the user to choose from and return the modified event
         
         Args:
             event: The event with options
+            
+        Returns:
+            The event with the selected option
         """
         # Create dialog
         dialog = QDialog(self)
@@ -391,6 +428,14 @@ class EventTab(QWidget):
         scroll_content = QWidget()
         options_layout = QVBoxLayout(scroll_content)
         
+        # Store selected option index
+        selected_option_index = [None]  # Use list to store by reference
+        
+        # Function to handle option selection
+        def on_option_selected(index):
+            selected_option_index[0] = index
+            dialog.accept()
+        
         # Add options as buttons
         options = event.get('options', [])
         for i, option in enumerate(options):
@@ -402,67 +447,82 @@ class EventTab(QWidget):
             option_button.setMinimumHeight(60)
             
             # Set tooltip to show impact
-            if impact_text:
-                option_button.setToolTip(f"Impact: {impact_text}")
+            # TODO: should we keep tooltip disabled? Its a small spoiler
+            # if impact_text:
+            #     option_button.setToolTip(f"Impact: {impact_text}")
             
             # Connect button to option selection
             option_index = i  # Need to capture current value of i
-            option_button.clicked.connect(lambda checked=False, idx=option_index: self._select_option(event, idx, dialog))
+            option_button.clicked.connect(lambda checked=False, idx=option_index: on_option_selected(idx))
             
             options_layout.addWidget(option_button)
         
         scroll.setWidget(scroll_content)
         layout.addWidget(scroll)
         
-        # Show dialog
+        # Show dialog and wait for user selection
         dialog.exec()
-    
-    def _select_option(self, event, option_index, dialog):
-        """Handle option selection
         
-        Args:
-            event: The event
-            option_index: The index of the selected option
-            dialog: The dialog to close
-        """
-        # Close the dialog
-        dialog.accept()
+        # If user selected an option, process it
+        if selected_option_index[0] is not None:
+            option_index = selected_option_index[0]
+            option = event.get('options', [])[option_index]
+            option_description = option.get('processed_description', option.get('description', ''))
+            option_impact = option.get('impact', '')
+
+            if 'impact_random_options' in option:
+                option_impact = self._process_impact_random_options(option)
+
+            # Save the selected option details for _accept_event to use
+            event['selected_option'] = option_index
+            event['selected_option_description'] = option_description
+            event['selected_option_impact'] = option_impact
+            
+            # Update target options if present in the selected option
+            if 'target_options' in option and len(option.get('target_options', [])) > 0:
+                event['target_options'] = option.get('target_options', [])
+
+            # Handle nested options
+            if 'options' in option and len(option.get('options', [])) > 0:
+                # Replace event options with the nested options
+                event['options'] = option.get('options', [])
+                # Update event description to reflect the current choice
+                event['processed_description'] = f"{event.get('description', '')}\n\nYou selected: {option_description}"
+            else:
+                # No more nested options
+                event['options'] = None
+            
+            # Store the selected option in the event
+            event['description'] = option_description
+            event['impact'] = option_impact
+            
+
+            # TODO: Do i need rest of this function?
+
+            # Freeze updates while modifying content
+            self.setUpdatesEnabled(False)
+            
+            # Update the display
+            if event['options'] is None:
+                # Final option selected
+                self.event_title.setText(f"{event.get('title', 'Unknown Event')} - Option Selected")
+                self.description_text.setPlainText(event['processed_description'])
+                self.impact_text.setPlainText(option_impact)
+                
+                # Keep buttons enabled so user can accept or re-roll
+                self.accept_button.setEnabled(True)
+                self.reroll_button.setEnabled(True)
+                
+                # Show a status message
+                self._show_status_message(f"Option selected: {option_description}. Click 'Accept Event' to confirm or 'Re-roll Event' to try again.")
+                
+                # Animate the result
+                self._animate_result()
+            
+            # Re-enable updates
+            self.setUpdatesEnabled(True)
         
-        # Get the selected option
-        option = event.get('options', [])[option_index]
-        option_description = option.get('processed_description', option.get('description', ''))
-        option_impact = option.get('impact', '')
-        
-        # Store the selected option in the event
-        event['selected_option'] = option_index
-        event['selected_option_description'] = option_description
-        event['selected_option_impact'] = option_impact
-        
-        # Freeze updates while modifying content
-        self.setUpdatesEnabled(False)
-        
-        # Update the display to show the selected option
-        self.event_title.setText(f"{event.get('title', 'Unknown Event')} - Option Selected")
-        
-        # Update description to include the chosen option
-        description = event.get('processed_description', event.get('description', ''))
-        self.description_text.setPlainText(f"{description}\n\nYou selected: {option_description}")
-        
-        # Update impact to show the option's impact
-        self.impact_text.setPlainText(option_impact)
-        
-        # Keep buttons enabled so user can accept or re-roll
-        self.accept_button.setEnabled(True)
-        self.reroll_button.setEnabled(True)
-        
-        # Re-enable updates
-        self.setUpdatesEnabled(True)
-        
-        # Show a status message confirming the selection
-        self._show_status_message(f"Option selected: {option_description}. Click 'Accept Event' to confirm or 'Re-roll Event' to try again.")
-        
-        # Animate the result to draw attention to the updated display
-        self._animate_result()
+        return event
     
     def _show_status_message(self, message, error=False):
         """Show a status message
