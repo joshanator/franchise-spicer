@@ -26,15 +26,28 @@ class EventTab(QWidget):
         """Initialize the UI components"""
         # Main layout
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(20, 20, 20, 20)
-        main_layout.setSpacing(15)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        
+        # Create scroll area for all content
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll_area.setFrameShape(QFrame.NoFrame)
+        
+        # Create a container widget for the scroll area
+        scroll_content = QWidget()
+        scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setContentsMargins(20, 20, 20, 20)
+        scroll_layout.setSpacing(15)
         
         # Status message for feedback
         self.status_message = QLabel("")
         self.status_message.setStyleSheet("QLabel { color: #00529B; background-color: #BDE5F8; padding: 8px; border-radius: 4px; }")
         self.status_message.setWordWrap(True)
+        self.status_message.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.status_message.setVisible(False)
-        main_layout.addWidget(self.status_message)
+        scroll_layout.addWidget(self.status_message)
         
         # Event generation section
         generator_group = QGroupBox("Generate Random Event")
@@ -56,7 +69,7 @@ class EventTab(QWidget):
         difficulty_layout.addStretch()
         generator_layout.addLayout(difficulty_layout)
         
-        main_layout.addWidget(generator_group)
+        scroll_layout.addWidget(generator_group)
         
         # Event result section
         self.result_group = QGroupBox("Event Result")
@@ -65,20 +78,28 @@ class EventTab(QWidget):
         # Event title
         self.event_title = QLabel("No event rolled yet")
         self.event_title.setFont(QFont("Arial", 12, QFont.Bold))
+        self.event_title.setWordWrap(True)
+        self.event_title.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         result_layout.addWidget(self.event_title)
         
         # Event description
         result_layout.addWidget(QLabel("Description:"))
         self.description_text = QTextEdit()
         self.description_text.setReadOnly(True)
-        self.description_text.setMinimumHeight(100)
+        self.description_text.setMinimumHeight(50)
+        self.description_text.setMaximumHeight(80)
+        self.description_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.description_text.setLineWrapMode(QTextEdit.WidgetWidth)
         result_layout.addWidget(self.description_text)
         
         # Event impact
         result_layout.addWidget(QLabel("Impact:"))
         self.impact_text = QTextEdit()
         self.impact_text.setReadOnly(True)
-        self.impact_text.setMinimumHeight(60)
+        self.impact_text.setMinimumHeight(30)
+        self.impact_text.setMaximumHeight(60)
+        self.impact_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.impact_text.setLineWrapMode(QTextEdit.WidgetWidth)
         result_layout.addWidget(self.impact_text)
         
         # Target/affected entity
@@ -86,12 +107,14 @@ class EventTab(QWidget):
         target_layout.addWidget(QLabel("Affected Player/Coach:"))
         self.target_label = QLabel()
         self.target_label.setFont(QFont("Arial", 10, QFont.Bold))
+        self.target_label.setWordWrap(True)
         target_layout.addWidget(self.target_label)
         target_layout.addStretch()
         result_layout.addLayout(target_layout)
         
         # Buttons
         buttons_layout = QHBoxLayout()
+        buttons_layout.setSpacing(10)  # Add spacing between buttons
         
         self.accept_button = QPushButton("Accept Event")
         self.accept_button.clicked.connect(self._accept_event)
@@ -106,7 +129,7 @@ class EventTab(QWidget):
         buttons_layout.addStretch()
         result_layout.addLayout(buttons_layout)
         
-        main_layout.addWidget(self.result_group)
+        scroll_layout.addWidget(self.result_group)
         
         # Help section
         help_group = QGroupBox("How to Use")
@@ -121,12 +144,17 @@ class EventTab(QWidget):
         
         help_label = QLabel(help_text)
         help_label.setWordWrap(True)
+        help_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         help_layout.addWidget(help_label)
         
-        main_layout.addWidget(help_group)
+        scroll_layout.addWidget(help_group)
         
         # Add stretch to push everything up
-        main_layout.addStretch()
+        scroll_layout.addStretch()
+        
+        # Set the scroll content and add to main layout
+        scroll_area.setWidget(scroll_content)
+        main_layout.addWidget(scroll_area)
         
         # Initialize displays
         self.refresh()
