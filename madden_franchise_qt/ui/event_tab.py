@@ -484,13 +484,13 @@ class EventTab(QWidget):
                 # Replace event options with the nested options
                 event['options'] = option.get('options', [])
                 # Update event description to reflect the current choice
-                event['processed_description'] = f"{event.get('description', '')}\n\nYou selected: {option_description}"
+                event['processed_description'] = f"{event.get('processed_description', event.get('description', ''))}\n\nYou selected: {option_description}\n\n{option_impact}"
             else:
                 # No more nested options
                 event['options'] = None
                 
                 # Store the selected option in the event
-                event['description'] = option_description
+                event['processed_description'] = f"{event.get('processed_description', event.get('description', ''))}\n\nYou selected: {option_description}"
                 event['impact'] = option_impact
             
             # Only update the UI if this is the final option (no nested options)

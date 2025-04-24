@@ -8,7 +8,7 @@
             "options": [
                 {
                     "description": "Nod and go with them.",
-                    "impact": "You and your player go with the shady figure to see what he has. He opens a breifcase and shows you a series of syringes.",
+                    "impact": "You and your player go with the shady figure to see what he has. He opens a breifcase and offers the player a series of syringes.",
                     "options": [
                         {
                             "description": "Red syringe: The elixir of Immediate Gratification",
@@ -21,6 +21,10 @@
                         {
                             "description": "Green syringe: The elixir of Youth",
                             "impact": "Your player trades their development for a return to youth. Downgrade the players dev trait to normal and remove -1 from age for every level of dev trait they lose. If at the end of the season this player gains a dev trait it must be reset to normal."
+                        },
+                        {
+                            "description": "Oh no thank you sir, I dont do drugs.",
+                            "impact": "Your player gets nominated to speak at a school assembly for DARE. They miss the next game."
                         }
                     ]
                 },
