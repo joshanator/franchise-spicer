@@ -270,7 +270,7 @@
     },
     {
       "id": 15,
-      "title": "TODO:: Russell Wilson Decline",
+      "title": "A Russell Wilson Level Decline",
       "description": "Your veteran QB is showing signs of rapid decline.",
       "impact": "QB loses 3 points in throw power, accuracy, and awareness.",
       "target_options": ["QB1"],
@@ -470,9 +470,9 @@
     {
       "id": 25,
       "title": "TODO:: Jim Irsay Meddling",
-      "description": "Team owner has demanded {position} be benched for the next game regardless of performance.",
+      "description": "Team owner has demanded {target} be benched for the next game regardless of performance.",
       "impact": "Must bench specified player for next game",
-      "position_options": ["QB1", "RB1", "WR1", "CB1"],
+      "target_options": ["QB1", "RB1", "WR1", "CB1"],
       "difficulty_weights": {
         "cupcake": 0.1,
         "rookie": 0.2,
@@ -693,7 +693,7 @@
         "rookie": 0.1,
         "pro": 0.15,
         "all-madden": 0.2,
-        "diabolical": 0.3
+        "diabolical": 1
       },
       "category": "injury",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"],
@@ -708,11 +708,21 @@
         },
         {
           "description": "Get a second opinion",
-          "impact": "50% chance of avoiding permanent injury with only 1 game missed, 50% chance of worsening to -2 throw power permanently"
+          "impact": "Maybe our luck will improve with a different doctor.",
+          "impact_random_options": {
+            "Player avoids permanent injury with only 1 game missed": 0.3,
+            "Player avoids permanent injury with 2 games missed": 0.3,
+            "2nd opinion confirms diagnosis. Player is out for 4 games": 0.3,
+            "Doctor hands out some painkillers and tells the player to ignore the problem, resulting in lasting damage, Quarterback in -2 throw power permanently": 0.1
+          }
         },
         {
           "description": "Experimental treatment",
-          "impact": "70% chance of recovery with no games missed, 30% chance of season-ending injury"
+          "impact": "70% chance of recovery with no games missed, 30% chance of season-ending injury",
+          "impact_random_options": {
+            "Full recovery, no games missed": 0.7,
+            "Severe injury, season-ending": 0.3
+          }
         }
       ]
     },
@@ -748,17 +758,75 @@
       "options": [
         {
           "description": "Start {target} for the next two games",
-          "impact": "Player receives +2 awareness and +1 to primary attribute due to motivation. Must start for next 2 games."
+          "impact": "{target} receives +2 Awareness and +1 to primary attribute due to motivation. {target} must start for next 2 games."
         },
         {
           "description": "Ignore the request",
-          "impact": "Player receives -2 awareness and may request a trade later in the season."
+          "impact": "{target} receives -2 Awareness and may request a trade later in the season."
         },
         {
           "description": "Bench the player completely",
-          "impact": "Player receives -5 awareness and will request a trade immediately."
+          "impact": "{target} receives -5 Awareness and will request a trade immediately."
         }
       ]
+    },
+    {
+      "id": 41,
+      "title": "Draft Day Meddling",
+      "description": "The teams owner wants to secure a different future in the draft. They want a {position}.",
+      "impact": "Your highest round pick in the draft must be a {position}.",
+      "position_options": ["QB", "WR", "CB", "DE", "OT"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.4
+      },
+      "category": "draft",
+      "season_stages": ["off-season"]
+    },
+    {
+      "id": 42,
+      "title": "Draft Day Research",
+      "description": "A {position} has been identified as a position of need. The owner wants you to prioritize this position in the draft.",
+      "impact": "One of your draft picks must be a {position}.",
+      "position_options": ["QB", "WR", "CB", "OT", "OG", "DT", "FS", "SS", "MLB", "LOLB", "ROLB", "DT", "DE", "K", "P"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "draft",
+      "season_stages": ["off-season"]
+    },
+    {
+      "id": 43,
+      "title": "Penny Pinching Owner",
+      "description": "The team owner is feeling the financial pressure and is cutting into your budget.",
+      "impact": "{impact_text}",
+      "result_options": [
+        {"impact_text": "You are limited to 4 total free agents this off-season", "probability": 0.2},
+        {"impact_text": "You must trade/release a player that will save you atlease $5 million in cap space.", "probability": 0.2},
+        {"impact_text": "You may not pay any free agent more than $15 million dollars per year.", "probability": 0.15},
+        {"impact_text": "You may not pay any free agent more than $10 million dollars per year.", "probability": 0.1},
+        {"impact_text": "Garenteed money is a scam. You may not make any offer with more than $5 million guaranteed per year.", "probability": 0.1},
+        {"impact_text": "You may not sign any free agents this off-season.", "probability": 0.05},
+        {"impact_text": "Trim the fat. Cut 2 bench players.", "probability": 0.1},
+        {"impact_text": "Trim the fat. Cut 5 bench players.", "probability": 0.05},
+        {"impact_text": "Trim the meat. Cut 1 bench player and 1 starter.", "probability": 0.05}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.8
+      },
+      "category": "free-agency",
+      "season_stages": ["off-season"]
     }
   ]
 } 
