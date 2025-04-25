@@ -37,9 +37,9 @@ After determining all eligible events based on these probability checks, the gam
 
 Events can be configured to only appear during specific season stages:
 
-- Pre-Season: Weeks 1-4
-- Regular Season Start: Weeks 5-7
-- Regular Season Mid: Weeks 8-15
-- Regular Season End: Weeks 16-22
-- Post-Season: Weeks 23-26
-- Off-Season: Week 27+ 
+- pre-season
+- regular-season-start
+- regular-season-mid / trade-deadline
+- regular-season-end
+- playoffs
+- off-season
