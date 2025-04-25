@@ -5,6 +5,19 @@ from datetime import datetime
 class EventManager:
     """Manages events and their processing"""
     
+    # Comprehensive list of all possible football positions
+    ALL_FOOTBALL_POSITIONS = [
+        "QB1", "QB2",
+        "RB1", "RB2", "RB3", "FB1",
+        "WR1", "WR2", "WR3", "WR4",
+        "TE1", "TE2",
+        "LT1", "LT2", "LG1", "LG2", "C1", "C2", "RG1", "RG2", "RT1", "RT2",
+        "LE1", "LE2", "DT1", "DT2", "DT3", "RE1", "RE2",
+        "LOLB1", "LOLB2", "MLB1", "MLB2", "ROLB1", "ROLB2",
+        "CB1", "CB2", "CB3", "CB4", "FS1", "FS2", "SS1", "SS2",
+        "K1", "P1"
+    ]
+    
     def __init__(self, data_manager):
         """Initialize the event manager
         
@@ -281,12 +294,13 @@ class EventManager:
                 
             # Special case: "All players" means choose any player from the roster
             elif len(processed_event['target_options']) == 1 and processed_event['target_options'][0] == "all-players":
-                # Get all positions from the roster
-                all_positions = list(self.config.get('roster', {}).keys())
+                # Use the comprehensive list of all possible football positions
+                all_positions = self.ALL_FOOTBALL_POSITIONS
+                
                 if all_positions:
                     target_position = random.choice(all_positions)
                 else:
-                    # Fallback if roster is empty
+                    # Fallback if no positions are defined
                     target_position = "Unknown"
                 
                 # Store the original target position for later reference
