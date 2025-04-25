@@ -143,7 +143,7 @@ The project uses GitHub Actions for continuous integration testing. The test wor
 - Verifies combined event pools
 - Validates the event schema
 
-For more details on the testing framework, see [README_TESTS.md](README_TESTS.md).
+For more details on the testing framework, see [./README_TESTS.md](./README_TESTS.md).
 
 ## Version History
 
@@ -173,7 +173,7 @@ You can freely use, modify, and share this code for non-commercial purposes as l
 
 ## Project Testing
 
-For information about the test suite and how to run tests, see [README_TESTS.md](README_TESTS.md).
+For information about the test suite and how to run tests, see [./README_TESTS.md](./README_TESTS.md).
 
 ## Acknowledgments
 
