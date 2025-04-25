@@ -29,7 +29,7 @@ class EffectsTab(QWidget):
         main_layout.setSpacing(15)
         
         # Title
-        title_label = QLabel("Active Effects Summary")
+        title_label = QLabel("Effect Tracker")
         title_label.setFont(QFont("Arial", 14, QFont.Bold))
         main_layout.addWidget(title_label)
         
@@ -39,7 +39,6 @@ class EffectsTab(QWidget):
         
         # Create individual tabs
         self._create_season_effects_tab()
-        self._create_timeline_effects_tab()
         self._create_temporary_effects_tab()
         
         # Refresh button at the bottom
@@ -77,34 +76,6 @@ class EffectsTab(QWidget):
         
         self.tab_widget.addTab(scroll_area, "Season Effects")
     
-    def _create_timeline_effects_tab(self):
-        """Create the tab for timeline-related effects"""
-        timeline_tab = QWidget()
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(timeline_tab)
-        
-        # Layout for the timeline effects tab
-        layout = QVBoxLayout(timeline_tab)
-        
-        # Timeline effects tree
-        self.timeline_tree = QTreeWidget()
-        self.timeline_tree.setColumnCount(5)
-        self.timeline_tree.setHeaderLabels(["Started", "Duration", "Player/Position", "Effect Description", "Impact"])
-        
-        # Configure header
-        header = self.timeline_tree.header()
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(4, QHeaderView.Stretch)
-        
-        self.timeline_tree.setAlternatingRowColors(True)
-        layout.addWidget(self.timeline_tree)
-        
-        self.tab_widget.addTab(scroll_area, "Timeline Effects")
-    
     def _create_temporary_effects_tab(self):
         """Create the tab for temporary effects"""
         temp_tab = QWidget()
@@ -117,8 +88,8 @@ class EffectsTab(QWidget):
         
         # Temporary effects tree
         self.temp_tree = QTreeWidget()
-        self.temp_tree.setColumnCount(5)
-        self.temp_tree.setHeaderLabels(["Player/Position", "Effect Type", "Description", "Impact", "Time Remaining"])
+        self.temp_tree.setColumnCount(6)
+        self.temp_tree.setHeaderLabels(["Player/Position", "Effect Type", "Description", "Impact", "Started", "Time Remaining"])
         
         # Configure header
         header = self.temp_tree.header()
@@ -127,6 +98,7 @@ class EffectsTab(QWidget):
         header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(3, QHeaderView.Stretch)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
         
         self.temp_tree.setAlternatingRowColors(True)
         layout.addWidget(self.temp_tree)
@@ -149,7 +121,6 @@ class EffectsTab(QWidget):
         
         # Process effects
         self._populate_season_effects(history, current_stage)
-        self._populate_timeline_effects(history, current_week, current_year)
         self._populate_temporary_effects(history, current_week, current_year)
     
     def _populate_season_effects(self, history, current_stage):
@@ -205,69 +176,6 @@ class EffectsTab(QWidget):
         
         self.season_tree.expandAll()
     
-    def _populate_timeline_effects(self, history, current_week, current_year):
-        """Populate the timeline effects tree
-        
-        Args:
-            history: The event history
-            current_week: The current week
-            current_year: The current year
-        """
-        self.timeline_tree.clear()
-        
-        # Look for events with duration mentions
-        timeline_events = []
-        
-        for event in history:
-            # Skip events with no impact
-            if not event.get('impact'):
-                continue
-                
-            # Extract event data
-            title = event.get('title', '')
-            impact = event.get('impact', '')
-            target = event.get('selected_target', 'N/A')
-            week = event.get('week', 0)
-            year = event.get('year', 0)
-            
-            # Check if this is a timeline event (has week duration mentioned)
-            duration_keywords = ["week", "game", "match", "suspend"]
-            
-            if any(keyword in impact.lower() for keyword in duration_keywords):
-                # Try to extract the duration
-                import re
-                duration_match = re.search(r'(\d+)\s+(week|game|match)', impact.lower())
-                duration = duration_match.group(1) if duration_match else "Multiple"
-                
-                # Check if still active
-                # Basic check - assumes events from current year and within recent weeks
-                # A more sophisticated approach would parse the exact duration
-                weeks_passed = 0
-                if year == current_year:
-                    weeks_passed = current_week - week
-                
-                # Assume active if within 8 weeks or if duration can't be determined
-                if weeks_passed <= 8:
-                    timeline_events.append({
-                        'week': week,
-                        'year': year,
-                        'duration': duration,
-                        'title': title,
-                        'impact': impact,
-                        'target': target
-                    })
-        
-        # Add timeline events to tree
-        for event in timeline_events:
-            item = QTreeWidgetItem(self.timeline_tree)
-            item.setText(0, f"Week {event['week']}, Year {event['year']}")
-            item.setText(1, f"{event['duration']} weeks/games")
-            item.setText(2, event['target'])
-            item.setText(3, event['title'])
-            item.setText(4, event['impact'])
-        
-        self.timeline_tree.sortItems(0, Qt.AscendingOrder)
-    
     def _populate_temporary_effects(self, history, current_week, current_year):
         """Populate the temporary effects tree
         
@@ -319,28 +227,45 @@ class EffectsTab(QWidget):
             
             # Calculate time remaining
             time_remaining = "Unknown"
-            import re
-            duration_match = re.search(r'(\d+)\s+(week|game|match)', impact.lower())
-            if duration_match:
-                duration = int(duration_match.group(1))
+            started = f"Week {week}, Year {year}"
+            
+            # Check if this effect is still active
+            is_active = False
+            if is_temporary:
+                import re
+                
+                # Check for specific duration in impact text
+                duration_match = re.search(r'(\d+)\s+(week|game|match)', impact.lower())
+                duration = int(duration_match.group(1)) if duration_match else 0
+                
+                # Check for "next game" in impact text
+                if "next game" in impact.lower():
+                    duration = 1
+                
+                # Calculate weeks passed and time remaining
                 weeks_passed = 0
                 if year == current_year:
                     weeks_passed = current_week - week
                 
-                if weeks_passed < duration:
-                    time_remaining = f"{duration - weeks_passed} games/weeks"
+                # Determine if still active
+                if duration == 0:  # No specific duration found
+                    is_active = (year == current_year and (current_week - week) <= 8)
+                    time_remaining = "Unknown"
                 else:
-                    time_remaining = "Expired"
-            elif "next game" in impact.lower():
-                time_remaining = "1 game"
+                    is_active = weeks_passed < duration
+                    if is_active:
+                        time_remaining = f"{duration - weeks_passed} games/weeks"
+                    else:
+                        time_remaining = "Expired"
             
             # Add recent temporary effects
-            if is_temporary and ((year == current_year and (current_week - week) <= 8) or "permanent" in impact.lower()):
+            if is_temporary and is_active:
                 temp_effects.append({
                     'target': target,
                     'category': category,
                     'title': title,
                     'impact': impact,
+                    'started': started,
                     'time_remaining': time_remaining
                 })
         
@@ -351,7 +276,8 @@ class EffectsTab(QWidget):
             item.setText(1, effect['category'])
             item.setText(2, effect['title'])
             item.setText(3, effect['impact'])
-            item.setText(4, effect['time_remaining'])
+            item.setText(4, effect['started'])
+            item.setText(5, effect['time_remaining'])
         
         # Group by player/position
         self.temp_tree.sortItems(0, Qt.AscendingOrder) 

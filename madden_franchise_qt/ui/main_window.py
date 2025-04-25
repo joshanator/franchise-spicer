@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
         self.tab_widget.addTab(self.event_tab, "Events")
         self.tab_widget.addTab(self.roster_tab, "Roster")
         self.tab_widget.addTab(self.history_tab, "History")
-        self.tab_widget.addTab(self.effects_tab, "Effects")
+        self.tab_widget.addTab(self.effects_tab, "Effect Tracker")
         
         # Connect signals
         self.tab_widget.currentChanged.connect(self._on_tab_changed)
@@ -422,7 +422,7 @@ class MainWindow(QMainWindow):
             <li>Set your current week and year</li>
             <li>Go to the Events tab and click "Roll for Event" to generate random events</li>
             <li>View event history in the History tab</li>
-            <li>Check active effects in the Effects tab</li>
+            <li>Check active effects in the Effect Tracker tab</li>
             <li>Update your roster in the Roster tab</li>
         </ol>
         <p><b>Event difficulty affects how challenging the events will be for your franchise.</b></p>
