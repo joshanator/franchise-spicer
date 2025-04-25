@@ -1,7 +1,7 @@
 # Madden Franchise Event Generator
 
-[![Tests](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Josh/franchise-spicer/releases)
+[![Tests](https://github.com/joshanator/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/joshanator/franchise-spicer/actions/workflows/tests.yml)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/joshanator/franchise-spicer/releases)
 [![License](https://img.shields.io/badge/license-CC--BY--NC--4.0-green.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Python](https://img.shields.io/badge/python-3.6%2B-blue)](https://www.python.org/)
 
@@ -134,7 +134,7 @@ This application is built with PySide6 (Qt for Python) to ensure compatibility w
 
 ## Build Status
 
-[![Tests](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml)
+[![Tests](https://github.com/joshanator/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/joshanator/franchise-spicer/actions/workflows/tests.yml)
 
 The project uses GitHub Actions for continuous integration testing. The test workflow:
 - Runs on both Python 3.9 and 3.10
