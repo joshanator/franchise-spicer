@@ -408,7 +408,7 @@
         "diabolical": 0.05
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 20,
@@ -436,7 +436,7 @@
         "diabolical": 0.05
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 21,
@@ -734,7 +734,7 @@
         "diabolical": 0.04
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 36,
@@ -1545,7 +1545,7 @@
         "diabolical": 0.03
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 70,
@@ -1576,7 +1576,7 @@
         "diabolical": 0.05
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 71,
@@ -1605,7 +1605,7 @@
         "diabolical": 0.04
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 72,
@@ -1637,7 +1637,7 @@
         "diabolical": 0.04
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 73,
@@ -1666,7 +1666,7 @@
         "diabolical": 0.04
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 74,
@@ -1695,7 +1695,7 @@
         "diabolical": 0.04
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 75,
@@ -1724,7 +1724,7 @@
         "diabolical": 0.025
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     },
     {
       "id": 76,
@@ -1751,7 +1751,7 @@
         "diabolical": 0.03
       },
       "category": "attribute",
-      "season_stages": ["pre-season"]
+      "season_stages": ["pre-season", "off-season"]
     }
   ]
 } 
