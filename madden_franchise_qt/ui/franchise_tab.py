@@ -179,19 +179,34 @@ class FranchiseTab(QWidget):
         info_group.setLayout(info_layout)
         
         # Team name
-        team_layout = QHBoxLayout()
-        team_layout.setSpacing(10)  # Add spacing between elements
+        team_widget = QWidget()
+        team_layout = QVBoxLayout(team_widget)
+        team_layout.setContentsMargins(0, 0, 0, 0)
+        team_layout.setSpacing(10)
+        
+        # Team name in a single row with update button
+        team_name_layout = QHBoxLayout()
+        team_name_layout.setSpacing(5)
+        
+        team_name_label = QLabel("Team Name:")
+        team_name_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        team_name_layout.addWidget(team_name_label)
+        
         self.team_name_edit = QLineEdit()
         self.team_name_edit.setMinimumHeight(30)  # Consistent height
-        team_layout.addWidget(self.team_name_edit, 1)  # Give the edit field stretch priority
+        self.team_name_edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        team_name_layout.addWidget(self.team_name_edit)
+        
         self.update_team_button = QPushButton("Update")
         self.update_team_button.setMinimumHeight(30)  # Consistent height
-        self.update_team_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  # Don't stretch button
         self.update_team_button.clicked.connect(self._update_team_name)
-        team_layout.addWidget(self.update_team_button)
-        info_layout.addRow("Team Name:", team_layout)
-
-        # Week and year - Wrap in FlowLayout or make responsive
+        team_name_layout.addWidget(self.update_team_button)
+        
+        team_layout.addLayout(team_name_layout)
+        
+        info_layout.addRow("", team_widget)
+        
+        # Week and year
         week_year_widget = QWidget()
         week_year_layout = QVBoxLayout(week_year_widget)  # Changed to vertical for better small window handling
         week_year_layout.setSpacing(10)
@@ -228,14 +243,11 @@ class FranchiseTab(QWidget):
         year_layout.addWidget(self.year_spinner)
         week_year_layout.addLayout(year_layout)
         
-        # Update button in its own row
-        update_layout = QHBoxLayout()
+        # Update button in the same row as year
         self.update_week_year_button = QPushButton("Update Week/Year")
         self.update_week_year_button.setMinimumHeight(30)
         self.update_week_year_button.clicked.connect(self._update_week_year)
-        update_layout.addWidget(self.update_week_year_button)
-        update_layout.addStretch(1)  # Push button to the left
-        week_year_layout.addLayout(update_layout)
+        year_layout.addWidget(self.update_week_year_button)
         
         info_layout.addRow("", week_year_widget)
         
@@ -245,13 +257,13 @@ class FranchiseTab(QWidget):
         season_stage_layout.setContentsMargins(0, 0, 0, 0)
         season_stage_layout.setSpacing(10)
         
-        # Label and dropdown in one row
-        stage_combo_layout = QHBoxLayout()
-        stage_combo_layout.setSpacing(10)
+        # Label and dropdown in one row with update button
+        stage_layout = QHBoxLayout()
+        stage_layout.setSpacing(10)
         
         season_stage_label = QLabel("Current Season Stage:")
         season_stage_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        stage_combo_layout.addWidget(season_stage_label)
+        stage_layout.addWidget(season_stage_label)
         
         self.season_stage_combo = QComboBox()
         self.season_stage_combo.setMinimumHeight(30)
@@ -265,17 +277,14 @@ class FranchiseTab(QWidget):
             OFF_SEASON_DISPLAY
         ])
         self.season_stage_combo.currentTextChanged.connect(self._on_season_stage_changed)
-        stage_combo_layout.addWidget(self.season_stage_combo)
-        season_stage_layout.addLayout(stage_combo_layout)
+        stage_layout.addWidget(self.season_stage_combo)
         
-        # Update button in its own row
-        stage_update_layout = QHBoxLayout()
         self.update_season_stage_button = QPushButton("Update Season Stage")
         self.update_season_stage_button.setMinimumHeight(30)
         self.update_season_stage_button.clicked.connect(self._update_season_stage)
-        stage_update_layout.addWidget(self.update_season_stage_button)
-        stage_update_layout.addStretch(1)
-        season_stage_layout.addLayout(stage_update_layout)
+        stage_layout.addWidget(self.update_season_stage_button)
+        
+        season_stage_layout.addLayout(stage_layout)
         
         info_layout.addRow("", season_stage_widget)
         
@@ -296,7 +305,7 @@ class FranchiseTab(QWidget):
         difficulty_layout.setSpacing(15)
         difficulty_layout.setContentsMargins(15, 20, 15, 20)
         
-        # Create horizontal layout for difficulty selection
+        # Create horizontal layout for difficulty selection with update button
         difficulty_selection_layout = QHBoxLayout()
         difficulty_selection_layout.setSpacing(10)
         
@@ -318,6 +327,12 @@ class FranchiseTab(QWidget):
         self.difficulty_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         difficulty_selection_layout.addWidget(self.difficulty_combo)
         
+        # Update button
+        self.update_difficulty_button = QPushButton("Update Difficulty")
+        self.update_difficulty_button.setMinimumHeight(30)
+        self.update_difficulty_button.clicked.connect(self._update_difficulty)
+        difficulty_selection_layout.addWidget(self.update_difficulty_button)
+        
         # Add the selection layout to the main difficulty layout
         difficulty_layout.addLayout(difficulty_selection_layout)
         
@@ -332,15 +347,6 @@ class FranchiseTab(QWidget):
         unrealistic_events_layout.addWidget(self.unrealistic_events_checkbox)
         unrealistic_events_layout.addStretch(1)  # Push checkbox to the left
         difficulty_layout.addLayout(unrealistic_events_layout)
-        
-        # Update button
-        update_difficulty_layout = QHBoxLayout()
-        self.update_difficulty_button = QPushButton("Update Difficulty")
-        self.update_difficulty_button.setMinimumHeight(30)
-        self.update_difficulty_button.clicked.connect(self._update_difficulty)
-        update_difficulty_layout.addWidget(self.update_difficulty_button)
-        update_difficulty_layout.addStretch(1)  # Push button to the left
-        difficulty_layout.addLayout(update_difficulty_layout)
         
         scroll_layout.addWidget(difficulty_group)
         
