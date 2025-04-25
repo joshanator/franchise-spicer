@@ -2657,6 +2657,40 @@
         "pre-season",
         "off-season"
       ]
+    },
+    {
+      "id": 77,
+      "title": "Coordinated Disconduct",
+      "description": "{target} was caught {reason}",
+      "impact": "{target} is {penalty}. For the remainder of the suspension or season, an assistant coach has stepped in to take their place. You must change your playbook to a default (non-coaching or custom playbook) and you must only select suggested plays.",
+      "target_options": ["OC", "DC"],
+      "reason_options": ["Soliciting services from individuals at night", "Betting on games", "Giving players performance enhancing drugs", "Using drugs in the locker room", "Giving awards to players for injuring opposing players"],
+      "penalty_options": ["suspended for 4 games", "fired from his position on the team", "suspended for 8 games", "suspended for the season"],
+      "category": "penalty",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-middle", "regular-season-end"],
+      "is_temporary": true,
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      }
+    },
+    {
+      "id": 78,
+      "title": "We need someone experienced",
+      "description": "Coach has decided that the team is too youthful, he wants to bring in a veteran prescense to help the team out.",
+      "impact": "You must cut backup under 25 years old and sign a free agent who is atleast 30 years old to replace them at that position.",
+      "category": "transaction",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-middle", "regular-season-end"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      }
     }
   ]
 }
