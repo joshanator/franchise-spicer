@@ -6,7 +6,6 @@ on:
       - 'madden_franchise_qt/data/events.json'
       - 'madden_franchise_qt/data/unrealistic_events.json'
       - 'scripts/calculate_scenarios.py'
-      - 'scripts/get_scenario_counts.py'
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
@@ -22,21 +21,16 @@ jobs:
         with:
           python-version: 3.9
           
-      - name: Get counts
+      - name: Get scenario count
         id: count
         run: |
-          # Run our main script first for logging
-          python3 scripts/calculate_scenarios.py
-          
-          # Run the dedicated script to get just the raw numbers
-          OUTPUTS=($(python3 scripts/get_scenario_counts.py))
-          echo "EVENT_COUNT=${OUTPUTS[0]}" >> $GITHUB_OUTPUT
-          echo "SCENARIO_COUNT=${OUTPUTS[1]}" >> $GITHUB_OUTPUT
+          # Run the script and capture the last line (which is just the number)
+          SCENARIO_COUNT=$(python3 scripts/calculate_scenarios.py | tail -n 1)
+          echo "SCENARIO_COUNT=$SCENARIO_COUNT" >> $GITHUB_OUTPUT
+          echo "Scenario count: $SCENARIO_COUNT"
       
       - name: Create badge data
         run: |
-          echo "Creating badge with ${{ steps.count.outputs.SCENARIO_COUNT }} scenarios"
-          
           # Create JSON data for shields.io endpoint
           cat > scenario_count.json << EOF
           {
@@ -46,6 +40,9 @@ jobs:
             "color": "orange"
           }
           EOF
+          
+          # Debug: show the generated JSON
+          cat scenario_count.json
           
       - name: Update GitHub Gist with badge data
         uses: exuanbo/actions-deploy-gist@v1

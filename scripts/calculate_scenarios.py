@@ -153,7 +153,8 @@ def calculate_total_scenarios():
 if __name__ == "__main__":
     try:
         scenario_counts = calculate_total_scenarios()
-        # No longer updating README directly - using GitHub Actions and badge instead
+        # Print just the final number for GitHub Actions to capture
+        print(scenario_counts['total_scenarios'])
     except Exception as e:
         print(f"Fatal error: {e}", file=sys.stderr)
         sys.exit(1) 
