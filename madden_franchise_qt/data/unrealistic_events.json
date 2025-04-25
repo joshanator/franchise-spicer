@@ -53,6 +53,105 @@
                 "playoffs",
                 "off-season"
             ]
+        },
+        {
+            "id": 2,
+            "title": "Goodell's Casino: Cap hit roulette",
+            "description": "In an imaginary casino commissioner Goodell stands and rolls some poker chips around in his hand. He looks at you and says I have an opportunity for you. Do you wanna play?",
+            "impact": "Whats the game?",
+            "options": [
+                {
+                    "description": "No thank you. I have no cap space to spare.",
+                    "impact": "You walk away from the table and wake up in your own bed.."
+                },
+                {
+                    "description": "I'm in. What's the game?",
+                    "impact": "Here's the deal. You make pick a player of your choice with 3 years or more left on their contract. I am going to give you some options, the higher value you choose the more likely you are to recieve good rewards. This player will have the bet added to their yearly bonus value and the awarded attributes added to their stats",
+                    "options": [
+                        {
+                            "description": "I bet 100k",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 100k cap hit added to player's yearly bonus.": 0.01,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 100k cap hit added to player's yearly bonus.": 0.04,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 100k cap hit added to player's yearly bonus.": 0.15,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 100k cap hit added to player's yearly bonus.": 0.2,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 100k cap hit added to player's yearly bonus": 0.25,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 100k cap hit added to player's yearly bonus.": 0.2,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 100k cap hit added to player's yearly bonus.": 0.15
+                            }
+                        },
+                        {
+                            "description": "I bet 1m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 1m cap hit added to player's yearly bonus.": 0.04,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 1m cap hit added to player's yearly bonus.": 0.10,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 1m cap hit added to player's yearly bonus.": 0.21,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 1m cap hit added to player's yearly bonus.": 0.19,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 1m cap hit added to player's yearly bonus": 0.24,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 1m cap hit added to player's yearly bonus.": 0.12,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 1m cap hit added to player's yearly bonus.": 0.10
+                            }
+                        },
+                        {
+                            "description": "I bet 2.5m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 2.5m cap hit added to player's yearly bonus.": 0.08,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 2.5m cap hit added to player's yearly bonus.": 0.16,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 2.5m cap hit added to player's yearly bonus.": 0.26,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 2.5m cap hit added to player's yearly bonus.": 0.17,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 2.5m cap hit added to player's yearly bonus": 0.19,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 2.5m cap hit added to player's yearly bonus.": 0.09,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 2.5m cap hit added to player's yearly bonus.": 0.05
+                            }
+                        },
+                        {
+                            "description": "I bet 5m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 5m cap hit added to player's yearly bonus.": 0.14,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 5m cap hit added to player's yearly bonus.": 0.24,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 5m cap hit added to player's yearly bonus.": 0.31,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 5m cap hit added to player's yearly bonus.": 0.13,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 5m cap hit added to player's yearly bonus": 0.10,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 5m cap hit added to player's yearly bonus.": 0.05,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 5m cap hit added to player's yearly bonus.": 0.03
+                            }
+                        },
+                        {
+                            "description": "I bet 10m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 10m cap hit added to player's yearly bonus.": 0.35,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 10m cap hit added to player's yearly bonus.": 0.35,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 10m cap hit added to player's yearly bonus.": 0.25,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 10m cap hit added to player's yearly bonus.": 0.06,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 10m cap hit added to player's yearly bonus": 0.03,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 10m cap hit added to player's yearly bonus.": 0.01,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 10m cap hit added to player's yearly bonus.": 0.00
+                            }
+                        }
+                    ]
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 1,
+                "rookie": 1,
+                "pro": 1,
+                "all-madden": 1,
+                "diabolical": 1
+            },
+            "category": "gamble",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end",
+                "playoffs",
+                "off-season"
+            ]
         }
     ]
 }
