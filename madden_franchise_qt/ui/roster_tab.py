@@ -92,6 +92,7 @@ class RosterTab(QWidget):
             ("RB1", "Running Back 1"),
             ("RB2", "Running Back 2"),
             ("RB3", "Running Back 3"),
+            ("FB1", "Fullback 1"),
             ("WR1", "Wide Receiver 1"),
             ("WR2", "Wide Receiver 2"),
             ("WR3", "Wide Receiver 3"),
