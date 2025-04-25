@@ -24,7 +24,8 @@
                         },
                         {
                             "description": "Oh no thank you sir, I dont do drugs.",
-                            "impact": "Your player gets nominated to speak at a school assembly for DARE. They miss the next game."
+                            "impact": "Your player gets nominated to speak at a school assembly for DARE. They miss the next game.",
+                            "is_temporary": true
                         }
                     ]
                 },

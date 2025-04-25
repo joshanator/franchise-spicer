@@ -15,6 +15,7 @@ from .franchise_tab import FranchiseTab
 from .event_tab import EventTab
 from .roster_tab import RosterTab
 from .history_tab import HistoryTab
+from .effects_tab import EffectsTab
 
 # Get version
 def get_version():
@@ -96,12 +97,14 @@ class MainWindow(QMainWindow):
         self.event_tab = EventTab(self.event_manager)
         self.roster_tab = RosterTab(self.event_manager)
         self.history_tab = HistoryTab(self.event_manager)
+        self.effects_tab = EffectsTab(self.event_manager)
         
         # Add tabs to widget
         self.tab_widget.addTab(self.franchise_tab, "Franchise")
         self.tab_widget.addTab(self.event_tab, "Events")
         self.tab_widget.addTab(self.roster_tab, "Roster")
         self.tab_widget.addTab(self.history_tab, "History")
+        self.tab_widget.addTab(self.effects_tab, "Effects")
         
         # Connect signals
         self.tab_widget.currentChanged.connect(self._on_tab_changed)
@@ -419,6 +422,7 @@ class MainWindow(QMainWindow):
             <li>Set your current week and year</li>
             <li>Go to the Events tab and click "Roll for Event" to generate random events</li>
             <li>View event history in the History tab</li>
+            <li>Check active effects in the Effects tab</li>
             <li>Update your roster in the Roster tab</li>
         </ol>
         <p><b>Event difficulty affects how challenging the events will be for your franchise.</b></p>
@@ -439,6 +443,7 @@ class MainWindow(QMainWindow):
         self.event_tab.refresh()
         self.roster_tab.refresh()
         self.history_tab.refresh()
+        self.effects_tab.refresh()
         self.update_week_year_display()
     
     def _on_tab_changed(self, index):

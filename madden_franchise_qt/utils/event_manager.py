@@ -287,6 +287,10 @@ class EventManager:
             description = self._replace_placeholder(description, 'target', target_display)
             processed_event['selected_target'] = target_display
         
+        # Preserve is_temporary flag
+        if 'is_temporary' in event:
+            processed_event['is_temporary'] = event['is_temporary']
+        
         # Handle player options and their impacts
         if 'trainer_options' in processed_event and 'trainer_impacts' in processed_event:
             # Choose a random trainer from the options
@@ -390,12 +394,22 @@ class EventManager:
             'selected_target': event.get('selected_target', 'N/A')  # Include player/position
         }
         
+        # Include is_temporary flag if present
+        if 'is_temporary' in event:
+            history_entry['is_temporary'] = event['is_temporary']
+        
         # Add selected option information if this was a branching event
         if selected_option is not None:
             history_entry['selected_option'] = {
                 'description': selected_option.get('processed_description', selected_option.get('description', '')),
                 'impact': selected_option.get('impact', '')
             }
+            
+            # Include is_temporary from the selected option if present
+            if 'is_temporary' in selected_option:
+                if 'selected_option' in history_entry:
+                    history_entry['selected_option']['is_temporary'] = selected_option['is_temporary']
+                history_entry['is_temporary'] = selected_option['is_temporary']
         
         # Add to in-memory event history (not directly to config)
         self.event_history.append(history_entry)

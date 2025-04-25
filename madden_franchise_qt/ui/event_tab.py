@@ -376,10 +376,12 @@ class EventTab(QWidget):
         self.accept_button.setEnabled(False)
         self.reroll_button.setEnabled(False)
         
-        # Update history tab
+        # Update history and effects tabs
         main_window = self.window()
         if hasattr(main_window, 'history_tab') and hasattr(main_window.history_tab, 'refresh'):
             main_window.history_tab.refresh()
+        if hasattr(main_window, 'effects_tab') and hasattr(main_window.effects_tab, 'refresh'):
+            main_window.effects_tab.refresh()
     
     def _process_impact_random_options(self, option):
         """Process random impact options from an option
