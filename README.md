@@ -129,7 +129,28 @@ This application is built with PySide6 (Qt for Python) to ensure compatibility w
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License** (CC BY-NC 4.0).
+
+### What this means:
+
+- ✅ **You are free to**:
+  - **Share** — copy and redistribute the material in any medium or format
+  - **Adapt** — remix, transform, and build upon the material
+
+- ❌ **Under the following terms**:
+  - **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made
+  - **NonCommercial** — You may not use the material for commercial purposes
+  - **No additional restrictions** — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits
+
+The full license text can be found at: [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
+
+### In simple terms:
+
+You can freely use, modify, and share this code for non-commercial purposes as long as you give credit to the original project. However, you cannot sell this software or use it in any commercial product or service without explicit permission.
+
+## Project Testing
+
+For information about the test suite and how to run tests, see [README_TESTS.md](README_TESTS.md).
 
 ## Acknowledgments
 
