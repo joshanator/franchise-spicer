@@ -57,6 +57,7 @@ class EventTab(QWidget):
         self.roll_button = QPushButton("ROLL FOR EVENT")
         self.roll_button.setFont(QFont("Arial", 12, QFont.Bold))
         self.roll_button.setMinimumHeight(50)
+        self.roll_button.setObjectName("roll_button")
         self.roll_button.clicked.connect(self._roll_event)
         generator_layout.addWidget(self.roll_button)
         
@@ -318,7 +319,7 @@ class EventTab(QWidget):
         original_style = self.result_group.styleSheet()
         
         # Highlight style
-        highlight_style = "QGroupBox { background-color: #e0f0ff; border: 2px solid #4477AA; }"
+        highlight_style = "QGroupBox { background-color: #234B6E; border: 1px solid #862633; }"
         
         # Set start value
         animation.setStartValue(original_style)

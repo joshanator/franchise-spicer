@@ -79,6 +79,7 @@ class MainWindow(QMainWindow):
         header_label = QLabel("MADDEN FRANCHISE EVENT GENERATOR")
         header_label.setFont(QFont("Arial", 16, QFont.Bold))
         header_label.setAlignment(Qt.AlignCenter)
+        header_label.setObjectName("headerLabel")
         main_layout.addWidget(header_label)
         
         # Version label
