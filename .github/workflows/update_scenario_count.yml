@@ -1,0 +1,32 @@
+name: Update Scenario Count
+
+on:
+  push:
+    paths:
+      - 'madden_franchise_qt/data/events.json'
+      - 'madden_franchise_qt/data/unrealistic_events.json'
+      - 'scripts/calculate_scenarios.py'
+
+jobs:
+  update-count:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+          
+      - name: Run scenario counter script
+        run: python scripts/calculate_scenarios.py
+        
+      - name: Commit changes if README was updated
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update scenario count in README [skip ci]"
+          git push 
