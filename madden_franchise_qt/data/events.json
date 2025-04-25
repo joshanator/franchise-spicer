@@ -1322,6 +1322,152 @@
       },
       "category": "team",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 64,
+      "title": "TODO:: Locker Room Divide",
+      "description": "Your team is experiencing a serious locker room divide that's affecting team chemistry.",
+      "options": [
+        {
+          "description": "Team meeting to address issues",
+          "impact": "Team loses 2 games while working through issues, but chemistry improves afterward with +1 awareness for all players."
+        },
+        {
+          "description": "Ignore the problems",
+          "impact": "All players receive -2 awareness for the remainder of the season."
+        },
+        {
+          "description": "Trade the troublemakers",
+          "impact": "You must trade at least 2 starters for draft picks only (no players in return)."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.15,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": ["regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 65,
+      "title": "Failed Drug Test",
+      "description": "{target} has failed a random drug test administered by the league.",
+      "impact": "Player is suspended for 4 games with no appeals possible.",
+      "target_options": ["all-players"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.15,
+        "all-madden": 0.3,
+        "diabolical": 0.5
+      },
+      "category": "suspension",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 66,
+      "title": "Bust bust bust",
+      "description": "Your highest draft pick from last year is a complete bust.",
+      "impact": "The player's development to normal and they lose -2 to Awareness.",
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 67,
+      "title": "Mo money mo problems",
+      "description": "it wasnt long ago when {target} signed a new contract, but they sure did spend it fast.",
+      "impact": "He came to your office to beg for more money.",
+      "target_options": ["all-players"],
+      "options": [
+        {
+          "description": "Cut him. If they cant manage their finances, then they arent responsible enough to be on your team.",
+          "impact": "Player is cut and cannot be re-signed for the rest of the season."
+        },
+        {
+          "description": "Offer to let him move into your house until he gets his finances in order.",
+          "impact": "{impact_text}",
+          "result_options": [
+            {
+              "impact_text": "Player glady accepts your offer. He fits right in with the family and he is able to spend more time focusing on the gamme. +1 Awareness permanently.",
+              "probability": 0.3
+            },            
+            {
+              "impact_text": "Player moves into your house. Hes kind of a deadbeat and spends all day playing video games. -2 Awareness permanently.",
+              "probability": 0.3
+            },
+            {
+              "impact_text": "Player moves into your home and prompty robs you silly. Add 2 million to bonus in his contract before cutting him. He may never be re-signed",
+              "probability": 0.2
+            },
+            {
+              "impact_text": "Player insults your offer and storms out of your office. He is cut and cannot be re-signed for the rest of the season.",
+              "probability": 0.2
+            }
+          ]
+        },
+        {
+          "description": "Pay the man. NFL salaries are practically minimum wage.",
+          "impact": "Add $2 million/year as a signing bonus to his contract for the remainder of his contract."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 68,
+      "title": "Media Criticism",
+      "description": "The media has been relentlessly critical of {target}, affecting their mental state.",
+      "options": [
+        {
+          "description": "Hold a press conference to defend the player",
+          "impact": "Will you actually back this player up?",
+          "options": [
+            {
+              "description": "Yes. And I promise to start him for the next 5 weeks to prove it.",
+              "impact": "Player gains +1 to two skill attributes of your choice. But they must start the next 5 games."
+            },
+            {
+              "description": "Nahh",
+              "impact": "Player is absolutely clowned on social media and crashes out. He loses -7 awareness permanetly. "
+            }
+          ]
+        },
+        {
+          "description": "Tell player to ignore the noise",
+          "impact": "He tries. He really does. But the media is relentless. He loses -2 awareness permanently."
+        },
+        {
+          "description": "Bench player for a bit to let things cool down",
+          "impact": "Player must be benched for two games, after which they return with normal attributes."
+        }
+      ],
+      "target_options": ["all-players"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.25,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     }
   ]
 } 
