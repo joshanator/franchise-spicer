@@ -137,11 +137,11 @@
                 }
             ],
             "difficulty_weights": {
-                "cupcake": 1,
-                "rookie": 1,
-                "pro": 1,
-                "all-madden": 1,
-                "diabolical": 1
+                "cupcake": 0.1,
+                "rookie": 0.05,
+                "pro": 0.05,
+                "all-madden": 0.05,
+                "diabolical": 0.05
             },
             "category": "gamble",
             "season_stages": [
