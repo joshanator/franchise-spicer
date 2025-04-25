@@ -372,10 +372,22 @@
     },
     {
       "id": 20,
-      "title": "Aaron Donald Training",
-      "description": "Defensive player worked on hand techniques with Aaron Donald in the offseason.",
-      "impact": "+3 to block shedding, +2 power moves, +1 finesse moves",
-      "target_options": ["LE1", "RE1", "DT1", "LOLB1", "ROLB1"],
+      "title": "Trench Training D",
+      "description": "{target} worked on hand techniques with {trainer} in the offseason.",
+      "impact": "{trainer_impact}",
+      "trainer_options": ["Aaron Donald", "Geno Atkins", "Warren Sapp", "Ndamukong Suh", "Julius Peppers", "Micheal Strahan", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Aaron Donald": "Player gains +3 to block shedding, +2 power moves, +1 finesse moves. Am I elite now coach?",
+        "Geno Atkins": "Player gains +1 to block shedding, +2 finesse moves. Am I elite now coach?",
+        "Warren Sapp": "Player gains +2 to block shedding, +2 power moves, +1 Awareness. Am I elite now coach?",
+        "Ndamukong Suh": "Player gains +1 to block shedding, +2 power moves, +1 Awareness, -5 predictability. Am I elite now coach?",
+        "Julius Peppers": "Player gains +1 Speed, +1 power moves, +1 finesse moves. Am I elite now coach?",
+        "Micheal Strahan": "Player gains +2 to block shedding, +2 power moves. Am I elite now coach?",
+        "a renowned sport scientist": "Player gains +1 to block shedding, +2 stamina, +1 strength. I paid the money to be elite now coach?",
+        "His high school football coach": "Player gains +1 to block shedding, +2 Stamina. Am I elite now coach?",
+        "His father": "Player gains -1 to block shedding, -2 to finesse moves, +2 Stamina, +1 Strength. Daddy says I'm elite now, right coach?"
+      },
+      "target_options": ["LE1", "LE2", "RE1", "RE2", "DT1", "DT2", "DT3"],
       "difficulty_weights": {
         "cupcake": 0.4,
         "rookie": 0.2,
@@ -384,7 +396,7 @@
         "diabolical": 0.05
       },
       "category": "attribute",
-      "season_stages": ["pre-season", "regular-season-start"]
+      "season_stages": ["pre-season"]
     },
     {
       "id": 21,
@@ -630,19 +642,34 @@
     },
     {
       "id": 35,
-      "title": "T.J. Watt Effect",
-      "description": "Edge rusher studied film with T.J. Watt and has improved pass rush moves.",
-      "impact": "+3 to finesse moves, +2 to power moves, +2 to block shedding",
-      "target_options": ["LE1", "RE1", "LOLB1", "ROLB1"],
+      "title": "EDGE Training",
+      "description": "{target} worked on pass rush techniques with {trainer} in the offseason.",
+      "impact": "{trainer_impact}",
+      "trainer_options": ["Dwight Freeney", "T.J. Watt", "Von Miller", "Khalil Mack", "Clay Matthews", "Chandler Jones", "Demarcus Ware", "Lawrence Taylor", "Micah Parsons", "His father", "His high school football coach", "a renowned sport scientist"],
+      "trainer_impacts": {
+        "Dwight Freeney": "Player gains +1 to Finesse moves, +1 speed, +1 acceleration, and gains the spin move. Ready to lead the league in sacks, coach?",
+        "T.J. Watt": "Player gains +1 to power moves, +1 to block shedding. Ready to lead the league in sacks, coach?",
+        "Von Miller": "Player gains +2 to finesse moves, +1 to acceleration. Ready to lead the league in sacks, coach?",
+        "Khalil Mack": "Player gains +2 to power moves, +2 to Strength, gains the bull rush move. Ready to lead the league in sacks, coach?",
+        "Clay Matthews": "Player gains +1 to finesse moves, +1 to block shedding, +1 to awareness. Ready to lead the league in sacks, coach?",
+        "Chandler Jones": "Player gains +1 to finesse moves, +1 to power moves, +1 to pursuit. Ready to lead the league in sacks, coach?",
+        "Demarcus Ware": "Player gains +2 to power moves, +2 to finesse moves, +1 to acceleration. Ready to lead the league in sacks, coach?",
+        "Lawrence Taylor": "Player gains +2 to power moves, +2 to hit power, +1 to pursuit. Ready to lead the league in sacks, coach?",
+        "Micah Parsons": "Player gains 1 to speed, +1 to finesse moves, +1 to acceleration. Ready to lead the league in sacks, coach?",
+        "His father": "Player gains -1 to power moves, -1 to finesse moves, +1 to block shedding, +2 stamina, +1 strength. Daddy says im ready to lead the league in sacks, right coach?",
+        "His high school football coach": "Player gains +1 to block shedding, +1 to stamina. Ready to lead the league in sacks, coach?",
+        "a renowned sport scientist": "Player gains +1 to power moves, +1 to finesse moves, +1 to stamina. Ready to lead the league in sacks, coach?"
+      },
+      "target_options": ["LE1", "LE2", "RE1", "RE2", "LOLB1", "LOLB2", "ROLB1", "ROLB2"],
       "difficulty_weights": {
-        "cupcake": 0.7,
-        "rookie": 0.6,
-        "pro": 0.5,
-        "all-madden": 0.4,
-        "diabolical": 0.3
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
       },
       "category": "attribute",
-      "season_stages": ["pre-season", "regular-season-start"]
+      "season_stages": ["pre-season"]
     },
     {
       "id": 36,
@@ -1472,11 +1499,11 @@
     {
       "id": 69,
       "title": "Return Specialist",
-      "description": "{target} spent a week practicing with {player} over the offseason.",
-      "impact": "{player_impact}",
+      "description": "{target} spent a week practicing with {trainer} over the offseason.",
+      "impact": "{trainer_impact}",
       "target_options": ["RB1", "RB2", "RB3", "WR1", "WR2", "WR3", "WR4", "CB1", "CB2", "CB3", "CB4", "FS1", "FS2", "SS1", "SS2"],
-      "player_options": ["Devin Hester", "DeSean Jackson", "Josh Cribbs", "Cordelle Patterson", "Dante Hall", "Leon Washington"],
-      "player_impacts": {
+      "trainer_options": ["Devin Hester", "DeSean Jackson", "Josh Cribbs", "Cordelle Patterson", "Dante Hall", "Leon Washington"],
+      "trainer_impacts": {
         "Devin Hester": "Player gains +1 Change of Direction, +1 Speed, +5 Return. Will this be enough to earn them some return-man reps?",
         "DeSean Jackson": "Player gains +1 Speed, +3 Return. Will this be enough to earn them some return-man reps?",
         "Josh Cribbs": "Player gains +1 Juke, +4 Return. Will this be enough to earn them some return-man reps?",
@@ -1490,6 +1517,37 @@
         "pro": 0.16,
         "all-madden": 0.07,
         "diabolical": 0.03
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 70,
+      "title": "Trench Training O",
+      "description": "{target} worked on blocking techniques with {trainer} in the offseason.",
+      "impact": "{trainer_impact}",
+      "trainer_options": ["Joe Thomas", "Trent Williams", "Jason Kelce", "Zack Martin", "David Bakhtiari", "Quenton Nelson", "Larry Allen", "Orlando Pace", "Jonathan Ogden", "His high school football coach", "His father", "a renowned sport scientist"],
+      "trainer_impacts": {
+        "Joe Thomas": "Player gains +3 to pass block finesse, +1 to run block, +1 awareness. Am I elite now coach?",
+        "Trent Williams": "Player gains +2 to pass block power, +2 to run block power, +1 strength. Am I elite now coach?",
+        "Jason Kelce": "Player gains +1 to pass block finesse, +2 to run block power, +2 awareness. Am I elite now coach?",
+        "Zack Martin": "Player gains +1 to pass block finesse, +1 to run block power, +1 awareness. Am I elite now coach?",
+        "David Bakhtiari": "Player gains +1 to pass block finesse, +1 to run block power. Am I elite now coach?",
+        "Quenton Nelson": "Player gains +2 to run block power, +1 to strength, +1 impact blocking. Am I elite now coach?",
+        "Larry Allen": "Player gains +2 to run block power, +2 to strength, +1 impact blocking. Am I elite now coach?",
+        "Orlando Pace": "Player gains +3 to pass block power, +2 to pass block finesse, +1 awareness. Am I elite now coach?",
+        "Jonathan Ogden": "Player gains +2 to pass block power, +2 to run block power, +1 Strength. Am I elite now coach?",
+        "His high school football coach": "Player gains +1 to run block power, +2 stamina. Am I elite now coach?",
+        "His father": "Player gains -1 to pass block finesse, -1 to run block power, +2 stamina, +1 strength. Daddy says I'm elite now, right coach?",
+        "a renowned sport scientist": "Player gains +1 to pass block finesse, +1 to run block finesse, +2 stamina. I paid the money to be elite now coach?"
+      },
+      "target_options": ["LT1", "LT2", "LG1", "LG2", "C1", "C2", "RG1", "RG2", "RT1", "RT2"],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.2,
+        "pro": 0.15,
+        "all-madden": 0.1,
+        "diabolical": 0.05
       },
       "category": "attribute",
       "season_stages": ["pre-season"]

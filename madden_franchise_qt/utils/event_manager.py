@@ -288,25 +288,25 @@ class EventManager:
             processed_event['selected_target'] = target_display
         
         # Handle player options and their impacts
-        if 'player_options' in processed_event and 'player_impacts' in processed_event:
-            # Choose a random player from the options
-            selected_player = random.choice(processed_event['player_options'])
-            processed_event['selected_player'] = selected_player
+        if 'trainer_options' in processed_event and 'trainer_impacts' in processed_event:
+            # Choose a random trainer from the options
+            selected_trainer = random.choice(processed_event['trainer_options'])
+            processed_event['selected_trainer'] = selected_trainer
             
-            # Get the impact for this player
-            player_impact = processed_event['player_impacts'].get(selected_player, "")
+            # Get the impact for this trainer
+            trainer_impact = processed_event['trainer_impacts'].get(selected_trainer, "")
             
-            # Replace player and player_impact placeholders
-            description = self._replace_placeholder(description, 'player', selected_player)
+            # Replace trainer and trainer_impact placeholders
+            description = self._replace_placeholder(description, 'trainer', selected_trainer)
             
             # Replace impact placeholders
             impact = processed_event.get('impact', '')
-            impact = self._replace_placeholder(impact, 'player_impact', player_impact)
+            impact = self._replace_placeholder(impact, 'trainer_impact', trainer_impact)
             processed_event['impact'] = impact
             
             # Debug output
-            print(f"Selected player: {selected_player}")
-            print(f"Player impact: {player_impact}")
+            print(f"Selected trainer: {selected_trainer}")
+            print(f"Trainer impact: {trainer_impact}")
         
         # Handle simple random selection fields
         for field_type in ['reason_options', 'round_options', 'games_options']:
