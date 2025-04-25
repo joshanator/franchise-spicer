@@ -20,22 +20,15 @@ from .custom_events_tab import CustomEventsTab
 
 # Get version
 def get_version():
-    """Get version from version.py (created during builds) or version.txt file"""
+    """Get version from version.txt file"""
     try:
-        # First try to import version.py if it exists (created by build script)
-        try:
-            from ..version import VERSION
-            return VERSION
-        except ImportError:
-            pass
-        
-        # Then try reading from version.txt
+        # Read from version.txt
         version_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'version.txt')
         with open(version_path, 'r') as f:
             version = f.read().strip()
         return version
     except:
-        return "0.1"  # Default fallback version
+        return "1.0"  # Default fallback version
 
 
 class MainWindow(QMainWindow):
@@ -48,7 +41,7 @@ class MainWindow(QMainWindow):
         self.version = get_version()
         
         # Set window properties
-        self.setWindowTitle(f"Madden Franchise Event Generator v{self.version}")
+        self.setWindowTitle(f"TheChumpiest's Franchise Event Generator v{self.version}")
         self.setMinimumSize(QSize(900, 700))
         
         # Initialize data managers
@@ -78,7 +71,7 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(10, 10, 10, 10)
         
         # Create header
-        header_label = QLabel("MADDEN FRANCHISE EVENT GENERATOR")
+        header_label = QLabel("THECHUMPIEST'S FRANCHISE EVENT GENERATOR")
         header_label.setFont(QFont("Arial", 16, QFont.Bold))
         header_label.setAlignment(Qt.AlignCenter)
         header_label.setObjectName("headerLabel")
@@ -201,7 +194,7 @@ class MainWindow(QMainWindow):
     def show_startup_dialog(self):
         """Show startup dialog requiring user to create or load a franchise"""
         dialog = QDialog(self)
-        dialog.setWindowTitle("Welcome to Madden Franchise Event Generator")
+        dialog.setWindowTitle("Welcome to TheChumpiest's Franchise Event Generator")
         dialog.setModal(True)
         dialog.setMinimumWidth(400)
         
@@ -211,7 +204,7 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(dialog)
         
         # Add logo or title
-        title = QLabel("Welcome to Madden Franchise Event Generator")
+        title = QLabel("Welcome to TheChumpiest's Franchise Event Generator")
         title.setAlignment(Qt.AlignCenter)
         title.setFont(QFont("Arial", 14, QFont.Bold))
         layout.addWidget(title)
@@ -407,7 +400,7 @@ class MainWindow(QMainWindow):
     def show_about(self):
         """Show the about dialog"""
         about_text = f"""
-        <h3>Madden Franchise Event Generator</h3>
+        <h3>TheChumpiest's Franchise Event Generator</h3>
         <p>Version {self.version}</p>
         <p>This tool generates random events for your Madden franchise mode to 
         make the experience more dynamic and unpredictable. Events can affect 

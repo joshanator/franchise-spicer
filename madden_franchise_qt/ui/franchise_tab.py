@@ -7,6 +7,27 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QFont
 
+# Add direct version handling
+import os
+import sys
+
+# Function to get version directly
+def get_version_directly():
+    """Get version from version.txt file"""
+    try:
+        # Read from version.txt
+        version_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'version.txt')
+        print(f"Version path: {version_path}")
+        
+        if os.path.exists(version_path):
+            with open(version_path, 'r') as f:
+                version = f.read().strip()
+            print(f"Version read from file: {version}")
+            return version
+    except Exception as e:
+        print(f"Error reading version: {e}")
+    print("Using default version 1.0")
+    return "1.0"  # Default fallback version
 
 # Season stages
 PRE_SEASON = "Pre-Season"
@@ -120,6 +141,7 @@ class FranchiseTab(QWidget):
         super().__init__()
         
         self.event_manager = event_manager
+        self.version = get_version_directly()  # Get the correct version
         
         # Set up UI
         self._init_ui()
@@ -396,6 +418,12 @@ class FranchiseTab(QWidget):
         instructions_layout = QVBoxLayout(instructions_group)
         instructions_layout.setSpacing(15)
         instructions_layout.setContentsMargins(15, 20, 15, 20)
+        
+        # Add version label at the top of instructions
+        version_label = QLabel(f"TheChumpiest's Franchise Event Generator - Version {self.version}")
+        version_label.setAlignment(Qt.AlignCenter)
+        version_label.setFont(QFont("Arial", 10, QFont.Bold))
+        instructions_layout.addWidget(version_label)
         
         instructions_text = """
         1. Create a new franchise or load an existing one

@@ -121,7 +121,7 @@ class CustomEventsTab(QWidget):
         ])
         basic_layout.addRow("Category:", self.category_input)
         
-        self.is_temporary = QCheckBox("Temporary Event (expires after effect)")
+        self.is_temporary = QCheckBox("Temporary Event (allows event to show in effects tracker)")
         basic_layout.addRow("", self.is_temporary)
         
         basic_group.setLayout(basic_layout)
