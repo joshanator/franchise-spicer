@@ -1,5 +1,10 @@
 # Madden Franchise Event Generator
 
+[![Tests](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Josh/franchise-spicer/releases)
+[![License](https://img.shields.io/badge/license-CC--BY--NC--4.0-green.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Python](https://img.shields.io/badge/python-3.6%2B-blue)](https://www.python.org/)
+
 A Python application that generates random events for Madden franchise mode to make gameplay more dynamic and unpredictable.
 
 ## Features
@@ -126,6 +131,24 @@ This application is built with PySide6 (Qt for Python) to ensure compatibility w
 - macOS
 - Windows
 - Linux
+
+## Build Status
+
+[![Tests](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/Josh/franchise-spicer/actions/workflows/tests.yml)
+
+The project uses GitHub Actions for continuous integration testing. The test workflow:
+- Runs on both Python 3.9 and 3.10
+- Tests all regular events
+- Tests unrealistic events (if present)
+- Verifies combined event pools
+- Validates the event schema
+
+For more details on the testing framework, see [README_TESTS.md](README_TESTS.md).
+
+## Version History
+
+- **v1.0.0** - Initial release with complete event system and UI
+- **v1.0.1** - Added unrealistic events support and comprehensive test suite
 
 ## License
 
