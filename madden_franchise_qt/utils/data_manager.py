@@ -123,6 +123,7 @@ class DataManager:
                 "OC": "",
                 "DC": ""
             },
+            "custom_events": [],  # Array for user-created events
             "event_history": []
         }
         
@@ -215,6 +216,9 @@ class DataManager:
             # Extract auto-save status
             auto_save = saved_data.get('auto_save', False)
             
+            # Extract custom events
+            custom_events = saved_data.get('custom_events', [])
+            
             # Create a copy without event history for the config
             config = saved_data.copy()
             if 'event_history' in config:
@@ -222,6 +226,9 @@ class DataManager:
             
             # Preserve auto-save status in config
             config['auto_save'] = auto_save
+            
+            # Preserve custom events in config
+            config['custom_events'] = custom_events
             
             # Update the save file reference
             config['franchise_info']['save_file'] = filename

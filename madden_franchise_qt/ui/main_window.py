@@ -16,6 +16,7 @@ from .event_tab import EventTab
 from .roster_tab import RosterTab
 from .history_tab import HistoryTab
 from .effects_tab import EffectsTab
+from .custom_events_tab import CustomEventsTab
 
 # Get version
 def get_version():
@@ -98,6 +99,7 @@ class MainWindow(QMainWindow):
         self.roster_tab = RosterTab(self.event_manager)
         self.history_tab = HistoryTab(self.event_manager)
         self.effects_tab = EffectsTab(self.event_manager)
+        self.custom_events_tab = CustomEventsTab(self.event_manager)
         
         # Add tabs to widget
         self.tab_widget.addTab(self.franchise_tab, "Franchise")
@@ -105,6 +107,7 @@ class MainWindow(QMainWindow):
         self.tab_widget.addTab(self.roster_tab, "Roster")
         self.tab_widget.addTab(self.history_tab, "History")
         self.tab_widget.addTab(self.effects_tab, "Effect Tracker")
+        self.tab_widget.addTab(self.custom_events_tab, "Custom Events")
         
         # Connect signals
         self.tab_widget.currentChanged.connect(self._on_tab_changed)
@@ -444,6 +447,7 @@ class MainWindow(QMainWindow):
         self.roster_tab.refresh()
         self.history_tab.refresh()
         self.effects_tab.refresh()
+        self.custom_events_tab.refresh()
         self.update_week_year_display()
     
     def _on_tab_changed(self, index):

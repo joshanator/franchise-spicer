@@ -188,6 +188,20 @@ class EventManager:
                 if random.random() < weight and stage_match:
                     eligible_events.append(event)
         
+        # Add custom events if available
+        custom_events = self.config.get('custom_events', [])
+        for event in custom_events:
+            # Check difficulty weight
+            weight = event.get('difficulty_weights', {}).get(difficulty, 0.5)
+            
+            # Check season stage eligibility
+            event_stages = event.get('season_stages', ["any"])
+            stage_match = any(stage in allowed_stages for stage in event_stages)
+            
+            # If this event matches both difficulty and season stage, add to eligible events
+            if random.random() < weight and stage_match:
+                eligible_events.append(event)
+        
         if not eligible_events:
             return None
         
@@ -259,8 +273,14 @@ class EventManager:
         
         # Handle target options
         if 'target_options' in processed_event:
+            # Special case: "N/A" means no target
+            if len(processed_event['target_options']) == 1 and processed_event['target_options'][0] == "n/a":
+                # No target needed
+                processed_event['original_target_position'] = "N/A"
+                processed_event['selected_target'] = "N/A"
+                
             # Special case: "All players" means choose any player from the roster
-            if len(processed_event['target_options']) == 1 and processed_event['target_options'][0] == "all-players":
+            elif len(processed_event['target_options']) == 1 and processed_event['target_options'][0] == "all-players":
                 # Get all positions from the roster
                 all_positions = list(self.config.get('roster', {}).keys())
                 if all_positions:
@@ -268,34 +288,88 @@ class EventManager:
                 else:
                     # Fallback if roster is empty
                     target_position = "Unknown"
+                
+                # Store the original target position for later reference
+                processed_event['original_target_position'] = target_position
+                
+                # Try to get player name for this position, fallback to position
+                player_name = self.config.get('roster', {}).get(target_position, "")
+                
+                if player_name and player_name.strip():
+                    # Use format: "Name (Position)"
+                    target_display = f"{player_name} ({target_position})"
+                else:
+                    # Just use position if no name available
+                    target_display = target_position
+                    
+                description = self._replace_placeholder(description, 'target', target_display)
+                processed_event['selected_target'] = target_display
+                
+                # Make sure we're directly replacing the impact text with the target too
+                if 'impact' in processed_event:
+                    processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
+                    
+                # Also replace target in any result_options impact_text values
+                if 'result_options' in processed_event:
+                    for option in processed_event['result_options']:
+                        if 'impact_text' in option:
+                            option['impact_text'] = self._replace_placeholder(option['impact_text'], 'target', target_display)
+            
+            # Handle coaches (HC, OC, DC)
+            elif len(processed_event['target_options']) == 1 and processed_event['target_options'][0] in ["HC", "OC", "DC"]:
+                coach_position = processed_event['target_options'][0]
+                processed_event['original_target_position'] = coach_position
+                
+                # Get coach name
+                coach_name = self.config.get('coaches', {}).get(coach_position, "")
+                
+                if coach_name and coach_name.strip():
+                    target_display = f"{coach_name} ({coach_position})"
+                else:
+                    target_display = coach_position
+                
+                description = self._replace_placeholder(description, 'target', target_display)
+                processed_event['selected_target'] = target_display
+                
+                # Replace in impact text
+                if 'impact' in processed_event:
+                    processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
+                    
+                # Replace in result options
+                if 'result_options' in processed_event:
+                    for option in processed_event['result_options']:
+                        if 'impact_text' in option:
+                            option['impact_text'] = self._replace_placeholder(option['impact_text'], 'target', target_display)
+            
             else:
+                # Regular case - randomly select from position options
                 target_position = random.choice(processed_event['target_options'])
-            
-            # Store the original target position for later reference
-            processed_event['original_target_position'] = target_position
-            
-            # Try to get player name for this position, fallback to position
-            player_name = self.config.get('roster', {}).get(target_position, "")
-            
-            if player_name and player_name.strip():
-                # Use format: "Name (Position)"
-                target_display = f"{player_name} ({target_position})"
-            else:
-                # Just use position if no name available
-                target_display = target_position
                 
-            description = self._replace_placeholder(description, 'target', target_display)
-            processed_event['selected_target'] = target_display
-            
-            # Make sure we're directly replacing the impact text with the target too
-            if 'impact' in processed_event:
-                processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
+                # Store the original target position for later reference
+                processed_event['original_target_position'] = target_position
                 
-            # Also replace target in any result_options impact_text values
-            if 'result_options' in processed_event:
-                for option in processed_event['result_options']:
-                    if 'impact_text' in option:
-                        option['impact_text'] = self._replace_placeholder(option['impact_text'], 'target', target_display)
+                # Try to get player name for this position, fallback to position
+                player_name = self.config.get('roster', {}).get(target_position, "")
+                
+                if player_name and player_name.strip():
+                    # Use format: "Name (Position)"
+                    target_display = f"{player_name} ({target_position})"
+                else:
+                    # Just use position if no name available
+                    target_display = target_position
+                    
+                description = self._replace_placeholder(description, 'target', target_display)
+                processed_event['selected_target'] = target_display
+                
+                # Make sure we're directly replacing the impact text with the target too
+                if 'impact' in processed_event:
+                    processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
+                    
+                # Also replace target in any result_options impact_text values
+                if 'result_options' in processed_event:
+                    for option in processed_event['result_options']:
+                        if 'impact_text' in option:
+                            option['impact_text'] = self._replace_placeholder(option['impact_text'], 'target', target_display)
         
         # Preserve is_temporary flag
         if 'is_temporary' in event:
