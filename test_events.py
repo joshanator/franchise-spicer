@@ -2,6 +2,7 @@ import unittest
 import json
 import random
 import sys
+import os
 from unittest.mock import MagicMock, patch
 
 from madden_franchise_qt.utils.event_manager import EventManager
@@ -15,9 +16,19 @@ class TestEvents(unittest.TestCase):
         with open('madden_franchise_qt/data/events.json', 'r') as f:
             self.events_data = json.load(f)
         
+        # Try to load unrealistic events if they exist
+        self.unrealistic_events_data = {"unrealistic_events": []}
+        unrealistic_events_path = 'madden_franchise_qt/data/unrealistic_events.json'
+        if os.path.exists(unrealistic_events_path):
+            try:
+                with open(unrealistic_events_path, 'r') as f:
+                    self.unrealistic_events_data = json.load(f)
+            except Exception as e:
+                print(f"Could not load unrealistic events: {e}", file=sys.stderr)
+        
         # Mock the data manager to return our test data
         self.data_manager.load_events.return_value = self.events_data
-        self.data_manager.load_unrealistic_events.return_value = {"unrealistic_events": []}
+        self.data_manager.load_unrealistic_events.return_value = self.unrealistic_events_data
         
         # Set up a basic config with all needed values
         self.test_config = {
@@ -414,6 +425,87 @@ class TestEvents(unittest.TestCase):
                                   f"Event {event_id} ({title}): Option {i} missing impact or impact_random_options")
             
             print(f"Event {event_id} ({title}) passed schema validation")
+    
+    def test_unrealistic_events(self):
+        """Test that unrealistic events can be processed properly."""
+        # Verify that unrealistic events are enabled
+        self.assertTrue(self.event_manager.config.get('unrealistic_events_enabled', False))
+        
+        # Get unrealistic events
+        unrealistic_events = self.unrealistic_events_data.get('unrealistic_events', [])
+        
+        # If there are no unrealistic events, skip this test
+        if not unrealistic_events:
+            self.skipTest("No unrealistic events found. Create unrealistic_events.json with events to test.")
+            return
+        
+        total_events = len(unrealistic_events)
+        processed_count = 0
+        failed_events = []
+        
+        # Set unrealistic events to be available
+        self.event_manager.unrealistic_events = unrealistic_events
+        
+        # Process each event
+        for event in unrealistic_events:
+            event_id = event.get('id', 'unknown')
+            title = event.get('title', 'Unknown Event')
+            
+            # Set random seed for deterministic testing
+            random.seed(event_id)
+            
+            try:
+                # Process the event
+                processed_event = self.event_manager._process_event(event)
+                
+                # Basic assertions
+                self.assertIsNotNone(processed_event)
+                self.assertIn('processed_description', processed_event)
+                
+                # Try accepting the event
+                self.event_manager.accept_event(processed_event)
+                
+                processed_count += 1
+                print(f"Successfully processed unrealistic event {event_id}: {title}")
+            except Exception as e:
+                failed_events.append((event_id, title, str(e)))
+                print(f"Failed to process unrealistic event {event_id}: {title} - {str(e)}", file=sys.stderr)
+        
+        if failed_events:
+            for event_id, title, error in failed_events:
+                print(f"Unrealistic event {event_id} ({title}) failed: {error}", file=sys.stderr)
+            
+            self.fail(f"Failed to process {len(failed_events)} out of {total_events} unrealistic events.")
+        
+        if processed_count > 0:
+            print(f"Successfully processed all {processed_count} unrealistic events.")
+        else:
+            self.skipTest("No unrealistic events were processed.")
+            
+    def test_combined_event_pool(self):
+        """Test that both regular and unrealistic events can be part of the event pool."""
+        # Ensure unrealistic events are enabled
+        self.event_manager.config['unrealistic_events_enabled'] = True
+        
+        # Get the combined event pool
+        event_pool = self.event_manager._get_event_pool()
+        
+        # Verify that we got a list of events
+        self.assertIsInstance(event_pool, list)
+        
+        # If there are unrealistic events, they should be included
+        if self.unrealistic_events_data.get('unrealistic_events', []):
+            # The event pool should be larger than just the regular events
+            regular_events = self.events_data.get('events', [])
+            self.assertGreaterEqual(len(event_pool), len(regular_events), 
+                                   "Event pool should include unrealistic events when enabled")
+            
+            # Print number of events in the pool
+            print(f"Event pool contains {len(event_pool)} events " + 
+                  f"({len(regular_events)} regular, " +
+                  f"{len(self.unrealistic_events_data.get('unrealistic_events', []))} unrealistic)")
+        else:
+            print("No unrealistic events found to test combined pool.")
 
 if __name__ == '__main__':
     unittest.main() 

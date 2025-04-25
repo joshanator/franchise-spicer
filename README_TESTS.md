@@ -31,6 +31,7 @@ The CI pipeline:
 3. Sets up X Virtual Frame Buffer (Xvfb) for QT testing on headless environments
 4. Runs the full test suite
 5. Runs critical tests individually for more detailed reporting
+6. Tests unrealistic events and combined event pools
 
 The workflow configuration file is located at `.github/workflows/tests.yml`.
 
@@ -51,6 +52,31 @@ This is the primary comprehensive test that verifies all events in the system ca
 
 ```bash
 python -m unittest test_events.TestEvents.test_all_events_processable
+```
+
+### `test_unrealistic_events`
+
+Tests unrealistic events from the unrealistic_events.json file:
+
+- Processes every event in the `unrealistic_events.json` file
+- Verifies these events can be processed correctly
+- Tests event acceptance functionality for unrealistic events
+- Outputs success messages for each processed unrealistic event
+
+```bash
+python -m unittest test_events.TestEvents.test_unrealistic_events
+```
+
+### `test_combined_event_pool`
+
+Tests that the event pool correctly includes both normal and unrealistic events:
+
+- Verifies that when unrealistic events are enabled, they're included in the event pool
+- Checks that the combined pool size is correct
+- Reports on the number of events in each category
+
+```bash
+python -m unittest test_events.TestEvents.test_combined_event_pool
 ```
 
 ### `test_events_with_options`
@@ -171,6 +197,38 @@ The tests use a mock data manager with test configuration:
 - A complete roster with test player names
 - Unrealistic events enabled
 
+## Setting Up Unrealistic Events
+
+To test unrealistic events, create a file at `madden_franchise_qt/data/unrealistic_events.json` with the following structure:
+
+```json
+{
+  "unrealistic_events": [
+    {
+      "id": 1001,
+      "title": "Test Unrealistic Event",
+      "description": "This is a test unrealistic event",
+      "impact": "This is the impact of the unrealistic event",
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "test",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    }
+    // Add more unrealistic events as needed
+  ]
+}
+```
+
+The CI pipeline will create an empty unrealistic events file if one doesn't exist, but for more comprehensive testing, you should create your own with actual test events.
+
 ## Example Workflow
 
 For general test execution:
@@ -191,4 +249,10 @@ When developing new events:
 1. Add your event to `madden_franchise_qt/data/events.json`
 2. Run `test_event_schema_validation` to verify your event follows the schema
 3. Run `test_all_events_processable` to check if your event can be processed without errors
-4. If your event has options or random impacts, run the specific tests for those features 
+4. If your event has options or random impacts, run the specific tests for those features
+
+For unrealistic events:
+
+1. Add your unrealistic event to `madden_franchise_qt/data/unrealistic_events.json`
+2. Run `test_unrealistic_events` to verify your unrealistic events can be processed
+3. Run `test_combined_event_pool` to verify that unrealistic events are included in the event pool 

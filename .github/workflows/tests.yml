@@ -44,4 +44,21 @@ jobs:
         
     - name: Run schema validation test
       run: |
-        xvfb-run python -m unittest test_events.TestEvents.test_event_schema_validation 
+        xvfb-run python -m unittest test_events.TestEvents.test_event_schema_validation
+        
+    - name: Run unrealistic events tests
+      run: |
+        xvfb-run python -m unittest test_events.TestEvents.test_unrealistic_events
+        
+    - name: Test combined event pool (realistic + unrealistic)
+      run: |
+        xvfb-run python -m unittest test_events.TestEvents.test_combined_event_pool
+        
+    # Create empty unrealistic events file if one doesn't exist (for testing purposes)
+    - name: Ensure unrealistic events file exists
+      run: |
+        mkdir -p madden_franchise_qt/data
+        if [ ! -f madden_franchise_qt/data/unrealistic_events.json ]; then
+          echo '{"unrealistic_events": []}' > madden_franchise_qt/data/unrealistic_events.json
+          echo "Created empty unrealistic_events.json file for testing"
+        fi 
