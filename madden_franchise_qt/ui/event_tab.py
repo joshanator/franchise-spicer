@@ -216,7 +216,9 @@ class EventTab(QWidget):
 
         # TODO: pull out into a function that updates current_event for all target references
         # Check if this event has a target player without a name
-        has_unnamed_player = False
+        has_player_target = False
+        self.player_position = None
+        
         if event.get('target_options'):
             # Get the selected target position
             target_position = None
@@ -236,13 +238,13 @@ class EventTab(QWidget):
             if not target_position and 'original_target_position' in event:
                 target_position = event.get('original_target_position')
             
-            # If we have a position, check if it has a name
+            # If we have a position, mark that we have a player target
             if target_position:
+                has_player_target = True
+                self.player_position = target_position
+                # Get the current name if it exists
                 player_name = self.event_manager.config.get('roster', {}).get(target_position, "")
-                if not player_name or not player_name.strip():
-                    has_unnamed_player = True
-                    self.unnamed_player_position = target_position
-        
+
         # Update display
         self.event_title.setText(event.get('title', 'Unknown Event'))
         
@@ -264,12 +266,12 @@ class EventTab(QWidget):
         self.accept_button.setEnabled(True)
         self.reroll_button.setEnabled(True)
         
-        # If there's an unnamed player, show the add name button
-        if has_unnamed_player:
+        # If there's a player target, show the update name button
+        if has_player_target:
             # Check if we already have the button, if not create it
-            if not hasattr(self, 'add_player_name_button'):
-                self.add_player_name_button = QPushButton("Add Player Name")
-                self.add_player_name_button.clicked.connect(self._add_player_name)
+            if not hasattr(self, 'update_player_name_button'):
+                self.update_player_name_button = QPushButton("Update Player Name")
+                self.update_player_name_button.clicked.connect(self._add_player_name)
             
             # Find the buttons layout in the result group
             for child in self.result_group.children():
@@ -282,26 +284,35 @@ class EventTab(QWidget):
                             # Check if our button is already in the layout
                             button_found = False
                             for j in range(item.count()):
-                                if item.itemAt(j).widget() == self.add_player_name_button:
+                                if item.itemAt(j).widget() == self.update_player_name_button:
                                     button_found = True
                                     break
                             
                             if not button_found:
                                 # Insert our button before the stretch
-                                item.insertWidget(item.count()-1, self.add_player_name_button)
+                                item.insertWidget(item.count()-1, self.update_player_name_button)
                             break
             
-            self.add_player_name_button.setVisible(True)
+            self.update_player_name_button.setVisible(True)
             
             # Show a notification
-            self._show_status_message(
-                f"This event involves a player at position {self.unnamed_player_position} who doesn't have a name. " 
-                "Click 'Add Player Name' to assign a name before accepting.",
-                error=False
-            )
-        elif hasattr(self, 'add_player_name_button'):
+            player_name = self.event_manager.config.get('roster', {}).get(self.player_position, "")
+            if not player_name or not player_name.strip():
+                self._show_status_message(
+                    f"This event involves a player at position {self.player_position} who doesn't have a name. " 
+                    "Click 'Update Player Name' to assign a name before accepting.",
+                    error=False
+                )
+            else:
+                self._show_status_message(
+                    f"This event involves {player_name} ({self.player_position}). "
+                    "You can click 'Update Player Name' to change the player's name if needed.",
+                    error=False
+                )
+                
+        elif hasattr(self, 'update_player_name_button'):
             # Hide the button if it exists
-            self.add_player_name_button.setVisible(False)
+            self.update_player_name_button.setVisible(False)
         
         # Re-enable updates and refresh the display
         self.setUpdatesEnabled(True)
@@ -543,46 +554,47 @@ class EventTab(QWidget):
         QTimer.singleShot(5000, lambda: self.status_message.setVisible(False))
     
     def _add_player_name(self):
-        """Add a name for an unnamed player"""
-        if not hasattr(self, 'unnamed_player_position') or not self.unnamed_player_position:
+        """Add or update a name for a player"""
+        if not hasattr(self, 'player_position') or not self.player_position:
             return
             
+        # Get current name if it exists
+        current_name = self.event_manager.config.get('roster', {}).get(self.player_position, "")
+        dialog_title = "Update Player Name" if current_name else "Add Player Name"
+        
         # Create an input dialog to get the player name
         player_name, ok = QInputDialog.getText(
             self, 
-            "Add Player Name", 
-            f"Enter the name for the player at position {self.unnamed_player_position}:"
+            dialog_title, 
+            f"Enter the name for the player at position {self.player_position}:",
+            text=current_name
         )
         
         if ok and player_name.strip():
             # Update the roster with the new name
-            if self.event_manager.update_roster(self.unnamed_player_position, player_name):
+            if self.event_manager.update_roster(self.player_position, player_name):
                 # Update the event with the new name
                 if self.current_event:
-                    target_display = f"{player_name} ({self.unnamed_player_position})"
+                    target_display = f"{player_name} ({self.player_position})"
                     
                     # Update the target label
                     self.target_label.setText(target_display)
                     
-                    # Update description if it contains the position
+                    # Update description if it contains the position or old name
                     desc = self.description_text.toPlainText()
-                    if self.unnamed_player_position in desc:
-                        desc = desc.replace(self.unnamed_player_position, target_display)
-                        self.description_text.setPlainText(desc)
+                    if self.player_position in desc:
+                        desc = desc.replace(self.player_position, target_display)
+                    if current_name and current_name in desc:
+                        desc = desc.replace(current_name, player_name)
+                    self.description_text.setPlainText(desc)
                     
                     # Update the current event
                     self.current_event['selected_target'] = target_display
                     # Store updated description in the event too
                     self.current_event['processed_description'] = desc
                 
-                # Hide the add name button
-                if hasattr(self, 'add_player_name_button'):
-                    self.add_player_name_button.setVisible(False)
-                
                 # Show success message
-                self._show_status_message(f"Successfully added name '{player_name}' for position {self.unnamed_player_position}")
-                
-                # Clear the saved position
-                del self.unnamed_player_position
+                action_verb = "updated" if current_name else "added"
+                self._show_status_message(f"Successfully {action_verb} name to '{player_name}' for position {self.player_position}")
             else:
                 self._show_status_message("Failed to update the roster", error=True) 
