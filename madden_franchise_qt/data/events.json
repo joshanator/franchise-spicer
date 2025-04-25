@@ -355,17 +355,30 @@
     },
     {
       "id": 19,
-      "title": "Offseason Training",
-      "description": "{position} spent the offseason training with {trainer} and has shown remarkable improvement.",
-      "impact": "+1 to speed, strength, and position-specific attributes",
-      "position_options": ["QB1", "RB1", "WR1", "TE1", "LB1", "CB1"],
-      "trainer_options": ["Tom House", "Exos", "Randy Moss", "Von Miller", "a renowned sport scientist"],
+      "title": "Catching Balls for Dummies",
+      "description": "{position} spent the offseason training their catching skills with {trainer} and has shown remarkable improvement.",
+      "impact": "{trainer_impact}",
+      "target_options": ["RB1", "RB2", "WR1", "WR2", "WR3", "WR4","TE1", "TE2"],
+      "trainer_options": ["Larry Fitzgerald", "Marques Colston", "Cooper Kupp", "Santonio Holmes", "Jakobi Meyers", "Tony Gonzalez", "Deandre Hopkins", "Roddy White", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Larry Fitzgerald": "Player gains +1 catching, +1 to catch in traffic, +1 to spectacular catch. Am I elite now coach?",
+        "Marques Colston": "Player gains +1 to catch in traffic, +1 to spectacular catch. Am I elite now coach?",
+        "Cooper Kupp": "Player gains +1 to catch in traffic, +1 to catch. Am I elite now coach?",
+        "Santonio Holmes": "Player gains +2 to spectacular catch. Am I elite now coach?",
+        "Jakobi Meyers": "Player gains +1 to catch. Am I elite now coach?",
+        "Tony Gonzalez": "Player gains +12 to catch in traffic, +1 to catch. Am I elite now coach?",
+        "Deandre Hopkins": "Player gains +1 to catch in traffic, +1 to spectacular catch. Am I elite now coach?",
+        "Roddy White": "Player gains +1 to catch in traffic, +1 to catch. Am I elite now coach?", 
+        "a renowned sport scientist": "Player gains +1 stamina, +1 to catch, +1 to catch in traffic. Am I elite now coach?",
+        "His high school football coach": "Player gains +1 to stamina, +1 to catch. Am I elite now coach?",
+        "His father": "Player gains +1 to catch. Daddy says I have the best hands in the league. What do you think coach?"
+      },
       "difficulty_weights": {
-        "cupcake": 0.8,
-        "rookie": 0.6,
-        "pro": 0.4,
-        "all-madden": 0.2,
-        "diabolical": 0.1
+        "cupcake": 0.7,
+        "rookie": 0.4,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
       },
       "category": "attribute",
       "season_stages": ["pre-season"]
@@ -1541,13 +1554,188 @@
         "His father": "Player gains -1 to pass block finesse, -1 to run block power, +2 stamina, +1 strength. Daddy says I'm elite now, right coach?",
         "a renowned sport scientist": "Player gains +1 to pass block finesse, +1 to run block finesse, +2 stamina. I paid the money to be elite now coach?"
       },
-      "target_options": ["LT1", "LT2", "LG1", "LG2", "C1", "C2", "RG1", "RG2", "RT1", "RT2"],
+      "target_options": ["LT1", "LT2", "LG1", "LG2", "C1", "C2", "RG1", "RG2", "RT1", "RT2", "FB1", "TE1", "TE2"],
       "difficulty_weights": {
         "cupcake": 0.4,
         "rookie": 0.2,
         "pro": 0.15,
         "all-madden": 0.1,
         "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 71,
+      "title": "Route Running Refinement",
+      "description": "{target} spent the offseason perfecting route-running techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": ["WR1", "WR2", "WR3", "WR4", "TE1", "TE2"],
+      "trainer_options": ["Jerry Rice", "Davante Adams", "Stefon Diggs", "Julian Edelman", "Wes Welker", "Keenan Allen", "Antonio Brown", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Jerry Rice": "Player gains +2 to short route running, +2 to medium route running, +1 to deep route running. Am I running crisp routes now coach?",
+        "Davante Adams": "Player gains +1 to release, +1 to short route running, +1 to medium route running. Am I running crisp routes now coach?",
+        "Stefon Diggs": "Player gains +1 to medium route running, +1 to deep route running, +1 to change of direction. Am I running crisp routes now coach?",
+        "Julian Edelman": "Player gains +3 to short route running. Am I running crisp routes now coach?",
+        "Wes Welker": "Player gains +1 to short route running, +1 to medium route running, +1 to change of direction. Am I running crisp routes now coach?",
+        "Keenan Allen": "Player gains +2 to medium route running, +1 to short route running. Am I running crisp routes now coach?",
+        "Antonio Brown": "Player gains +1 to short route running, +1 to medium route running, +1 to deep route running, -5 predictability. Am I running crisp routes now coach?",
+        "a renowned sport scientist": "Player gains +1 to short route running, +1 to medium route running, +1 stamina. I paid the money to run perfect routes now coach?",
+        "His high school football coach": "Player gains +1 to short route running, +1 stamina. Am I running crisp routes now coach?",
+        "His father": "Player gains -1 to short route running, +2 stamina. Daddy says my routes are perfect now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 72,
+      "title": "Lockdown Coverage Class",
+      "description": "{target} spent the offseason improving coverage skills with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": ["CB1", "CB2", "CB3", "CB4", "FS1", "FS2", "SS1", "SS2"],
+      "trainer_options": ["Deion Sanders", "Darrelle Revis", "Ed Reed", "Charles Woodson", "Richard Sherman", "Jaylon Johnson", "Champ Bailey", "Patrick Peterson", "Asante Samuel Jr", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Deion Sanders": "Player gains +2 to man coverage, +1 to speed. Prime Time says I'm locking receivers down now coach?",
+        "Darrelle Revis": "Player gains +3 to man coverage, +1 to press. Welcome to Revis Island. (lite)",
+        "Ed Reed": "Player gains +2 to zone coverage, +2 to play recognition, +1 to catching. Ball hawk abilities unlocked now coach?",
+        "Charles Woodson": "Player gains +1 to man coverage, +1 to zone coverage, +1 to tackle. Complete defensive back now coach?",
+        "Richard Sherman": "Player gains +3 to zone coverage, +1 to press, +1 to awareness. Am I the best corner in the game now coach?",
+        "Jaylon Johnson": "Player gains +1 to man coverage, +1 to zone coverage, +1 to press. Complete defensive back now coach?",
+        "Troy Polamalu": "Player gains +1 to zone coverage, +2 to play recognition, +1 to hit power. Ill hop right over that line just watch.",
+        "Champ Bailey": "Player gains +2 to man coverage, +2 to zone coverage, +1 to awareness. Shutdown corner now coach?",
+        "Patrick Peterson": "Player gains +1 to man coverage, +1 to speed, +1 to acceleration. Complete defensive back now coach?",
+        "Asante Samuel Jr": "Player gains +1 to man coverage +1 to zone coverage, -3 to press coverage, -1 to tackling. Complete defensive back now coach?",
+        "a renowned sport scientist": "Player gains +1 to man coverage, +1 to zone coverage, +1 stamina. I paid the money to be a lock-down defender now coach?",
+        "His high school football coach": "Player gains +1 to zone coverage, +1 stamina. Coverage skills improved now coach?",
+        "His father": "Player gains -1 to man coverage, -1 to zone coverage, +2 stamina. Daddy says I'm a ball hawk now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 73,
+      "title": "Tackling Academy",
+      "description": "{target} spent the offseason improving tackling techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": ["MLB1", "MLB2", "LOLB1", "LOLB2", "ROLB1", "ROLB2", "SS1", "SS2", "FS1", "FS2"],
+      "trainer_options": ["Ray Lewis", "Luke Kuechly", "Brian Urlacher", "Bobby Wagner", "Patrick Willis", "John Lynch", "Brian Dawkins", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Ray Lewis": "Player gains +1 to tackle, +2 to hit power, +1 to pursuit. Bringing that raw intensity to every hit now coach?",
+        "Luke Kuechly": "Player gains +3 to tackle, +2 to play recognition, +1 to pursuit. Reading the play and making the stop now coach?",
+        "Brian Urlacher": "Player gains +2 to tackle, +1 to hit power, +2 to pursuit. Sideline to sideline tackling machine now coach?",
+        "Bobby Wagner": "Player gains +1 to tackle, +1 to pursuit, +1 to awareness. Tackling with perfect form now coach?",
+        "Patrick Willis": "Player gains +2 to tackle, +1 to hit power, +2 to pursuit. Bringing that intimidating presence now coach?",
+        "John Lynch": "Player gains +2 to hit power, +1 to tackle, +1 to play recognition. Ready to deliver those bone-jarring hits now coach?",
+        "Brian Dawkins": "Player gains +2 to hit power, +2 to tackle, +1 to speed. Bringing that Weapon X mentality now coach?",
+        "a renowned sport scientist": "Player gains +1 to tackle, +1 to pursuit, +1 stamina. I paid the money to perfect my tackling now coach?",
+        "His high school football coach": "Player gains +1 to tackle, +1 stamina. Form tackling improved now coach?",
+        "His father": "Player gains -1 to tackle, +1 to hit power, +2 stamina. Daddy says I'm putting guys on their back now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 74,
+      "title": "Running Back Workshop",
+      "description": "{target} spent the offseason refining running techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": ["RB1", "RB2", "RB3", "FB1"],
+      "trainer_options": ["Barry Sanders", "Emmitt Smith", "LaDainian Tomlinson", "Marshall Faulk", "Adrian Peterson", "Christian McCaffrey", "Derrick Henry", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Barry Sanders": "Player gains +2 to juke move, +2 to change of direction, +1 to elusiveness. Making defenders miss in phone booths now coach?",
+        "Emmitt Smith": "Player gains +1 to ball carrier vision, +1 to break tackle, +1 to carrying. Finding the holes and protecting the ball now coach?",
+        "LaDainian Tomlinson": "Player gains +1 to juke move, +1 to spin move, +1 to stiff arm, +1 to catching. Complete running back now coach?",
+        "Marshall Faulk": "Player gains +1 to ball carrier vision, +1 to catching, +1 to route running. Dual-threat back now coach?",
+        "Adrian Peterson": "Player gains +2 to break tackle, +2 to stiff arm, +1 to truck. Running through defenders now coach?",
+        "Christian McCaffrey": "Player gains +1 to ball carrier vision, +1 to juke move, +1 to catching. All-purpose back now coach?",
+        "Derrick Henry": "Player gains +3 to truck, +1 to stiff arm, +1 to break tackle. Bringing that King Henry power now coach?",
+        "a renowned sport scientist": "Player gains +1 to ball carrier vision, +1 to carrying, +1 stamina. I paid the money to maximize my running skills now coach?",
+        "His high school football coach": "Player gains +1 to ball carrier vision, +1 stamina. Running fundamentals improved now coach?",
+        "His father": "Player gains +1 to carrying, +1 stamina. Daddy says I'm a beast with the ball now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 75,
+      "title": "Quarterback Camp",
+      "description": "{target} spent the offseason refining their technique with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": ["QB1", "QB2"],
+      "trainer_options": ["Tom Brady", "Peyton Manning", "Aaron Rodgers", "Patrick Mahomes", "Drew Brees", "Josh Allen", "Terry Bradshaw", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Tom Brady": "Player gains +2 to short accuracy, +1 to medium accuracy, +2 to awareness. Reading defenses like a book now coach?",
+        "Peyton Manning": "Player gains +1 to short accuracy, +2 to medium accuracy, +2 to play action. Mastering the pocket now coach?",
+        "Aaron Rodgers": "Player gains +1 to medium accuracy, +2 to deep accuracy, +1 to throw on run. Throwing dimes on the move now coach?",
+        "Patrick Mahomes": "Player gains +1 to throw power, +1 to deep accuracy, +1 to throw on run. No-look passes in my arsenal now coach?",
+        "Drew Brees": "Player gains +3 to short accuracy, +1 to medium accuracy, +1 to play action. Surgical precision now coach?",
+        "Josh Allen": "Player gains +1 to throw power, +1 to deep accuracy, +1 to break sack. Bringing that cannon arm now coach?",
+        "Terry Bradshaw": "Player gains +1 to deep accuracy, +1 to awareness. Quarterback skills never go away, right coach?",
+        "a renowned sport scientist": "Player gains +1 to throw power, +1 stamina. I paid the money to optimize my throwing now coach?",
+        "His high school football coach": "Player gains +1 to short accuracy, +1 stamina. Fundamentals improved now coach?",
+        "His father": "Player gains -1 to play action, +1 to short accuracy, +1 awareness. Daddy says I'm ready to lead the team now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.2,
+        "pro": 0.1,
+        "all-madden": 0.06,
+        "diabolical": 0.025
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 76,
+      "title": "Kicking Specialist Workshop",
+      "description": "{target} spent the offseason perfecting kicking techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": ["K1", "P1"],
+      "trainer_options": ["Justin Tucker", "Adam Vinatieri", "Johnny Hekker", "Sebastian Janikowski", "Pat McAfee", "a renowned sport scientist", "His high school football coach", "His father"],
+      "trainer_impacts": {
+        "Justin Tucker": "Player gains +2 to kick power. Splitting the uprights from 60+ yards now coach?",
+        "Adam Vinatieri": "Player gains +2 to kick accuracy, +1 to awareness. Ice in my veins for clutch kicks now coach?",
+        "Johnny Hekker": "Player gains +1 to kick power, +1 to kick accuracy, +1 to awareness. Pinning them inside the 10 now coach?",
+        "Sebastian Janikowski": "Player gains +2 to kick power. Booming those long kicks now coach?",
+        "Pat McAfee": "Player gains +1 to punt power, +1 to punt accuracy, +4 to tackle. For the brand now coach?",
+        "a renowned sport scientist": "Player gains +1 to kick power, +1 to kick accuracy, +1 stamina. I paid the money to perfect my technique now coach?",
+        "His high school football coach": "Player gains +2 to strength, +1 to stamina. My old coach just sent me to the weight room. I dont think he know much about kicking.",
+        "His father": "Player gains -2 to kick accuracy, +1 to kick power. Daddy says I'm booming them now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.22,
+        "pro": 0.11,
+        "all-madden": 0.06,
+        "diabolical": 0.03
       },
       "category": "attribute",
       "season_stages": ["pre-season"]
