@@ -35,14 +35,14 @@ jobs:
       
       - name: Create badge data
         run: |
-          echo "Creating badge with ${{ steps.count.outputs.SCENARIO_COUNT }} scenarios across ${{ steps.count.outputs.EVENT_COUNT }} events"
+          echo "Creating badge with ${{ steps.count.outputs.SCENARIO_COUNT }} scenarios"
           
           # Create JSON data for shields.io endpoint
           cat > scenario_count.json << EOF
           {
             "schemaVersion": 1,
             "label": "scenarios",
-            "message": "${{ steps.count.outputs.SCENARIO_COUNT }} across ${{ steps.count.outputs.EVENT_COUNT }} events",
+            "message": "${{ steps.count.outputs.SCENARIO_COUNT }}",
             "color": "orange"
           }
           EOF

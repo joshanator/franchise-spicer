@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/joshanator/franchise-spicer/actions/workflows/tests.yml/badge.svg)](https://github.com/joshanator/franchise-spicer/actions/workflows/tests.yml)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/joshanator/franchise-spicer/releases)
-[![Scenarios](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/joshanator/d5a0161486a7d8a2f2d63fe591cedb75/raw/scenario_count.json)](https://github.com/joshanator/franchise-spicer)
+[![Unique Scenarios](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/joshanator/d5a0161486a7d8a2f2d63fe591cedb75/raw/scenario_count.json)](https://github.com/joshanator/franchise-spicer)
 [![License](https://img.shields.io/badge/license-CC--BY--NC--4.0-green.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Python](https://img.shields.io/badge/python-3.6%2B-blue)](https://www.python.org/)
 
