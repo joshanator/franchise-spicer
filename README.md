@@ -147,8 +147,8 @@ For more details on the testing framework, see [README_TESTS.md](README_TESTS.md
 
 ## Version History
 
-- **v1.0.0** - Initial release with complete event system and UI
-- **v1.0.1** - Added unrealistic events support and comprehensive test suite
+- **v0.1** - Initial release with complete event system and UI. some bugs
+- **v1.0** - Version adds a ton of events, features, testing
 
 ## License
 
