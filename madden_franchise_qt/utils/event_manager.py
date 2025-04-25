@@ -286,6 +286,16 @@ class EventManager:
                 
             description = self._replace_placeholder(description, 'target', target_display)
             processed_event['selected_target'] = target_display
+            
+            # Make sure we're directly replacing the impact text with the target too
+            if 'impact' in processed_event:
+                processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
+                
+            # Also replace target in any result_options impact_text values
+            if 'result_options' in processed_event:
+                for option in processed_event['result_options']:
+                    if 'impact_text' in option:
+                        option['impact_text'] = self._replace_placeholder(option['impact_text'], 'target', target_display)
         
         # Preserve is_temporary flag
         if 'is_temporary' in event:
@@ -356,7 +366,7 @@ class EventManager:
                 processed_event['selected_opponent_team'] = opponent_team
         
         # Handle user options in branching events
-        if 'options' in processed_event:
+        if 'options' in processed_event and processed_event['options']:
             # Process each option to fill in placeholders
             for option in processed_event['options']:
                 # Replace placeholders in option descriptions
@@ -372,6 +382,28 @@ class EventManager:
                 
                 # Store processed description
                 option['processed_description'] = option_description
+                
+                # Process nested options if they exist
+                if 'options' in option and option['options']:
+                    for nested_option in option['options']:
+                        nested_desc = nested_option.get('description', '')
+                        
+                        # Apply same replacements to nested options
+                        if 'selected_target' in processed_event:
+                            nested_desc = self._replace_placeholder(nested_desc, 'target', processed_event['selected_target'])
+                        
+                        if 'selected_reason' in processed_event:
+                            nested_desc = self._replace_placeholder(nested_desc, 'reason', processed_event['selected_reason'])
+                        
+                        nested_option['processed_description'] = nested_desc
+                
+                # Copy any other properties from option to nested options for consistency
+                if 'options' in option and option['options']:
+                    for nested_option in option['options']:
+                        # Copy important properties from the parent option to nested options if not already set
+                        for key in ['is_temporary', 'impact_random_options']:
+                            if key in option and key not in nested_option:
+                                nested_option[key] = option[key]
         
         processed_event['processed_description'] = description
         return processed_event
@@ -424,19 +456,58 @@ class EventManager:
         Returns:
             dict: The processed option with impact details
         """
-        if 'options' not in event or option_index >= len(event['options']):
+        if event is None:
             return None
         
-        # Get the selected option
-        selected_option = event['options'][option_index]
+        # When options is None, it means we're at the final option choice and should just record the event
+        if 'options' not in event or event['options'] is None:
+            # Create a synthetic selected option from event data
+            synthetic_option = {
+                'description': event.get('selected_option_description', ''),
+                'impact': event.get('selected_option_impact', event.get('impact', '')),
+                'is_temporary': event.get('is_temporary', False)
+            }
+            
+            # Add to history with the synthetic selected option
+            self._add_to_history(event, synthetic_option)
+            
+            # Auto-save if enabled
+            self._try_auto_save()
+            
+            return synthetic_option
         
-        # Add to history with the selected option
-        self._add_to_history(event, selected_option)
+        if not isinstance(event['options'], list):
+            print(f"ERROR: event['options'] is not a list, type: {type(event['options'])}")
+            return None
         
-        # Auto-save if enabled
-        self._try_auto_save()
+        if option_index is None:
+            print("ERROR: option_index is None")
+            return None
         
-        return selected_option
+        if option_index >= len(event['options']):
+            print(f"DEBUG: option_index {option_index} is out of range, returning None")
+            return None
+        
+        try:
+            # Get the selected option
+            selected_option = event['options'][option_index]
+            print(f"DEBUG: selected_option: {selected_option}")
+            
+            # Add to history with the selected option
+            print("DEBUG: Calling _add_to_history")
+            self._add_to_history(event, selected_option)
+            
+            # Auto-save if enabled
+            print("DEBUG: Calling _try_auto_save")
+            self._try_auto_save()
+            
+            print("DEBUG: Returning selected_option")
+            return selected_option
+        except Exception as e:
+            print(f"DEBUG: Exception in select_event_option: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
     
     def get_event_history(self):
         """Get the event history
@@ -525,7 +596,8 @@ class EventManager:
             bool: True if successful
         """
         # For branching events, don't add to history here - wait for option selection
-        if 'options' not in event:
+        # Check both if 'options' not in event OR if event['options'] is None
+        if 'options' not in event or event['options'] is None:
             self._add_to_history(event)
             self._try_auto_save()  # Ignore return value, event acceptance is the main task
         

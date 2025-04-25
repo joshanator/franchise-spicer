@@ -1863,7 +1863,7 @@
     {
       "id": 57,
       "title": "New Conditioning Coach",
-      "description": "The team has hired a revolutionary new conditioning coach from Europe.",
+      "description": "The team has hired a revolutionary new conditioning coach from Europe. Choose a position group for the conditioning coach to focus on.",
       "impact": "Choose a position group for the conditioning coach to focus on.",
       "options": [
         {

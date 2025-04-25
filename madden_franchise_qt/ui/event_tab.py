@@ -359,16 +359,20 @@ class EventTab(QWidget):
         if has_selected_option:
             # For events with selected options, pass the option index
             option_index = self.current_event.get('selected_option')
-            if self.event_manager.select_event_option(self.current_event, option_index):
+            # select_event_option returns the selected option dict, not a boolean
+            selected_option = self.event_manager.select_event_option(self.current_event, option_index)
+            if selected_option is not None:
                 option_desc = self.current_event.get('selected_option_description', '')
                 self._show_status_message(f"Event with option '{option_desc}' has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
             else:
+                print("ERROR: select_event_option returned None")
                 self._show_status_message("Failed to record event choice to history", error=True)
         else:
             # For events without options, add directly to history
             if self.event_manager.accept_event(self.current_event):
                 self._show_status_message("Event has been recorded in your franchise history. Make sure to implement the effects in your Madden game!")
             else:
+                print("ERROR: accept_event returned False")
                 self._show_status_message("Failed to record event to history", error=True)
         
         # Reset for next event
@@ -489,6 +493,11 @@ class EventTab(QWidget):
             event['selected_option_description'] = option_description
             event['selected_option_impact'] = option_impact
             
+            # Copy important properties from option to event
+            for key in ['is_temporary', 'impact_random_options', 'required_attributes']:
+                if key in option:
+                    event[key] = option[key]
+            
             # Update target options if present in the selected option
             if 'target_options' in option and len(option.get('target_options', [])) > 0:
                 event['target_options'] = option.get('target_options', [])
@@ -499,6 +508,12 @@ class EventTab(QWidget):
                 event['options'] = option.get('options', [])
                 # Update event description to reflect the current choice
                 event['processed_description'] = f"{event.get('processed_description', event.get('description', ''))}\n\nYou selected: {option_description}\n\n{option_impact}"
+                
+                # Transfer any important properties from option to the nested options
+                for nested_option in event['options']:
+                    for key in ['is_temporary', 'impact_random_options']:
+                        if key in option and key not in nested_option:
+                            nested_option[key] = option[key]
             else:
                 # No more nested options
                 event['options'] = None
