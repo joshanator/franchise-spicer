@@ -1,0 +1,47 @@
+name: Event System Tests
+
+on:
+  push:
+    branches: [ main, master, dev, development ]
+  pull_request:
+    branches: [ main, master, dev, development ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, '3.10']
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Install PySide6 which is required for the UI components
+        pip install PySide6>=6.4.0
+        # Install other dependencies
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+    - name: Install X Virtual Frame Buffer for QT
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb
+        
+    - name: Run all tests
+      run: |
+        xvfb-run python -m unittest test_events.py
+        
+    - name: Run comprehensive event processing test
+      run: |
+        xvfb-run python -m unittest test_events.TestEvents.test_all_events_processable
+        
+    - name: Run schema validation test
+      run: |
+        xvfb-run python -m unittest test_events.TestEvents.test_event_schema_validation 
