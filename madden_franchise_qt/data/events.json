@@ -1468,6 +1468,31 @@
       },
       "category": "attribute",
       "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 69,
+      "title": "Return Specialist",
+      "description": "{target} spent a week practicing with {player} over the offseason.",
+      "impact": "{player_impact}",
+      "target_options": ["RB1", "RB2", "RB3", "WR1", "WR2", "WR3", "WR4", "CB1", "CB2", "CB3", "CB4", "FS1", "FS2", "SS1", "SS2"],
+      "player_options": ["Devin Hester", "DeSean Jackson", "Josh Cribbs", "Cordelle Patterson", "Dante Hall", "Leon Washington"],
+      "player_impacts": {
+        "Devin Hester": "Player gains +1 Change of Direction, +1 Speed, +5 Return. Will this be enough to earn them some return-man reps?",
+        "DeSean Jackson": "Player gains +1 Speed, +3 Return. Will this be enough to earn them some return-man reps?",
+        "Josh Cribbs": "Player gains +1 Juke, +4 Return. Will this be enough to earn them some return-man reps?",
+        "Cordelle Patterson": "Player gains +1 Break Tackle, +2 Return. Will this be enough to earn them some return-man reps?",
+        "Dante Hall": "Player gains +3 Juke, +1 Spin, +1 Return. Will this be enough to earn them some return-man reps?",
+        "Leon Washington": "Player gains +2 Return. Will this be enough to earn them some return-man reps?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.8,
+        "rookie": 0.4,
+        "pro": 0.16,
+        "all-madden": 0.07,
+        "diabolical": 0.03
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
     }
   ]
 } 

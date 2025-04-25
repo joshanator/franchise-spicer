@@ -287,6 +287,27 @@ class EventManager:
             description = self._replace_placeholder(description, 'target', target_display)
             processed_event['selected_target'] = target_display
         
+        # Handle player options and their impacts
+        if 'player_options' in processed_event and 'player_impacts' in processed_event:
+            # Choose a random player from the options
+            selected_player = random.choice(processed_event['player_options'])
+            processed_event['selected_player'] = selected_player
+            
+            # Get the impact for this player
+            player_impact = processed_event['player_impacts'].get(selected_player, "")
+            
+            # Replace player and player_impact placeholders
+            description = self._replace_placeholder(description, 'player', selected_player)
+            
+            # Replace impact placeholders
+            impact = processed_event.get('impact', '')
+            impact = self._replace_placeholder(impact, 'player_impact', player_impact)
+            processed_event['impact'] = impact
+            
+            # Debug output
+            print(f"Selected player: {selected_player}")
+            print(f"Player impact: {player_impact}")
+        
         # Handle simple random selection fields
         for field_type in ['reason_options', 'round_options', 'games_options']:
             if field_type in processed_event:
