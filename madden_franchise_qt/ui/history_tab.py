@@ -219,10 +219,14 @@ class HistoryTab(QWidget):
             item.setText(2, event.get('title', ''))
             
             # Description
-            item.setText(3, event.get('description', '')[:100] + '...' if len(event.get('description', '')) > 100 else event.get('description', ''))
+            desc = event.get('description', '')
+            item.setText(3, desc[:50] + '...' if len(desc) > 50 else desc)
+            item.setData(3, Qt.UserRole, desc)
             
             # Impact
-            item.setText(4, event.get('impact', '')[:100] + '...' if len(event.get('impact', '')) > 100 else event.get('impact', ''))
+            impact = event.get('impact', '')
+            item.setText(4, impact[:50] + '...' if len(impact) > 50 else impact)
+            item.setData(4, Qt.UserRole, impact)
             
             self.history_tree.addTopLevelItem(item)
         
@@ -255,7 +259,12 @@ class HistoryTab(QWidget):
         detail_text = f"<h3>{current.text(2)}</h3>"  # Event title
         detail_text += f"<p><b>Time:</b> {current.text(0)}</p>"
         detail_text += f"<p><b>Player/Position:</b> {current.text(1)}</p>"
-        detail_text += f"<p><b>Description:</b> {current.text(3)}</p>"
-        detail_text += f"<p><b>Impact:</b> {current.text(4)}</p>"
+        
+        # Get full description and impact from data
+        full_description = current.data(3, Qt.UserRole) or current.text(3)
+        full_impact = current.data(4, Qt.UserRole) or current.text(4)
+        
+        detail_text += f"<p><b>Description:</b> {full_description}</p>"
+        detail_text += f"<p><b>Impact:</b> {full_impact}</p>"
         
         self.details_text.setHtml(detail_text) 

@@ -74,7 +74,7 @@ class EffectsTab(QWidget):
         self.season_tree.setAlternatingRowColors(True)
         layout.addWidget(self.season_tree)
         
-        self.tab_widget.addTab(scroll_area, "Season Effects")
+        self.tab_widget.addTab(scroll_area, "Season Effects - Unfinished")
     
     def _create_temporary_effects_tab(self):
         """Create the tab for temporary effects"""
