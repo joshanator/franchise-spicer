@@ -27,7 +27,7 @@ def count_event_scenarios(event):
     # Account for target options
     if 'target_options' in event and event['target_options']:
         # Special case: if 'all-players' is one of the options, this represents all players
-        # For simplicity, we'll count this as one option, but it's actually many
+        # For simplicity, we'll use a standard roster size
         if 'all-players' in event['target_options']:
             base_count *= 53  # Standard NFL roster size
         else:
@@ -116,7 +116,7 @@ def calculate_total_scenarios():
     # Print detailed info
     print(f"Regular events: {len(regular_events)} events with {regular_scenario_count} scenarios")
     print(f"Unrealistic events: {len(unrealistic_events)} events with {unrealistic_scenario_count} scenarios")
-    print(f"Total: {len(regular_events) + len(unrealistic_events)} events with possible {total_scenario_count} scenarios")
+    print(f"Total: {len(regular_events) + len(unrealistic_events)} events with {total_scenario_count} scenarios")
     
     return {
         'regular_events': len(regular_events),
@@ -127,42 +127,6 @@ def calculate_total_scenarios():
         'total_scenarios': total_scenario_count
     }
 
-def update_readme_with_counts(counts):
-    """Update the README.md file with the scenario counts."""
-    readme_path = Path(__file__).resolve().parent.parent / 'README.md'
-    
-    with open(readme_path, 'r') as f:
-        readme_content = f.read()
-    
-    # Define patterns to search for and replace
-    scenario_pattern = r'(## Features.*?- )(.*?)(?:unique scenarios across.*?events)(\s*?-)'
-    
-    # Create replacement text
-    replacement = f"\\1{counts['total_scenarios']} unique scenarios across {counts['total_events']} events\\3"
-    
-    # Apply the replacement using regex
-    updated_content = re.sub(scenario_pattern, replacement, readme_content, flags=re.DOTALL)
-    
-    # If no substitution was made, add the stat after the Features section
-    if updated_content == readme_content:
-        features_section = "## Features\n\n"
-        features_content = "- Generate random events that affect your Madden franchise\n"
-        new_feature = f"- {counts['total_scenarios']} unique scenarios across {counts['total_events']} events\n"
-        
-        updated_content = readme_content.replace(
-            features_section + features_content,
-            features_section + features_content + new_feature
-        )
-    
-    # Write the updated content back to the README
-    with open(readme_path, 'w') as f:
-        f.write(updated_content)
-    
-    print(f"README.md updated with scenario counts:")
-    print(f"  Regular events: {counts['regular_events']} events with {counts['regular_scenarios']} scenarios")
-    print(f"  Unrealistic events: {counts['unrealistic_events']} events with {counts['unrealistic_scenarios']} scenarios")
-    print(f"  Total: {counts['total_events']} events with {counts['total_scenarios']} scenarios")
-
 if __name__ == "__main__":
     scenario_counts = calculate_total_scenarios()
-    update_readme_with_counts(scenario_counts) 
+    # No longer updating README directly - using GitHub Actions and badge instead 

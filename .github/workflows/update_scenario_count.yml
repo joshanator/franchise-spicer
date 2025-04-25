@@ -6,6 +6,7 @@ on:
       - 'madden_franchise_qt/data/events.json'
       - 'madden_franchise_qt/data/unrealistic_events.json'
       - 'scripts/calculate_scenarios.py'
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   update-count:
@@ -21,12 +22,31 @@ jobs:
           python-version: 3.9
           
       - name: Run scenario counter script
-        run: python scripts/calculate_scenarios.py
-        
-      - name: Commit changes if README was updated
+        id: counter
         run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update scenario count in README [skip ci]"
-          git push 
+          python3 scripts/calculate_scenarios.py
+          # Capture the scenario count from the output
+          TOTAL_EVENTS=$(python3 -c "import json; from pathlib import Path; regular = json.load(open(Path('madden_franchise_qt/data/events.json')))['events']; unrealistic = json.load(open(Path('madden_franchise_qt/data/unrealistic_events.json')))['unrealistic_events']; print(len(regular) + len(unrealistic))")
+          TOTAL_SCENARIOS=$(python3 -c "import json, sys; sys.path.append('.'); from scripts.calculate_scenarios import calculate_total_scenarios; print(calculate_total_scenarios()['total_scenarios'])")
+          echo "TOTAL_EVENTS=$TOTAL_EVENTS" >> $GITHUB_ENV
+          echo "TOTAL_SCENARIOS=$TOTAL_SCENARIOS" >> $GITHUB_ENV
+      
+      - name: Create badge data
+        run: |
+          # Create JSON data for shields.io endpoint
+          cat > scenario_count.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "scenarios",
+            "message": "${{ env.TOTAL_SCENARIOS }} across ${{ env.TOTAL_EVENTS }} events",
+            "color": "orange"
+          }
+          EOF
+          
+      - name: Update GitHub Gist with badge data
+        uses: exuanbo/actions-deploy-gist@v1
+        with:
+          token: ${{ secrets.GIST_TOKEN }}
+          gist_id: ${{ secrets.GIST_ID }}
+          file_path: scenario_count.json
+          file_type: json 
