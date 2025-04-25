@@ -828,7 +828,7 @@
       "season_stages": ["off-season"]
     },
     {
-      "id":44,
+      "id": 44,
       "title": "TODO:: Test deep options",
       "description": "Test deep options",
       "impact": "Deep options test.",
@@ -1062,6 +1062,266 @@
       },
       "category": "attribute",
       "season_stages": ["pre-season", "off-season"]
+    },
+    {
+      "id": 52,
+      "title": "Trade-phobia",
+      "description": "Your GM got fleeced in a trade at his last job. He's afraid to make a mistake like that again.",
+      "impact": "{impact_text}",
+      "result_options": [
+        {"impact_text": "You cannot trade-down in the nfl draft this season", "probability": 0.4},
+        {"impact_text": "You cannot trade down or up in the nfl draft this season", "probability": 0.4},
+        {"impact_text": "You may not make any trades this off-season (unless required by event)", "probability": 0.2}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.01,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.4
+      },
+      "category": "draft",
+      "season_stages": ["playoffs", "off-season"]
+    },
+    {
+      "id": 53,
+      "title": "Participation {award}",
+      "description": "Not every player gets recognized and thats a shame. Everyone deserves a {award}.",
+      "impact": "Choose a player that has never been recognized for an award. They will receive +1 to {stat} skill attributes of your choice.",
+      "award_options": ["trophy", "ribbon"],
+      "stat_options": [1,2,3],
+      "target_options": ["all-players"],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.2,
+        "pro": 0.01,
+        "all-madden": 0,
+        "diabolical": 0
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 54,
+      "title": "Oxygen Chamber Therapy",
+      "description": "{target} has been sleeping in a hyperbaric oxygen chamber to improve recovery and performance.",
+      "impact": "{impact_text}",
+      "target_options": ["all-players"],
+      "result_options": [
+        {"impact_text": "Player gains +2 stamina and +1 injury", "probability": 0.6},
+        {"impact_text": "The therapy backfires, player loses -1 stamina, -1 injury", "probability": 0.4}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 55,
+      "title": "Hometown Hero",
+      "description": "{target} is from the city where your next opponent is located. The media is making a big deal about the homecoming.",
+      "impact": "{impact_text}",
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "MLB1", "CB1", "FS1", "SS1"],
+      "result_options": [
+        {"impact_text": "Player locks in and plays with extra intensity. +10 to Awareness for the next game.", "probability": 0.5},
+        {"impact_text": "Your player folds under the pressure, he loses sleep and has -10 to Awareness for the next game.", "probability": 0.5}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 56,
+      "title": "Fan Favorite",
+      "description": "The fans have voted {target} as their favorite player. The team is giving away bobbleheads at the next home game.",
+      "impact": "{impact_text}",
+      "target_options": ["QB1", "RB1", "WR1", "TE1", "LOLB1", "MLB1", "ROLB1", "CB1", "SS1"],
+      "target_impacts": {
+        "QB1": "Player gets a permanent +2 awareness and +1 throw under pressure due to fan support",
+        "RB1": "Player gets a permanent +2 awareness and +1 break tackle due to fan support",
+        "WR1": "Player gets a permanent +2 awareness and +1 catching in traffic due to fan support",
+        "TE1": "Player gets a permanent +2 awareness and +1 spectacular catch due to fan support",
+        "LOLB1": "Player gets a permanent +2 awareness and +1 block shedding due to fan support",
+        "MLB1": "Player gets a permanent +2 awareness and +1 tackle due to fan support",
+        "ROLB1": "Player gets a permanent +2 awareness and +1 pursuit due to fan support",
+        "CB1": "Player gets a permanent +2 awareness and +1 man coverage due to fan support",
+        "SS1": "Player gets a permanent +2 awareness and +1 hit power due to fan support"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.3,
+        "pro": 0.15,
+        "all-madden": 0.05,
+        "diabolical": 0.01
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 57,
+      "title": "New Conditioning Coach",
+      "description": "The team has hired a revolutionary new conditioning coach from Europe.",
+      "impact": "Choose a position group for the conditioning coach to focus on.",
+      "options": [
+        {
+          "description":  "Offensive Line",
+          "impact": "All starting offensive linemen gain +2 stamina."
+        },
+        {
+          "description": "Defensive Line",
+          "impact": "All starting defensive linemen gain +2 stamina."
+        },
+        {
+          "description": "Linebackers",
+          "impact": "All starting linebackers gain +2 stamina."
+        }, 
+        {
+          "description": "Defensive Backs",
+          "impact": "All starting defensive backs gain +2 stamina."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.3,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "team",
+      "season_stages": ["pre-season", "regular-season-start"]
+    },
+    {
+      "id": 58,
+      "title": "Weight Room Warrior",
+      "description": "{target} has been spending extra hours in the weight room.",
+      "impact": "{impact_text}",
+      "target_options": ["all-players"],
+      "result_options": [
+        {"impact_text": "Player gains +2 strength and +1 trucking/breaking tackles", "probability": 0.7},
+        {"impact_text": "Player pushed too hard and suffered a minor injury. -1 injury and stamina", "probability": 0.3}
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 59,
+      "title": "Midnight Film Study",
+      "description": "{target} has been staying up until midnight studying film of opponents.",
+      "impact": "Player gains +3 awareness but -1 stamina due to lack of sleep",
+      "target_options": ["QB1", "MLB1", "FS1", "CB1"],
+      "difficulty_weights": {
+        "cupcake": 0.6,
+        "rookie": 0.4,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
+    },
+    {
+      "id": 60,
+      "title": "Position Change Experiment",
+      "description": "Coaches are considering moving {target} to a new position to better utilize their skills.",
+      "impact": "You must change the player's position to a related position (e.g., CB to FS, LB to DE, etc.). After 3 games, if the coaches decide to revert them back to their original position, they lose -2 Awareness.",
+      "target_options": ["CB2", "FS2", "SS2", "LOLB2", "ROLB2", "MLB2", "WR3", "TE2", "RB2"],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "roster",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-mid"]
+    },
+    {
+      "id": 61,
+      "title": "Breakout Candidate",
+      "description": "Analysts are predicting {target} will have a breakout season this year.",
+      "impact": "{impact_text}",
+      "target_options": ["QB2", "RB2", "WR2", "WR3", "TE2", "CB2", "MLB2", "FS2", "SS2"],
+      "target_impacts": {
+        "QB2": "If quarterback throws for 3,500+ yards or 25+ TDs with fewer than 15 INTs, they gain +1 development trait at end of season",
+        "RB2": "If running back rushes for 1,000+ yards or scores 8+ rushing TDs, they gain +1 development trait at end of season",
+        "WR2": "If wide receiver has 800+ receiving yards or 6+ receiving TDs, they gain +1 development trait at end of season",
+        "WR3": "If wide receiver has 700+ receiving yards or 5+ receiving TDs, they gain +1 development trait at end of season",
+        "TE2": "If tight end has 500+ receiving yards or 5+ receiving TDs, they gain +1 development trait at end of season",
+        "CB2": "If cornerback has 5+ INTs or 10+ passes defended, they gain +1 development trait at end of season",
+        "MLB2": "If linebacker has 80+ tackles and 5+ sacks or 2+ INTs, they gain +1 development trait at end of season",
+        "FS2": "If free safety has 3+ INTs and 70+ tackles, they gain +1 development trait at end of season",
+        "SS2": "If strong safety has 80+ tackles and 3+ forced fumbles or 2+ INTs, they gain +1 development trait at end of season"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.6,
+        "pro": 0.45,
+        "all-madden": 0.25,
+        "diabolical": 0.15
+      },
+      "category": "attribute",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 62,
+      "title": "TODO:: Quarterback Competition",
+      "description": "The backup quarterback has been pushing for the starting job in practice.",
+      "options": [
+        {
+          "description": "Stick with the starter",
+          "impact": "Starter remains QB1 but gets -1 confidence. Backup remains QB2 but gets -2 confidence."
+        },
+        {
+          "description": "Hold an open competition",
+          "impact": "Both QBs get +1 throw power and +1 accuracy from competition. Whoever performs better in preseason gets +2 confidence."
+        },
+        {
+          "description": "Make the backup the new starter",
+          "impact": "Former starter becomes QB2 with -3 confidence. New starter gets +3 confidence but -1 awareness due to inexperience."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
+      },
+      "category": "roster",
+      "season_stages": ["pre-season"]
+    },
+    {
+      "id": 63,
+      "title": "Viral Trick Play",
+      "description": "One of your team's trick plays went viral on social media after being executed perfectly in practice.",
+      "impact": "So much for the element of surprise. For the next 5 games, your team cannot use fake punts/field goals.",
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": ["regular-season-start", "regular-season-mid", "regular-season-end"]
     }
   ]
 } 
