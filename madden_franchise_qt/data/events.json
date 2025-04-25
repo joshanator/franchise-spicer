@@ -2691,6 +2691,151 @@
         "all-madden": 0.2,
         "diabolical": 0.3
       }
+    },
+    {
+      "id": 79,
+      "title": "Hard Knocks Curse",
+      "description": "Your team has been selected to appear on HBO's Hard Knocks this season. The cameras are everywhere during training camp.",
+      "impact": "How will you handle the additional media scrutiny?",
+      "options": [
+        {
+          "description": "Embrace the spotlight and use it as motivation",
+          "impact": "Team morale is affected by the constant cameras.",
+          "impact_random_options": {
+            "Players thrive under the spotlight! raise your offensive blocking sliders by 3 for the first 3 games.": 0.3,
+            "The exposure helped some players but distracted others. Lower your offensive blocking sliders by 2 and raise catching sliders by 2 for the first 3 games.": 0.4,
+            "The constant cameras become a major distraction. lower your gameplay offensive blocking sliders by 5 of 3 games,": 0.3
+          },
+          "is_temporary": true
+        },
+        {
+          "description": "Limit camera access and shield players from the spotlight",
+          "impact": "How will HBO and the NFL respond?",
+          "options": [
+            {
+              "description": "Strictly enforce boundaries - no cameras in team meetings",
+              "impact": "The show lacks compelling content. NFL fines the team $5,000,000, but players maintain focus with no attribute penalties.",
+              "impact_random_options": {
+                "Players appreciate the protection. Two starters gain +2 to awareness permanently. 5m of cap room is unavailable this season.": 0.4,
+                "Players feel the coaches don't trust them. Two starters lose -2 awareness permanently. 5m of cap room is unavailable this season.": 0.3,
+                "The NFL is furious and forces extended access. All rookies lose -2 awareness permanently due to the uncomfortable situation. 5m of cap room is unavailable this season.": 0.3
+              }
+            },
+            {
+              "description": "Allow limited strategic access to protect team secrets",
+              "impact": "HBO gets enough content while team maintains some privacy.",
+              "impact_random_options": {
+                "Perfect balance achieved. No negative effects, choose one breakout star to gain +3 to a skill attribute permanently.": 0.5,
+                "The selective access creates tension and chemistry suffers. No at the line adjustments for the first 2 games of the season.": 0.5
+              }
+            }
+          ]
+        },
+        {
+          "description": "Make a star player the focus to shield others",
+          "impact": "Choose a star player to be the main focus of the show.",
+          "target_options": [
+            "QB1",
+            "RB1",
+            "WR1",
+            "TE1",
+            "MLB1",
+            "CB1"
+          ],
+          "impact_random_options": {
+            "{target} becomes a national star but the attention affects their play. -2 to awareness but +1 to skill attributes permanently.": 0.3,
+            "{target} handles the spotlight perfectly and becomes a team leader. +2 awarness, get high_motor trait, +1 toughness attributes.": 0.3,
+            "{target} gets overwhelmed by the attention and struggles. -3 awareness permanently.": 0.2,
+            "{target} gets a major endorsement deal that causes distractions. -1 to all physical attributes but gains Superstar development trait.": 0.2
+          }
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.15,
+        "pro": 0.2,
+        "all-madden": 0.25,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season"
+      ]
+    },
+    {
+      "id": 80,
+      "title": "Social Media Challenges Gone Wrong",
+      "description": "{target} has gone viral online for attempting a dangerous social media challenge in the offseason.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Implement a team-wide social media policy with fines for violations",
+          "impact": "How will the team respond to the strict policy?",
+          "impact_random_options": {
+            "Players respect the boundaries. Team morale can be reset to 50 if lower. {target} apologizes publicly.": 0.4,
+            "Several players resent the restrictions. {target} and two other players lose -2 awareness.": 0.3,
+            "Policy causes major locker room divide. You must cut a rostered player to restore order.": 0.2,
+            "Players unanimously reject policy as too controlling. {target} requests a trade immediately.": 0.1
+          }
+        },
+        {
+          "description": "Turn it into a team bonding opportunity with safer challenges",
+          "impact": "The team creates their own social media content under supervision.",
+          "impact_random_options": {
+            "Team content goes viral in a positive way! Team morale can be reset to 50 if lower..": 0.3,
+            "Some good content emerges but it's still a distraction. Two starters gain +2 awareness while two others lose -2 awareness.": 0.4,
+            "Challenge goes wrong despite supervision. {target} suffers minor injury and is out for 4 games.": 0.3
+          }
+        },
+        {
+          "description": "Make an example of {target} with a suspension",
+          "impact": "Will discipline solve the problem?",
+          "options": [
+            {
+              "description": "One-game suspension with mandatory social media training",
+              "impact": "{target} is suspended for 1 game but learns from the experience.",
+              "impact_random_options": {
+                "{target} takes responsibility and returns focused. +2 awareness and a 1 game suspension.": 0.6,
+                "{target} feels unfairly punished and becomes disgruntled. -2 awareness permanently and a 1 game suspension.": 0.4
+              },
+              "is_temporary": true
+            },
+            {
+              "description": "Heavy fine but no suspension",
+              "impact": "Financial penalty without missing games.",
+              "impact_random_options": {
+                "{target} accepts the fine and focuses on football. No lasting effects.": 0.5,
+                "{target} continues risky behavior off-camera. Suffers random -2 stength and -3 injury permanately due to unreported injury. Misses 2 games.": 0.3,
+                "Team sees coach as too soft. Three random players attempt similar stunts and each lose -2 injury permanently.": 0.2
+              }
+            },
+            {
+              "description": "Public reprimand with community service",
+              "impact": "{target} must perform community service related to safety education.",
+              "impact_random_options": {
+                "The experience is transformative. {target} gains +3 awareness and becomes a team leader.": 0.4,
+                "The punishment feels like a PR stunt. {target} loses -2 awareness but completes service.": 0.4,
+                "{target} embraces their 'bad boy' image and becomes a distraction. Must be benched and traded by midseason.": 0.2
+              }
+            }
+          ]
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.13,
+        "pro": 0.22,
+        "all-madden": 0.35,
+        "diabolical": 0.5
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-middle"
+      ]
     }
   ]
 }
