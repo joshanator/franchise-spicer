@@ -524,8 +524,12 @@ class CustomEventsTab(QWidget):
         for difficulty, spinner in self.difficulty_weights.items():
             spinner.setValue(weights.get(difficulty, 0.2))
         
-        # Set options
-        has_options = 'options' in event and event['options']
+        # Set options - Fix for TypeError: convert to boolean explicitly
+        has_options = False
+        if 'options' in event:
+            if isinstance(event['options'], list) and len(event['options']) > 0:
+                has_options = True
+        
         self.has_options.setChecked(has_options)
         self.options_widget.setVisible(has_options)
         
