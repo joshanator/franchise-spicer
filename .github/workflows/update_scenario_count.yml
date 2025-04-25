@@ -6,6 +6,7 @@ on:
       - 'madden_franchise_qt/data/events.json'
       - 'madden_franchise_qt/data/unrealistic_events.json'
       - 'scripts/calculate_scenarios.py'
+      - 'scripts/get_scenario_counts.py'
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
@@ -21,37 +22,27 @@ jobs:
         with:
           python-version: 3.9
           
-      - name: Create script to get counts
+      - name: Get counts
+        id: count
         run: |
-          cat > get_counts.py << 'EOF'
-          import json
-          import sys
-          from pathlib import Path
-          from scripts.calculate_scenarios import calculate_total_scenarios
-          
-          # Get the counts
-          counts = calculate_total_scenarios()
-          
-          # Print values that will be captured by the workflow (GitHub Actions newer syntax)
-          print(f"TOTAL_EVENTS={counts['total_events']}")
-          print(f"TOTAL_SCENARIOS={counts['total_scenarios']}")
-          EOF
-          
-      - name: Run counter script
-        id: counter
-        run: |
+          # Run our main script first for logging
           python3 scripts/calculate_scenarios.py
-          echo "$(python3 get_counts.py)" >> $GITHUB_OUTPUT
+          
+          # Run the dedicated script to get just the raw numbers
+          OUTPUTS=($(python3 scripts/get_scenario_counts.py))
+          echo "EVENT_COUNT=${OUTPUTS[0]}" >> $GITHUB_OUTPUT
+          echo "SCENARIO_COUNT=${OUTPUTS[1]}" >> $GITHUB_OUTPUT
       
       - name: Create badge data
         run: |
-          echo "Creating badge with ${{ steps.counter.outputs.TOTAL_SCENARIOS }} scenarios across ${{ steps.counter.outputs.TOTAL_EVENTS }} events"
+          echo "Creating badge with ${{ steps.count.outputs.SCENARIO_COUNT }} scenarios across ${{ steps.count.outputs.EVENT_COUNT }} events"
+          
           # Create JSON data for shields.io endpoint
           cat > scenario_count.json << EOF
           {
             "schemaVersion": 1,
             "label": "scenarios",
-            "message": "${{ steps.counter.outputs.TOTAL_SCENARIOS }} across ${{ steps.counter.outputs.TOTAL_EVENTS }} events",
+            "message": "${{ steps.count.outputs.SCENARIO_COUNT }} across ${{ steps.count.outputs.EVENT_COUNT }} events",
             "color": "orange"
           }
           EOF
