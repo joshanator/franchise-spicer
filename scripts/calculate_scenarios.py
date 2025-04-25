@@ -47,6 +47,10 @@ def count_event_scenarios(event):
         if 'games_options' in event and event['games_options']:
             base_count *= len(event['games_options'])
         
+        # Account for penalty options
+        if 'penalty_options' in event and event['penalty_options']:
+            base_count *= len(event['penalty_options'])
+        
         # Account for position options
         if 'position_options' in event and event['position_options']:
             base_count *= len(event['position_options'])
