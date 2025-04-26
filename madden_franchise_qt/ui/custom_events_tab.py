@@ -117,7 +117,7 @@ class CustomEventsTab(QWidget):
         self.category_input = QComboBox()
         self.category_input.addItems([
             "attribute", "contract", "draft", "free-agency", "injury", 
-            "lineup", "roster", "suspension", "team", "trade", "challenge", "penalty"
+            "lineup", "roster", "suspension", "team", "trade", "penalty", "mini-challenge", "random-challenge", "season-challenge"
         ])
         basic_layout.addRow("Category:", self.category_input)
         

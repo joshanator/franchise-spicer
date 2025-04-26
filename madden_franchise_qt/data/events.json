@@ -133,7 +133,7 @@
         "all-madden": 0.1,
         "diabolical": 0.1
       },
-      "category": "attribute",
+      "category": "random-challenge",
       "season_stages": [
         "pre-season",
         "off-season"
@@ -1011,7 +1011,7 @@
         "all-madden": 0.2,
         "diabolical": 0.2
       },
-      "category": "challenge",
+      "category": "mini-challenge",
       "season_stages": [
         "pre-season",
         "off-season"
@@ -1194,7 +1194,7 @@
         "all-madden": 0.5,
         "diabolical": 0.5
       },
-      "category": "challenge",
+      "category": "random-challenge",
       "season_stages": [
         "pre-season",
         "regular-season-start",
@@ -1505,7 +1505,7 @@
         "all-madden": 0.3,
         "diabolical": 0.4
       },
-      "category": "attribute",
+      "category": "mini-challenge",
       "season_stages": [
         "regular-season-end",
         "playoffs"
@@ -2019,7 +2019,7 @@
         "all-madden": 0.25,
         "diabolical": 0.15
       },
-      "category": "attribute",
+      "category": "season-challenge",
       "season_stages": [
         "pre-season"
       ]
