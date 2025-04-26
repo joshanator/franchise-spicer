@@ -315,6 +315,45 @@
                 "regular-season-start",
                 "regular-season-mid"
             ]
+        },
+        {
+            "id": 5,
+            "title": "Free cupcake?",
+            "description": "You are walking down a street with {target} when you both see a cupcake sitting on the sidewalk. Your player will eat anything and lunges for it. Do you let them?",
+            "impact": "Is that safe to eat?",
+            "target_options": ["all-players"],
+            "options": [
+                {
+                    "description": "No! Bad! You dont eat food off the ground.",
+                    "impact": "Your player is properly scolded and you continue on your way. He looks at you with a disappointed look in his eyes. -1 to awareness."
+                },
+                {
+                    "description": "No. Ill get you some real food.",
+                    "impact": "You get your player some McDonalds and thats good enough for him. Nothing happens."
+                },
+                {
+                    "description": "Yea why not",
+                    "impact": "Your player happily eats the cupcake. It's so delicious he starts to glow.",
+                    "impact_random_options": {
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +1 to every stat. The cupcake is magic!": 0.02,
+                        "Cupcake or magic mushroom? Your player gains 2 inches of height.": 0.03,
+                        "Cupcake or magic mushroom? Your player gains an inch of height.": 0.1,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +1 to 2 stats of your choice. The cupcake is magic!": 0.15,
+                        "Your player happily eats the cupcake. The player gains +1 speed permanatly. Sugar Rush.": 0.15,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player thinks of his childhood and suddenly he is 1 year younger. -1 age": 0.05,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +10 awareness for the next game": 0.15,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +5 speed and +5 acceleration for the next game": 0.1,
+                        "Your player eats the cupcake and immediately gets sick. They are out for 1 game.": 0.25
+                    }
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.1,
+                "rookie": 0.01,
+                "pro": 0.006,
+                "all-madden": 0.001,
+                "diabolical": 0.0001
+            }
         }
     ]
 }
