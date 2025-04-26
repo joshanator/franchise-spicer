@@ -49,6 +49,46 @@ class EventTab(QWidget):
         self.status_message.setVisible(False)
         scroll_layout.addWidget(self.status_message)
         
+        # Debug mode section - will be shown/hidden based on debug_mode setting
+        self.debug_group = QGroupBox("DEBUG MODE")
+        self.debug_group.setStyleSheet("QGroupBox { color: #FF0000; font-weight: bold; }")
+        debug_layout = QVBoxLayout(self.debug_group)
+        
+        # Event ID input
+        event_id_layout = QHBoxLayout()
+        event_id_layout.addWidget(QLabel("Event ID:"))
+        self.event_id_input = QTextEdit()
+        self.event_id_input.setMaximumHeight(30)
+        event_id_layout.addWidget(self.event_id_input)
+        debug_layout.addLayout(event_id_layout)
+        
+        # Type selection (realistic vs unrealistic)
+        type_layout = QHBoxLayout()
+        type_layout.addWidget(QLabel("Event Type:"))
+        self.realistic_button = QPushButton("Realistic")
+        self.realistic_button.setCheckable(True)
+        self.realistic_button.setChecked(True)
+        self.unrealistic_button = QPushButton("Unrealistic")
+        self.unrealistic_button.setCheckable(True)
+        
+        # Make buttons toggle each other
+        self.realistic_button.clicked.connect(lambda: self.unrealistic_button.setChecked(not self.realistic_button.isChecked()))
+        self.unrealistic_button.clicked.connect(lambda: self.realistic_button.setChecked(not self.unrealistic_button.isChecked()))
+        
+        type_layout.addWidget(self.realistic_button)
+        type_layout.addWidget(self.unrealistic_button)
+        debug_layout.addLayout(type_layout)
+        
+        # Trigger button
+        self.trigger_button = QPushButton("TRIGGER SPECIFIC EVENT")
+        self.trigger_button.setFont(QFont("Arial", 12, QFont.Bold))
+        self.trigger_button.setMinimumHeight(50)
+        self.trigger_button.clicked.connect(self._trigger_specific_event)
+        debug_layout.addWidget(self.trigger_button)
+        
+        # Add debug section to layout (will show/hide based on debug mode)
+        scroll_layout.addWidget(self.debug_group)
+        
         # Event generation section
         generator_group = QGroupBox("Generate Random Event")
         generator_layout = QVBoxLayout(generator_group)
@@ -180,6 +220,10 @@ class EventTab(QWidget):
         self.status_message.setText(f"Current season stage: {current_stage} - {week_display}, Year {year} | Unrealistic events: {unrealistic_events}")
         self.status_message.setVisible(True)
         
+        # Show/hide debug mode based on config setting
+        debug_mode = self.event_manager.config.get('debug_mode', False)
+        self.debug_group.setVisible(debug_mode)
+        
         # Clear event display if no current event
         if not hasattr(self, 'current_event') or not self.current_event:
             self.event_title.setText("No event rolled yet")
@@ -189,6 +233,149 @@ class EventTab(QWidget):
             
             self.accept_button.setEnabled(False)
             self.reroll_button.setEnabled(False)
+    
+    def _trigger_specific_event(self):
+        """Trigger a specific event based on ID and type"""
+        event_id = self.event_id_input.toPlainText().strip()
+        if not event_id:
+            self._show_status_message("Please enter an event ID", error=True)
+            return
+            
+        try:
+            # Convert to integer if possible
+            event_id = int(event_id)
+        except ValueError:
+            # Keep as string if not an integer
+            pass
+            
+        # Determine event type
+        is_unrealistic = self.unrealistic_button.isChecked()
+        
+        # Call the event manager to get the specific event
+        event = self.event_manager.get_specific_event(event_id, is_unrealistic)
+        
+        if not event:
+            self._show_status_message(
+                f"No event found with ID '{event_id}' in {'unrealistic' if is_unrealistic else 'realistic'} events.",
+                error=True
+            )
+            return
+            
+        self.current_event = event
+        
+        # Handle options recursively until no more options need to be selected
+        while 'options' in event and event['options']:
+            event = self._show_options_dialog(event)
+            self.current_event = event
+        
+        # Update the UI with the event information (code already exists in _roll_event)
+        self.setUpdatesEnabled(False)
+        
+        # TODO: pull out into a function that updates current_event for all target references
+        # Check if this event has a target player without a name
+        has_player_target = False
+        self.player_position = None
+        
+        if event.get('target_options'):
+            # Get the selected target position
+            target_position = None
+            
+            # First check if we've already processed and stored the target position
+            if 'selected_target' in event:
+                # Extract position from "Name (Position)" format or just use as-is if no name
+                target_text = event.get('selected_target', '')
+                if '(' in target_text and ')' in target_text:
+                    # Extract position from parentheses
+                    target_position = target_text[target_text.find('(')+1:target_text.find(')')]
+                else:
+                    # Just the position
+                    target_position = target_text
+            
+            # If we couldn't extract from selected_target, get the original position
+            if not target_position and 'original_target_position' in event:
+                target_position = event.get('original_target_position')
+            
+            # If we have a position, mark that we have a player target
+            if target_position:
+                has_player_target = True
+                self.player_position = target_position
+                # Get the current name if it exists
+                player_name = self.event_manager.config.get('roster', {}).get(target_position, "")
+
+        # Update display
+        self.event_title.setText(event.get('title', 'Unknown Event'))
+        
+        # Display description without impact information
+        description = event.get('processed_description', event.get('description', ''))
+        self.description_text.setPlainText(description)
+        
+        # Display impact separately
+        self.impact_text.setPlainText(event.get('impact', ''))
+        
+        # Set target if available
+        target = event.get('selected_target', '')
+        if target:
+            self.target_label.setText(target)
+        else:
+            self.target_label.setText("N/A")
+        
+        # Enable buttons
+        self.accept_button.setEnabled(True)
+        self.reroll_button.setEnabled(True)
+        
+        # If there's a player target, show the update name button
+        if has_player_target:
+            # Check if we already have the button, if not create it
+            if not hasattr(self, 'update_player_name_button'):
+                self.update_player_name_button = QPushButton("Update Player Name")
+                self.update_player_name_button.clicked.connect(self._add_player_name)
+            
+            # Find the buttons layout in the result group
+            for child in self.result_group.children():
+                if isinstance(child, QVBoxLayout):
+                    result_layout = child
+                    # Find the buttons layout
+                    for i in range(result_layout.count()):
+                        item = result_layout.itemAt(i)
+                        if isinstance(item, QHBoxLayout):
+                            # Check if our button is already in the layout
+                            button_found = False
+                            for j in range(item.count()):
+                                if item.itemAt(j).widget() == self.update_player_name_button:
+                                    button_found = True
+                                    break
+                            
+                            if not button_found:
+                                # Insert our button before the stretch
+                                item.insertWidget(item.count()-1, self.update_player_name_button)
+                            break
+            
+            self.update_player_name_button.setVisible(True)
+            
+            # Show a notification
+            player_name = self.event_manager.config.get('roster', {}).get(self.player_position, "")
+            if not player_name or not player_name.strip():
+                self._show_status_message(
+                    f"This event involves a player at position {self.player_position} who doesn't have a name. " 
+                    "Click 'Update Player Name' to assign a name before accepting.",
+                    error=False
+                )
+            else:
+                self._show_status_message(
+                    f"This event involves {player_name} ({self.player_position}). "
+                    "You can click 'Update Player Name' to change the player's name if needed.",
+                    error=False
+                )
+                
+        elif hasattr(self, 'update_player_name_button'):
+            # Hide the button if it exists
+            self.update_player_name_button.setVisible(False)
+        
+        # Re-enable updates and refresh the display
+        self.setUpdatesEnabled(True)
+        
+        # Animate the result (better highlight effect)
+        self._animate_result()
     
     def _roll_event(self):
         """Generate a random event"""
@@ -213,7 +400,6 @@ class EventTab(QWidget):
         # Start update - freeze layout to prevent jumbled appearance
         self.setUpdatesEnabled(False)
         
-
         # TODO: pull out into a function that updates current_event for all target references
         # Check if this event has a target player without a name
         has_player_target = False

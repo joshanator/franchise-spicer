@@ -161,6 +161,40 @@ class EventManager:
         self._save_config()
         return True
     
+    def get_specific_event(self, event_id, is_unrealistic=False):
+        """Get a specific event by ID
+        
+        Args:
+            event_id: The ID of the event to retrieve (can be string or number)
+            is_unrealistic: Whether to look in the unrealistic events list
+            
+        Returns:
+            dict: The processed event, or None if no event with that ID was found
+        """
+        # Convert event_id to string for comparison
+        event_id_str = str(event_id)
+        
+        # Determine which event source to use
+        if is_unrealistic:
+            events_source = self.unrealistic_events.get('unrealistic_events', [])
+        else:
+            events_source = self.events.get('events', [])
+        
+        # Search for event with matching ID
+        for event in events_source:
+            if str(event.get('id', '')) == event_id_str:
+                # Process the event to fill in placeholders
+                return self._process_event(event)
+                
+        # Also check custom events if not found in the main sources
+        custom_events = self.config.get('custom_events', [])
+        for event in custom_events:
+            if str(event.get('id', '')) == event_id_str:
+                return self._process_event(event)
+                
+        # No matching event found
+        return None
+    
     def roll_event(self):
         """Roll for a random event
         
