@@ -1,15 +1,36 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QTabWidget, QLineEdit, QComboBox, QTextEdit, QListWidget,
+    QTabWidget, QLineEdit, QComboBox, QTextEdit, QListWidget, QListWidgetItem,
     QFileDialog, QMessageBox, QScrollArea, QSpinBox, QDoubleSpinBox,
-    QFormLayout, QCheckBox, QGroupBox, QRadioButton, QInputDialog
+    QFormLayout, QCheckBox, QGroupBox, QRadioButton, QInputDialog,
+    QTableWidget, QTableWidgetItem, QHeaderView, QStyledItemDelegate, QStyleOptionViewItem
 )
-from PySide6.QtCore import Qt, QSize, Signal
-from PySide6.QtGui import QFont, QIcon
+from PySide6.QtCore import Qt, QSize, Signal, QRect
+from PySide6.QtGui import QFont, QIcon, QColor, QPixmap, QPainter, QPen
 
 import json
 import os
 import copy
+
+class CheckBoxDelegate(QStyledItemDelegate):
+    """Custom delegate to properly center checkboxes in table cells"""
+    
+    def paint(self, painter, option, index):
+        """Paint the checkbox centered in the cell
+        
+        Args:
+            painter: The painter
+            option: The style options
+            index: The model index
+        """
+        # Create a copy of the options
+        opt = QStyleOptionViewItem(option)
+        
+        # Set alignment to center
+        opt.displayAlignment = Qt.AlignCenter
+        
+        # Let the default implementation handle the drawing
+        QStyledItemDelegate.paint(self, painter, opt, index)
 
 class CustomEventsTab(QWidget):
     """Tab for creating, editing, importing, and exporting custom events"""
@@ -69,9 +90,36 @@ class CustomEventsTab(QWidget):
         left_panel = QWidget()
         left_layout = QVBoxLayout(left_panel)
         
-        self.events_list = QListWidget()
-        self.events_list.currentRowChanged.connect(self.on_event_selected)
         left_layout.addWidget(QLabel("Your Custom Events:"))
+        
+        # Create table widget for events with improved layout
+        self.events_list = QTableWidget()
+        self.events_list.setColumnCount(2)
+        self.events_list.setHorizontalHeaderLabels(["Event Name", "Enabled"])
+        
+        # Center header for enabled column
+        enabled_header = QTableWidgetItem("Enabled")
+        enabled_header.setTextAlignment(Qt.AlignCenter)
+        self.events_list.setHorizontalHeaderItem(1, enabled_header)
+        
+        # Set column properties
+        self.events_list.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)  # Event name stretches
+        self.events_list.horizontalHeader().setSectionResizeMode(1, QHeaderView.Fixed)    # Enabled column fixed width
+        self.events_list.setColumnWidth(1, 60)  # Make the enabled column thinner
+        
+        # Set appearance
+        self.events_list.setSelectionBehavior(QTableWidget.SelectRows)  # Select entire row
+        self.events_list.setEditTriggers(QTableWidget.NoEditTriggers)   # Make read-only
+        self.events_list.setAlternatingRowColors(True)                  # Alternate row colors
+        self.events_list.setShowGrid(True)                              # Show grid lines
+        
+        # Set delegate for better checkbox centering
+        checkbox_delegate = CheckBoxDelegate()
+        self.events_list.setItemDelegateForColumn(1, checkbox_delegate)
+        
+        # Connect signals
+        self.events_list.cellClicked.connect(self.on_event_selected)
+        
         left_layout.addWidget(self.events_list)
         
         # Buttons for event management
@@ -113,6 +161,8 @@ class CustomEventsTab(QWidget):
         self.impact_input = QTextEdit()
         self.impact_input.setMaximumHeight(80)
         basic_layout.addRow("Impact:", self.impact_input)
+        
+        # Remove enabled checkbox from here, as it will be in the list
         
         self.category_input = QComboBox()
         self.category_input.addItems([
@@ -453,13 +503,48 @@ class CustomEventsTab(QWidget):
         self.custom_events = config.get('custom_events', [])
         
         # Update the events list
-        self.events_list.clear()
-        for event in self.custom_events:
-            self.events_list.addItem(event.get('title', 'Unnamed Event'))
+        self.events_list.setRowCount(0)  # Clear the table
+        
+        for i, event in enumerate(self.custom_events):
+            title = event.get('title', 'Unnamed Event')
+            is_enabled = event.get('enabled', True)
+            
+            # Insert a new row
+            self.events_list.insertRow(i)
+            
+            # Create title item
+            title_item = QTableWidgetItem(title)
+            self.events_list.setItem(i, 0, title_item)
+            
+            # Update the enabled cell
+            self.update_enabled_cell(i, is_enabled)
+        
+        # Adjust column widths
+        self.events_list.setColumnWidth(0, 260)  # Event name column
+        self.events_list.setColumnWidth(1, 50)   # Enabled column
         
         # Disable editor when refreshing
         self.enable_editor(False)
         self.current_event_index = -1
+    
+    def update_enabled_cell(self, row, is_enabled):
+        """Update the enabled cell with a checkbox
+        
+        Args:
+            row: The row to update
+            is_enabled: Whether the event is enabled
+        """
+        # Create a new item for the enabled column
+        enabled_item = QTableWidgetItem()
+        
+        # Make sure the item is only checkable
+        enabled_item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsSelectable)
+        
+        # Set checked state
+        enabled_item.setCheckState(Qt.CheckState.Checked if is_enabled else Qt.CheckState.Unchecked)
+        
+        # Add to table
+        self.events_list.setItem(row, 1, enabled_item)
     
     def save_custom_events(self):
         """Save custom events to the config"""
@@ -467,15 +552,22 @@ class CustomEventsTab(QWidget):
         self.event_manager.config['custom_events'] = self.custom_events
         self.event_manager._save_config()  # Save using event manager's method
     
-    def on_event_selected(self, row):
-        """Handle event selection in the list
+    def on_event_selected(self, row, column):
+        """Handle event selection in the table
         
         Args:
             row: The row index of the selected event
+            column: The column that was clicked
         """
         if row < 0 or row >= len(self.custom_events):
             self.enable_editor(False)
             self.current_event_index = -1
+            return
+        
+        # If user clicked the "Enabled" column, toggle the checkbox
+        if column == 1:
+            # Get the checkbox item
+            self.toggle_event_enabled(row)
             return
             
         self.current_event_index = row
@@ -543,6 +635,34 @@ class CustomEventsTab(QWidget):
         # Enable the editor
         self.enable_editor(True)
     
+    def toggle_event_enabled(self, row):
+        """Toggle the enabled state of an event
+        
+        Args:
+            row: The row index of the event to toggle
+        """
+        if row < 0 or row >= len(self.custom_events):
+            return
+            
+        # Get the item from the "Enabled" column
+        enabled_item = self.events_list.item(row, 1)
+        if not enabled_item:
+            # Create one if it doesn't exist
+            enabled_item = QTableWidgetItem()
+            enabled_item.setTextAlignment(Qt.AlignCenter)
+            self.events_list.setItem(row, 1, enabled_item)
+            
+        # Toggle the enabled state
+        event = self.custom_events[row]
+        is_enabled = event.get('enabled', True)
+        event['enabled'] = not is_enabled
+        
+        # Update checkbox display
+        self.update_enabled_cell(row, not is_enabled)
+        
+        # Save changes
+        self.save_custom_events()
+    
     def on_option_selected(self, row):
         """Handle option selection in the list
         
@@ -580,6 +700,7 @@ class CustomEventsTab(QWidget):
             'description': 'This is a custom event. Edit this description.',
             'impact': 'Define the impact of this event.',
             'category': 'attribute',
+            'enabled': True,
             'season_stages': ['pre-season', 'regular-season-mid'],
             'target_options': ['all-players'],
             'difficulty_weights': {
@@ -594,9 +715,19 @@ class CustomEventsTab(QWidget):
         # Add to custom events
         self.custom_events.append(new_event)
         
-        # Update list and select the new event
-        self.events_list.addItem(new_event['title'])
-        self.events_list.setCurrentRow(len(self.custom_events) - 1)
+        # Add new row to table
+        row = self.events_list.rowCount()
+        self.events_list.insertRow(row)
+        
+        # Set name in first column
+        title_item = QTableWidgetItem(new_event['title'])
+        self.events_list.setItem(row, 0, title_item)
+        
+        # Set enabled status in second column
+        self.update_enabled_cell(row, True)
+        
+        # Select the new row
+        self.events_list.setCurrentCell(row, 0)
         
         # Save
         self.save_custom_events()
@@ -620,7 +751,7 @@ class CustomEventsTab(QWidget):
         del self.custom_events[self.current_event_index]
         
         # Update list
-        self.events_list.takeItem(self.current_event_index)
+        self.events_list.removeRow(self.current_event_index)
         
         # Save
         self.save_custom_events()
@@ -696,6 +827,11 @@ class CustomEventsTab(QWidget):
         event['category'] = self.category_input.currentText()
         event['is_temporary'] = self.is_temporary.isChecked()
         
+        # Get enabled state from the checkbox in the table
+        enabled_item = self.events_list.item(self.current_event_index, 1)
+        if enabled_item:
+            event['enabled'] = enabled_item.checkState() == Qt.CheckState.Checked
+        
         # Get season stages
         stages = []
         if self.pre_season.isChecked():
@@ -755,8 +891,13 @@ class CustomEventsTab(QWidget):
             if 'options' in event:
                 del event['options']
         
-        # Update the list display
-        self.events_list.item(self.current_event_index).setText(event['title'])
+        # Update the title in the first column
+        title_item = self.events_list.item(self.current_event_index, 0)
+        if title_item:
+            title_item.setText(event['title'])
+        
+        # Update the enabled state visual
+        self.update_enabled_cell(self.current_event_index, event['enabled'])
         
         # Save all custom events
         self.save_custom_events()
