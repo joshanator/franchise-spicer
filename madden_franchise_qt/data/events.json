@@ -2884,6 +2884,26 @@
         "off-season",
         "playoffs"
       ]
+    },
+    {
+      "id": 83,
+      "title": "Mentor Needed",
+      "description": "Your talented quarterback needs veteran guidance to reach his potential.",
+      "impact": "if you have a {player} in their first or second season in the league on the roster and a {player} with 7+ years of experience on the roster, your young {player} gains +2 awareness and +1 to a skill of your choice permanently.",
+      "player_options": [ "QB", "RB", "TE", "OT", "OG", "C", "DT", "LE", "RE", "OLB", "MLB", "FS", "SS" ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.4,
+        "pro": 0.3,
+        "all-madden": 0.2,
+        "diabolical": 0.1
+      },
+      "category": "player-development",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-middle"
+      ]
     }
   ]
 }
