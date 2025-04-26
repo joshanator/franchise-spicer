@@ -362,9 +362,47 @@ class EventTab(QWidget):
                     error=False
                 )
                 
-        elif hasattr(self, 'update_player_name_button'):
-            # Hide the button if it exists
-            self.update_player_name_button.setVisible(False)
+        else:
+            # No player target, hide the update player name button if it exists
+            if hasattr(self, 'update_player_name_button'):
+                self.update_player_name_button.setVisible(False)
+            
+            # If target is N/A or empty, show the custom target button
+            if not target or target.strip() == "":
+                # Check if we already have the button, if not create it
+                if not hasattr(self, 'add_custom_target_button'):
+                    self.add_custom_target_button = QPushButton("Add Custom Target")
+                    self.add_custom_target_button.clicked.connect(self._add_custom_target)
+                
+                # Find the buttons layout in the result group
+                for child in self.result_group.children():
+                    if isinstance(child, QVBoxLayout):
+                        result_layout = child
+                        # Find the buttons layout
+                        for i in range(result_layout.count()):
+                            item = result_layout.itemAt(i)
+                            if isinstance(item, QHBoxLayout):
+                                # Check if our button is already in the layout
+                                button_found = False
+                                for j in range(item.count()):
+                                    if item.itemAt(j).widget() == self.add_custom_target_button:
+                                        button_found = True
+                                        break
+                                
+                                if not button_found:
+                                    # Insert our button before the stretch
+                                    item.insertWidget(item.count()-1, self.add_custom_target_button)
+                                break
+                
+                self.add_custom_target_button.setVisible(True)
+                self._show_status_message(
+                    "This event doesn't have a specific target. You can click 'Add Custom Target' to assign one if needed.",
+                    error=False
+                )
+            else:
+                # Has a target already, hide the custom target button
+                if hasattr(self, 'add_custom_target_button'):
+                    self.add_custom_target_button.setVisible(False)
         
         # Re-enable updates and refresh the display
         self.setUpdatesEnabled(True)
@@ -491,9 +529,47 @@ class EventTab(QWidget):
                     error=False
                 )
                 
-        elif hasattr(self, 'update_player_name_button'):
-            # Hide the button if it exists
-            self.update_player_name_button.setVisible(False)
+        else:
+            # No player target, hide the update player name button if it exists
+            if hasattr(self, 'update_player_name_button'):
+                self.update_player_name_button.setVisible(False)
+            
+            # If target is N/A or empty, show the custom target button
+            if not target or target.strip() == "":
+                # Check if we already have the button, if not create it
+                if not hasattr(self, 'add_custom_target_button'):
+                    self.add_custom_target_button = QPushButton("Add Custom Target")
+                    self.add_custom_target_button.clicked.connect(self._add_custom_target)
+                
+                # Find the buttons layout in the result group
+                for child in self.result_group.children():
+                    if isinstance(child, QVBoxLayout):
+                        result_layout = child
+                        # Find the buttons layout
+                        for i in range(result_layout.count()):
+                            item = result_layout.itemAt(i)
+                            if isinstance(item, QHBoxLayout):
+                                # Check if our button is already in the layout
+                                button_found = False
+                                for j in range(item.count()):
+                                    if item.itemAt(j).widget() == self.add_custom_target_button:
+                                        button_found = True
+                                        break
+                                
+                                if not button_found:
+                                    # Insert our button before the stretch
+                                    item.insertWidget(item.count()-1, self.add_custom_target_button)
+                                break
+                
+                self.add_custom_target_button.setVisible(True)
+                self._show_status_message(
+                    "This event doesn't have a specific target. You can click 'Add Custom Target' to assign one if needed.",
+                    error=False
+                )
+            else:
+                # Has a target already, hide the custom target button
+                if hasattr(self, 'add_custom_target_button'):
+                    self.add_custom_target_button.setVisible(False)
         
         # Re-enable updates and refresh the display
         self.setUpdatesEnabled(True)
@@ -795,4 +871,30 @@ class EventTab(QWidget):
                 action_verb = "updated" if current_name else "added"
                 self._show_status_message(f"Successfully {action_verb} name to '{player_name}' for position {self.player_position}")
             else:
-                self._show_status_message("Failed to update the roster", error=True) 
+                self._show_status_message("Failed to update the roster", error=True)
+    
+    def _add_custom_target(self):
+        """Add a custom target for the event without saving to roster"""
+        if not self.current_event:
+            return
+            
+        # Create an input dialog to get the custom target
+        custom_target, ok = QInputDialog.getText(
+            self, 
+            "Add Custom Target", 
+            "Enter a custom target for this event:",
+            text=""
+        )
+        
+        if ok and custom_target.strip():
+            # Update the target label
+            self.target_label.setText(custom_target)
+            
+            # Update the current event with the custom target
+            self.current_event['selected_target'] = custom_target
+            
+            # Show success message
+            self._show_status_message(f"Custom target set to '{custom_target}' for this event only")
+        elif ok:
+            # User clicked OK but entered empty text
+            self._show_status_message("Custom target cannot be empty", error=True) 
