@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QGroupBox, QTreeWidget, QTreeWidgetItem,
-    QHeaderView, QTabWidget, QScrollArea, QSizePolicy
+    QHeaderView, QTabWidget, QScrollArea, QSizePolicy, QTextEdit
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
@@ -73,7 +73,20 @@ class EffectsTab(QWidget):
         header.setSectionResizeMode(3, QHeaderView.Stretch)
         
         self.season_tree.setAlternatingRowColors(True)
+        # Connect selection change event
+        self.season_tree.currentItemChanged.connect(self._on_season_effect_selected)
         layout.addWidget(self.season_tree)
+        
+        # Event details section
+        details_group = QGroupBox("Effect Details")
+        details_layout = QVBoxLayout(details_group)
+        
+        self.season_details_text = QTextEdit()
+        self.season_details_text.setReadOnly(True)
+        self.season_details_text.setMinimumHeight(100)
+        details_layout.addWidget(self.season_details_text)
+        
+        layout.addWidget(details_group)
         
         self.tab_widget.addTab(scroll_area, "Season Effects - (not fully working)")
     
@@ -101,7 +114,20 @@ class EffectsTab(QWidget):
         header.setSectionResizeMode(4, QHeaderView.Stretch)
         
         self.challenges_tree.setAlternatingRowColors(True)
+        # Connect selection change event
+        self.challenges_tree.currentItemChanged.connect(self._on_challenge_selected)
         layout.addWidget(self.challenges_tree)
+        
+        # Event details section
+        details_group = QGroupBox("Challenge Details")
+        details_layout = QVBoxLayout(details_group)
+        
+        self.challenge_details_text = QTextEdit()
+        self.challenge_details_text.setReadOnly(True)
+        self.challenge_details_text.setMinimumHeight(100)
+        details_layout.addWidget(self.challenge_details_text)
+        
+        layout.addWidget(details_group)
         
         self.tab_widget.addTab(scroll_area, "Season Challenges")
     
@@ -130,7 +156,20 @@ class EffectsTab(QWidget):
         header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
         
         self.temp_tree.setAlternatingRowColors(True)
+        # Connect selection change event
+        self.temp_tree.currentItemChanged.connect(self._on_temp_effect_selected)
         layout.addWidget(self.temp_tree)
+        
+        # Event details section
+        details_group = QGroupBox("Effect Details")
+        details_layout = QVBoxLayout(details_group)
+        
+        self.temp_details_text = QTextEdit()
+        self.temp_details_text.setReadOnly(True)
+        self.temp_details_text.setMinimumHeight(100)
+        details_layout.addWidget(self.temp_details_text)
+        
+        layout.addWidget(details_group)
         
         self.tab_widget.addTab(scroll_area, "Temporary Effects")
     
@@ -162,6 +201,9 @@ class EffectsTab(QWidget):
         """
         self.season_tree.clear()
         
+        # Track stored events for details view
+        self.season_effects = {}
+        
         # Group events by season stage
         stage_events = {}
         
@@ -188,7 +230,8 @@ class EffectsTab(QWidget):
                 stage_events[stage].append({
                     'title': title,
                     'impact': impact,
-                    'target': target
+                    'target': target,
+                    'event': event  # Store the full event
                 })
         
         # Add stage groups to tree
@@ -197,12 +240,17 @@ class EffectsTab(QWidget):
             stage_item.setText(0, stage)
             stage_item.setFont(0, QFont("Arial", 10, QFont.Bold))
             
-            for event in events:
+            for event_data in events:
                 event_item = QTreeWidgetItem(stage_item)
                 event_item.setText(0, "")  # No stage in child item
-                event_item.setText(1, event['target'])
-                event_item.setText(2, event['title'])
-                event_item.setText(3, event['impact'])
+                event_item.setText(1, event_data['target'])
+                event_item.setText(2, event_data['title'])
+                event_item.setText(3, event_data['impact'])
+                
+                # Store the full event data with the item using a unique key
+                event_key = f"{event_data['target']}_{event_data['title']}"
+                event_item.setData(0, Qt.UserRole, event_key)
+                self.season_effects[event_key] = event_data['event']
         
         self.season_tree.expandAll()
     
@@ -215,6 +263,9 @@ class EffectsTab(QWidget):
             current_year: The current year
         """
         self.challenges_tree.clear()
+        
+        # Track stored events for details view
+        self.challenge_events = {}
         
         # Look for events with category "season-challenge"
         for event in history:
@@ -245,19 +296,27 @@ class EffectsTab(QWidget):
                 if 'selected_option' in event and isinstance(event['selected_option'], dict):
                     option = event['selected_option']
                     description = option.get('description', description)
+                    # Make sure to use the impact from the selected option
                     impact = option.get('impact', impact)
                 
                 # Extract goal and reward from impact text
-                if "if" in impact.lower() and ":" not in impact:
+                if "if" in impact.lower():
                     parts = impact.lower().split("if")
                     if len(parts) > 1:
                         condition_parts = parts[1].split(",")
                         if len(condition_parts) > 0:
                             goal = condition_parts[0].strip()
-                            reward = parts[0].strip()
+                            reward = impact  # Use the full impact text for better context
+                    else:
+                        goal = "Complete season challenge"
+                        reward = impact
                 else:
                     # Simple approach - just display the impact
                     goal = "Complete season challenge"
+                    reward = impact
+                
+                # Make sure reward is not empty
+                if not reward.strip():
                     reward = impact
                 
                 # Add to tree
@@ -267,6 +326,16 @@ class EffectsTab(QWidget):
                 item.setText(2, description)
                 item.setText(3, goal)
                 item.setText(4, reward)
+                
+                # Store the full event data with the item using a unique key
+                event_key = f"{target}_{title}_{event_year}"
+                item.setData(0, Qt.UserRole, event_key)
+                self.challenge_events[event_key] = event
+                
+                # Debug print to help diagnose issues
+                print(f"Season Challenge - {title} for {target}")
+                print(f"  Impact: {impact}")
+                print(f"  Reward set to: {reward}")
         
         # Sort by player/position
         self.challenges_tree.sortItems(0, Qt.AscendingOrder)
@@ -280,6 +349,9 @@ class EffectsTab(QWidget):
             current_year: The current year
         """
         self.temp_tree.clear()
+        
+        # Track stored events for details view
+        self.temp_effects = {}
         
         # Look for temporary effects marked with is_temporary tag
         temp_effects = []
@@ -355,14 +427,16 @@ class EffectsTab(QWidget):
             
             # Add recent temporary effects
             if is_temporary and is_active:
-                temp_effects.append({
+                effect_data = {
                     'target': target,
                     'category': category,
                     'title': title,
                     'impact': impact,
                     'started': started,
-                    'time_remaining': time_remaining
-                })
+                    'time_remaining': time_remaining,
+                    'event': event  # Store the original event
+                }
+                temp_effects.append(effect_data)
         
         # Add temporary effects to tree
         for effect in temp_effects:
@@ -373,6 +447,180 @@ class EffectsTab(QWidget):
             item.setText(3, effect['impact'])
             item.setText(4, effect['started'])
             item.setText(5, effect['time_remaining'])
+            
+            # Store the full event data with the item using a unique key
+            event_key = f"{effect['target']}_{effect['title']}_{effect['started']}"
+            item.setData(0, Qt.UserRole, event_key)
+            self.temp_effects[event_key] = effect['event']
         
         # Group by player/position
-        self.temp_tree.sortItems(0, Qt.AscendingOrder) 
+        self.temp_tree.sortItems(0, Qt.AscendingOrder)
+    
+    def _on_challenge_selected(self, current, previous):
+        """Handle selection change in challenges tree"""
+        if not current:
+            self.challenge_details_text.clear()
+            return
+            
+        # Get the event key and retrieve full event data
+        event_key = current.data(0, Qt.UserRole)
+        event = self.challenge_events.get(event_key)
+        
+        if not event:
+            # Fallback to display if no event data stored
+            player_position = current.text(0)
+            challenge = current.text(1)
+            description = current.text(2)
+            goal = current.text(3)
+            reward = current.text(4)
+            
+            detail_html = f"""
+            <h3>{challenge}</h3>
+            <p><b>Player/Position:</b> {player_position}</p>
+            <p><b>Description:</b> {description}</p>
+            <p><b>Goal:</b> {goal}</p>
+            <p><b>Reward/Consequence:</b> {reward}</p>
+            """
+        else:
+            # Format using full event data
+            title = event.get('title', '')
+            description = event.get('description', '')
+            target = event.get('selected_target', 'N/A')
+            impact = event.get('impact', '')
+            week = event.get('week', 0)
+            year = event.get('year', 0)
+            
+            # Get selected option details if available
+            option_desc = ""
+            if 'selected_option' in event and isinstance(event['selected_option'], dict):
+                option = event['selected_option']
+                option_desc = option.get('description', '')
+                
+            # Build rich HTML detail display
+            detail_html = f"""
+            <h3>{title}</h3>
+            <p><b>Player/Position:</b> {target}</p>
+            <p><b>Week/Year:</b> Week {week}, Year {year}</p>
+            <p><b>Description:</b> {description}</p>
+            """
+            
+            if option_desc:
+                detail_html += f"<p><b>Selected Option:</b> {option_desc}</p>"
+                
+            detail_html += f"""
+            <p><b>Challenge Impact:</b> {impact}</p>
+            """
+            
+            # Add advice on how to track
+            detail_html += """
+            <p><b>How to track:</b> Make note of this challenge and track the player's 
+            performance in Madden to see if they meet the goal.</p>
+            """
+        
+        # Set the formatted HTML
+        self.challenge_details_text.setHtml(detail_html)
+    
+    def _on_temp_effect_selected(self, current, previous):
+        """Handle selection change in temporary effects tree"""
+        if not current:
+            self.temp_details_text.clear()
+            return
+            
+        # Get the event key and retrieve full event data
+        event_key = current.data(0, Qt.UserRole)
+        event = self.temp_effects.get(event_key)
+        
+        if not event:
+            # Fallback to display if no event data stored
+            player_position = current.text(0)
+            effect_type = current.text(1)
+            description = current.text(2)
+            impact = current.text(3)
+            time_remaining = current.text(5)
+            
+            detail_html = f"""
+            <h3>{effect_type}</h3>
+            <p><b>Player/Position:</b> {player_position}</p>
+            <p><b>Description:</b> {description}</p>
+            <p><b>Impact:</b> {impact}</p>
+            <p><b>Time Remaining:</b> {time_remaining}</p>
+            """
+        else:
+            # Format using full event data
+            title = event.get('title', '')
+            description = event.get('description', '')
+            target = event.get('selected_target', 'N/A')
+            impact = event.get('impact', '')
+            week = event.get('week', 0)
+            year = event.get('year', 0)
+            
+            # Get selected option details if available
+            option_desc = ""
+            if 'selected_option' in event and isinstance(event['selected_option'], dict):
+                option = event['selected_option']
+                option_desc = option.get('description', '')
+                
+            # Build rich HTML detail display
+            detail_html = f"""
+            <h3>{title}</h3>
+            <p><b>Player/Position:</b> {target}</p>
+            <p><b>Week/Year:</b> Week {week}, Year {year}</p>
+            <p><b>Description:</b> {description}</p>
+            """
+            
+            if option_desc:
+                detail_html += f"<p><b>Selected Option:</b> {option_desc}</p>"
+                
+            detail_html += f"""
+            <p><b>Effect Impact:</b> {impact}</p>
+            """
+            
+            # Add advice on how to track
+            detail_html += """
+            <p><b>How to track:</b> Make note of this effect and monitor the player's 
+            performance in Madden to see if it impacts the team.</p>
+            """
+        
+        # Set the formatted HTML
+        self.temp_details_text.setHtml(detail_html)
+    
+    def _on_season_effect_selected(self, current, previous):
+        """Handle selection change in season effects tree"""
+        if not current:
+            self.season_details_text.clear()
+            return
+            
+        # Get the event key and retrieve full event data
+        event_key = current.data(0, Qt.UserRole)
+        event = self.season_effects.get(event_key)
+        
+        if not event:
+            # Fallback to display if no event data stored
+            season_stage = current.parent().text(0) if current.parent() else current.text(0)
+            player_position = current.text(1)
+            effect_description = current.text(2)
+            impact = current.text(3)
+            
+            detail_html = f"""
+            <h3>{effect_description}</h3>
+            <p><b>Season Stage:</b> {season_stage}</p>
+            <p><b>Player/Position:</b> {player_position}</p>
+            <p><b>Impact:</b> {impact}</p>
+            """
+        else:
+            # Format using full event data
+            title = event.get('title', '')
+            description = event.get('description', '')
+            target = event.get('selected_target', 'N/A')
+            impact = event.get('impact', '')
+            
+            # Build rich HTML detail display
+            detail_html = f"""
+            <h3>{title}</h3>
+            <p><b>Player/Position:</b> {target}</p>
+            <p><b>Description:</b> {description}</p>
+            <p><b>Impact:</b> {impact}</p>
+            """
+        
+        # Set the formatted HTML
+        self.season_details_text.setHtml(detail_html) 
