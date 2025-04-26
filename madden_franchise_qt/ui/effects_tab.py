@@ -331,11 +331,6 @@ class EffectsTab(QWidget):
                 event_key = f"{target}_{title}_{event_year}"
                 item.setData(0, Qt.UserRole, event_key)
                 self.challenge_events[event_key] = event
-                
-                # Debug print to help diagnose issues
-                print(f"Season Challenge - {title} for {target}")
-                print(f"  Impact: {impact}")
-                print(f"  Reward set to: {reward}")
         
         # Sort by player/position
         self.challenges_tree.sortItems(0, Qt.AscendingOrder)
