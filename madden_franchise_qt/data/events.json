@@ -868,7 +868,8 @@
       "id": 27,
       "title": "Urban Meyer Scandal",
       "description": "Head coach caught in inappropriate behavior at a restaurant after not traveling with team.",
-      "impact": "HC suspended for the next 2 games. You must either sim your next game or only choose the first available suggested play each snap.",
+      "impact": "Head coach suspended for the next 2 games. You must either sim your next game or only choose the first available suggested play each snap.",
+      "target_options": ["HC"],
       "difficulty_weights": {
         "cupcake": 0,
         "rookie": 0.1,
