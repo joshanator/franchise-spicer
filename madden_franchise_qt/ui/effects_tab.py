@@ -39,6 +39,7 @@ class EffectsTab(QWidget):
         
         # Create individual tabs
         self._create_season_effects_tab()
+        self._create_season_challenges_tab()
         self._create_temporary_effects_tab()
         
         # Refresh button at the bottom
@@ -74,7 +75,35 @@ class EffectsTab(QWidget):
         self.season_tree.setAlternatingRowColors(True)
         layout.addWidget(self.season_tree)
         
-        self.tab_widget.addTab(scroll_area, "Season Effects - Unfinished")
+        self.tab_widget.addTab(scroll_area, "Season Effects - (not fully working)")
+    
+    def _create_season_challenges_tab(self):
+        """Create the tab for season challenges"""
+        challenges_tab = QWidget()
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(challenges_tab)
+        
+        # Layout for the season challenges tab
+        layout = QVBoxLayout(challenges_tab)
+        
+        # Season challenges tree
+        self.challenges_tree = QTreeWidget()
+        self.challenges_tree.setColumnCount(5)
+        self.challenges_tree.setHeaderLabels(["Player/Position", "Challenge", "Description", "Goal", "Reward/Consequence"])
+        
+        # Configure header
+        header = self.challenges_tree.header()
+        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.Stretch)
+        
+        self.challenges_tree.setAlternatingRowColors(True)
+        layout.addWidget(self.challenges_tree)
+        
+        self.tab_widget.addTab(scroll_area, "Season Challenges")
     
     def _create_temporary_effects_tab(self):
         """Create the tab for temporary effects"""
@@ -121,6 +150,7 @@ class EffectsTab(QWidget):
         
         # Process effects
         self._populate_season_effects(history, current_stage)
+        self._populate_season_challenges(history, current_week, current_year)
         self._populate_temporary_effects(history, current_week, current_year)
     
     def _populate_season_effects(self, history, current_stage):
@@ -175,6 +205,71 @@ class EffectsTab(QWidget):
                 event_item.setText(3, event['impact'])
         
         self.season_tree.expandAll()
+    
+    def _populate_season_challenges(self, history, current_week, current_year):
+        """Populate the season challenges tree
+        
+        Args:
+            history: The event history
+            current_week: The current week
+            current_year: The current year
+        """
+        self.challenges_tree.clear()
+        
+        # Look for events with category "season-challenge"
+        for event in history:
+            # We need to find events from the current year only
+            event_year = event.get('year', 0)
+            if event_year != current_year:
+                continue
+                
+            # Skip events with no impact
+            if not event.get('impact'):
+                continue
+                
+            # Check if this is a season challenge by category
+            category = event.get('category', '')
+            
+            # Only process events with season-challenge category
+            if category == "season-challenge":
+                title = event.get('title', '')
+                description = event.get('description', '')
+                target = event.get('selected_target', 'N/A')
+                impact = event.get('impact', '')
+                
+                # Extract goal and reward from the impact text if possible
+                goal = ""
+                reward = ""
+                
+                # Try to parse options for better details
+                if 'selected_option' in event and isinstance(event['selected_option'], dict):
+                    option = event['selected_option']
+                    description = option.get('description', description)
+                    impact = option.get('impact', impact)
+                
+                # Extract goal and reward from impact text
+                if "if" in impact.lower() and ":" not in impact:
+                    parts = impact.lower().split("if")
+                    if len(parts) > 1:
+                        condition_parts = parts[1].split(",")
+                        if len(condition_parts) > 0:
+                            goal = condition_parts[0].strip()
+                            reward = parts[0].strip()
+                else:
+                    # Simple approach - just display the impact
+                    goal = "Complete season challenge"
+                    reward = impact
+                
+                # Add to tree
+                item = QTreeWidgetItem(self.challenges_tree)
+                item.setText(0, target)
+                item.setText(1, title)
+                item.setText(2, description)
+                item.setText(3, goal)
+                item.setText(4, reward)
+        
+        # Sort by player/position
+        self.challenges_tree.sortItems(0, Qt.AscendingOrder)
     
     def _populate_temporary_effects(self, history, current_week, current_year):
         """Populate the temporary effects tree

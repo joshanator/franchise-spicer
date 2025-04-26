@@ -331,13 +331,13 @@
         "RB1"
       ],
       "difficulty_weights": {
-        "cupcake": 0.15,
-        "rookie": 0.3,
+        "cupcake": 0.4,
+        "rookie": 0.4,
         "pro": 0.4,
         "all-madden": 0.4,
         "diabolical": 0.4
       },
-      "category": "challenge",
+      "category": "season-challenge",
       "season_stages": [
         "pre-season",
         "regular-season-start"

@@ -515,7 +515,8 @@ class EventManager:
             'timestamp': datetime.now().isoformat(),
             'week': self.config['franchise_info']['current_week'],
             'year': self.config['franchise_info']['current_year'],
-            'selected_target': event.get('selected_target', 'N/A')  # Include player/position
+            'selected_target': event.get('selected_target', 'N/A'),  # Include player/position
+            'category': event.get('category', '')  # Include category for filtering by type
         }
         
         # Include is_temporary flag if present
