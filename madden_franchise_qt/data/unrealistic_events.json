@@ -353,7 +353,14 @@
                 "pro": 0.006,
                 "all-madden": 0.001,
                 "diabolical": 0.0001
-            }
+            },
+            "category": "boost",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end"
+            ]
         }
     ]
 }
