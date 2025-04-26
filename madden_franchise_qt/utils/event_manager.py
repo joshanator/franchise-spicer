@@ -48,6 +48,11 @@ class EventManager:
         if 'unrealistic_events_enabled' not in self.config:
             self.config['unrealistic_events_enabled'] = False
             self._save_config()
+            
+        # Set default adult content setting if not set yet
+        if 'adult_content_enabled' not in self.config:
+            self.config['adult_content_enabled'] = False
+            self._save_config()
     
     def _save_config(self):
         """Helper method to save config and attempt auto-save"""
@@ -90,14 +95,27 @@ class EventManager:
         """Enable or disable unrealistic events
         
         Args:
-            enabled: Boolean indicating whether unrealistic events should be enabled
-            
-        Returns:
-            bool: True if successful
+            enabled: True to enable, False to disable
         """
-        self.config['unrealistic_events_enabled'] = bool(enabled)
+        self.config['unrealistic_events_enabled'] = enabled
         self._save_config()
-        return True
+    
+    def is_adult_content_enabled(self):
+        """Check if adult content is enabled
+        
+        Returns:
+            bool: True if adult content is enabled, False otherwise
+        """
+        return self.config.get('adult_content_enabled', False)
+    
+    def set_adult_content_enabled(self, enabled):
+        """Enable or disable adult content
+        
+        Args:
+            enabled: True to enable, False to disable
+        """
+        self.config['adult_content_enabled'] = enabled
+        self._save_config()
     
     def update_franchise_info(self, team_name=None, week=None, year=None):
         """Update franchise information
@@ -208,6 +226,9 @@ class EventManager:
         current_season_stage = self.config.get('franchise_info', {}).get('season_stage', 'Pre-Season')
         allowed_stages = self._get_allowed_stages(current_season_stage)
         
+        # Get adult content setting
+        adult_content_enabled = self.config.get('adult_content_enabled', False)
+        
         # Filter standard events based on difficulty weights and season stage
         for event in self.events.get('events', []):
             # Check difficulty weight
@@ -217,8 +238,12 @@ class EventManager:
             event_stages = event.get('season_stages', ["any"])
             stage_match = any(stage in allowed_stages for stage in event_stages)
             
-            # If this event matches both difficulty and season stage, add to eligible events
-            if random.random() < weight and stage_match:
+            # Check adult content filter
+            is_adult = event.get('adult_content', False)
+            adult_content_allowed = adult_content_enabled or not is_adult
+            
+            # If this event matches difficulty, season stage, and adult content filter, add to eligible events
+            if random.random() < weight and stage_match and adult_content_allowed:
                 eligible_events.append(event)
         
         # Add unrealistic events if enabled
@@ -231,8 +256,12 @@ class EventManager:
                 event_stages = event.get('season_stages', ["any"])
                 stage_match = any(stage in allowed_stages for stage in event_stages)
                 
-                # If this event matches both difficulty and season stage, add to eligible events
-                if random.random() < weight and stage_match:
+                # Check adult content filter
+                is_adult = event.get('adult_content', False)
+                adult_content_allowed = adult_content_enabled or not is_adult
+                
+                # If this event matches difficulty, season stage, and adult content filter, add to eligible events
+                if random.random() < weight and stage_match and adult_content_allowed:
                     eligible_events.append(event)
         
         # Add custom events if available
@@ -245,8 +274,12 @@ class EventManager:
             event_stages = event.get('season_stages', ["any"])
             stage_match = any(stage in allowed_stages for stage in event_stages)
             
-            # If this event matches both difficulty and season stage, add to eligible events
-            if random.random() < weight and stage_match:
+            # Check adult content filter
+            is_adult = event.get('adult_content', False)
+            adult_content_allowed = adult_content_enabled or not is_adult
+            
+            # If this event matches difficulty, season stage, and adult content filter, add to eligible events
+            if random.random() < weight and stage_match and adult_content_allowed:
                 eligible_events.append(event)
         
         if not eligible_events:

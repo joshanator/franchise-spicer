@@ -348,6 +348,18 @@ class FranchiseTab(QWidget):
         unrealistic_events_layout.addStretch(1)  # Push checkbox to the left
         difficulty_layout.addLayout(unrealistic_events_layout)
         
+        # Add adult content checkbox
+        adult_content_layout = QHBoxLayout()
+        self.adult_content_checkbox = QCheckBox("Enable potentially adult content (We're talking rated T nothing crazy.)")
+        self.adult_content_checkbox.setMinimumHeight(30)
+        self.adult_content_checkbox.setToolTip("Include adult/mature content events in the event pool")
+        self.adult_content_checkbox.setTristate(False)  # Make it a two-state checkbox
+        self.adult_content_checkbox.setCheckState(Qt.Unchecked)  # Start unchecked
+        self.adult_content_checkbox.stateChanged.connect(self._toggle_adult_content)
+        adult_content_layout.addWidget(self.adult_content_checkbox)
+        adult_content_layout.addStretch(1)  # Push checkbox to the left
+        difficulty_layout.addLayout(adult_content_layout)
+        
         scroll_layout.addWidget(difficulty_group)
         
         # Save management section
@@ -513,12 +525,18 @@ class FranchiseTab(QWidget):
         # Get unrealistic events status
         unrealistic_events_enabled = self.event_manager.config.get('unrealistic_events_enabled', False)
         
+        # Get adult content status
+        adult_content_enabled = self.event_manager.config.get('adult_content_enabled', False)
+        
         # Set auto-save checkbox based on config
         # Don't block signals as we want this to trigger display update
         self.auto_save_checkbox.setCheckState(Qt.Checked if auto_save else Qt.Unchecked)
         
         # Set unrealistic events checkbox based on config
         self.unrealistic_events_checkbox.setCheckState(Qt.Checked if unrealistic_events_enabled else Qt.Unchecked)
+        
+        # Set adult content checkbox based on config
+        self.adult_content_checkbox.setCheckState(Qt.Checked if adult_content_enabled else Qt.Unchecked)
         
         # Update season stage display
         current_stage = franchise_info.get('season_stage', 'Pre-Season')
@@ -565,6 +583,9 @@ class FranchiseTab(QWidget):
                 
             if unrealistic_events_enabled:
                 status_flags.append("Unrealistic events ON")
+                
+            if adult_content_enabled:
+                status_flags.append("Adult content ON")
                 
             if status_flags:
                 label_text += f" ({', '.join(status_flags)})"
@@ -812,7 +833,7 @@ class FranchiseTab(QWidget):
         # In Qt, Checked=2, Unchecked=0, PartiallyChecked=1
         is_checked = (state == 2)
         
-        # Update the config
+        # Update the config directly
         self.event_manager.config['auto_save'] = is_checked
         self.event_manager.data_manager.save_config(self.event_manager.config)
         
@@ -824,9 +845,6 @@ class FranchiseTab(QWidget):
             if display_name.lower().endswith('.json'):
                 display_name = display_name[:-5]  # Remove the .json extension
             
-            # Get unrealistic events status
-            unrealistic_events_enabled = self.event_manager.config.get('unrealistic_events_enabled', False)
-            
             label_text = f"Current save file: {display_name}"
             
             # Add status flags
@@ -836,8 +854,13 @@ class FranchiseTab(QWidget):
             else:
                 status_flags.append("Auto-save OFF")
                 
-            if unrealistic_events_enabled:
+            # Add unrealistic events status if enabled
+            if self.event_manager.config.get('unrealistic_events_enabled', False):
                 status_flags.append("Unrealistic events ON")
+                
+            # Add adult content status if enabled
+            if self.event_manager.config.get('adult_content_enabled', False):
+                status_flags.append("Adult content ON")
                 
             if status_flags:
                 label_text += f" ({', '.join(status_flags)})"
@@ -927,6 +950,10 @@ class FranchiseTab(QWidget):
             if is_checked:
                 status_flags.append("Unrealistic events ON")
                 
+            # Check adult content status
+            if self.event_manager.config.get('adult_content_enabled', False):
+                status_flags.append("Adult content ON")
+                
             if status_flags:
                 label_text += f" ({', '.join(status_flags)})"
                 
@@ -936,4 +963,51 @@ class FranchiseTab(QWidget):
         if is_checked:
             self._show_status_message("Unrealistic events are now enabled.")
         else:
-            self._show_status_message("Unrealistic events are now disabled.") 
+            self._show_status_message("Unrealistic events are now disabled.")
+
+    def _toggle_adult_content(self, state):
+        """Toggle adult content feature
+        
+        Args:
+            state: The checkbox state
+        """
+        # In Qt, Checked=2, Unchecked=0, PartiallyChecked=1
+        is_checked = (state == 2)
+        
+        # Update the config directly
+        self.event_manager.config['adult_content_enabled'] = is_checked
+        self.event_manager.data_manager.save_config(self.event_manager.config)
+        
+        # Update save file label
+        save_file = self.event_manager.config.get('franchise_info', {}).get('save_file', '')
+        if save_file:
+            # Remove .json extension for display purposes
+            display_name = save_file
+            if display_name.lower().endswith('.json'):
+                display_name = display_name[:-5]  # Remove the .json extension
+            
+            # Get auto-save status
+            auto_save = self.event_manager.config.get('auto_save', False)
+            
+            label_text = f"Current save file: {display_name}"
+            
+            # Add status flags
+            status_flags = []
+            if auto_save:
+                status_flags.append("Auto-save ON")
+            else:
+                status_flags.append("Auto-save OFF")
+                
+            if is_checked:
+                status_flags.append("Adult content ON")
+                
+            if status_flags:
+                label_text += f" ({', '.join(status_flags)})"
+                
+            self.save_file_label.setText(label_text)
+        
+        # Show status message
+        if is_checked:
+            self._show_status_message("Adult content is now enabled.")
+        else:
+            self._show_status_message("Adult content is now disabled.") 

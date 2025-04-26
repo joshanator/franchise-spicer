@@ -917,6 +917,7 @@
       "title": "Aaron Rodgers Ayahuasca trip",
       "description": "{target} took a spiritual journey with Aaron Rodgers in the offseason",
       "impact": "{impact_text}",
+      "adult_content": true,
       "result_options": [
         {
           "impact_text": "Player claims to see the field in a new way. He gains +3 awareness, +2 throw under pressure.",
@@ -1515,9 +1516,10 @@
     },
     {
       "id": 48,
-      "title": "At practice this week, your team exposes that {target} went on a date with your daughter. Word is he might have gotten lucky.",
-      "description": "What will you do?",
+      "title": "What will you do?",
+      "description": "At practice this week, your team exposes that {target} went on a date with your daughter. Word is he might have gotten lucky.",
       "impact": "",
+      "adult_content": true,
       "options": [
         {
           "description": "Let it slide. Your daughter is a grown woman and can date who she wants.",

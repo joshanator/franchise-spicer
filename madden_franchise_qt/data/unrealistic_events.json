@@ -5,6 +5,7 @@
             "title": "A sketchy opportunity",
             "description": "A shady figure dressed in a trench coat approaches your {target} at a signature event and asks them to come see something in private. Your player looks to you for approval.",
             "impact": "Go with him and the shady figure to see what he has?",
+            "adult_content": true,
             "options": [
                 {
                     "description": "Nod and go with them.",
@@ -59,6 +60,7 @@
             "title": "Goodell's Casino: Cap hit roulette",
             "description": "In an imaginary casino commissioner Goodell stands and rolls some poker chips around in his hand. He looks at you and says I have an opportunity for you. Do you wanna play?",
             "impact": "Whats the game?",
+            "adult_content": true,
             "options": [
                 {
                     "description": "No thank you. I have no cap space to spare.",
