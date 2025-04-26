@@ -2854,11 +2854,11 @@
       ],
       "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
       "difficulty_weights": {
-        "cupcake": 0.02,
-        "rookie": 0.15,
-        "pro": 0.25,
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
         "all-madden": 0.35,
-        "diabolical": 0.45
+        "diabolical": 0.5
       },
       "category": "draft",
       "season_stages": [
@@ -2873,11 +2873,11 @@
       "impact": "You must select at least one player from {school} by the end of the 3rd round (unless no players from that school are available).",
       "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
       "difficulty_weights": {
-        "cupcake": 0.02,
-        "rookie": 0.1,
-        "pro": 0.2,
-        "all-madden": 0.3,
-        "diabolical": 0.4
+        "cupcake": 0,
+        "rookie": 0.08,
+        "pro": 0.15,
+        "all-madden": 0.25,
+        "diabolical": 0.35
       },
       "category": "draft",
       "season_stages": [

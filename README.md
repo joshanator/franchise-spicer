@@ -8,16 +8,21 @@
 
 A Python application that generates random events for Madden franchise mode to make gameplay more dynamic and unpredictable.
 
+## Features
+
 - Events impact players, coaches, and team circumstances
 - Adjustable difficulty levels to control event severity
 - Save and load franchise configurations
 - Track event history over multiple seasons
 - Manage your roster for accurate player references
+- Create and manage custom events
+- Cross-platform support (Windows, macOS, Linux)
 
 ## Requirements
 
 - Python 3.6+
 - PySide6 (Qt for Python)
+- appdirs (Cross-platform directory handling)
 
 ## Installation Options
 
@@ -36,13 +41,13 @@ cd franchise-spicer
 python3 run_madden_events.py
 ```
 
-This will automatically install PySide6 if needed and launch the application.
+This will automatically install PySide6 and appdirs if needed and launch the application.
 
 ### Option 2: Standalone Executable
 
 For users who prefer not to install Python, we provide standalone executable options:
 
-1. Download the latest release for your platform from the [Releases](https://github.com/yourusername/franchise-spicer/releases) page
+1. Download the latest release for your platform from the [Releases](https://github.com/joshanator/franchise-spicer/releases) page
 2. Extract the ZIP archive to any location
 3. Run the application:
    - Windows: Open the extracted folder and double-click the `.exe` file
@@ -89,6 +94,7 @@ The build script creates executables for all platforms, generating build instruc
 5. Implement the changes in your Madden game as indicated
 6. Update your roster in the Roster tab to keep it synchronized with your game
 7. View your event history in the History tab
+8. Create custom events in the Custom Events tab
 
 ## Event Difficulty
 
@@ -107,6 +113,10 @@ The difficulty setting affects the types of events that can occur:
 - Suspensions
 - Player callouts and challenges
 - Season-long performance challenges
+- Contract negotiations
+- Team chemistry situations
+- Staff and coaching changes
+- Unrealistic events (optional)
 
 ## Save File Location
 
@@ -121,7 +131,9 @@ The application stores save files and configuration data in the following locati
 
 ## Adding Custom Events
 
-You can add custom events by modifying the `events.json` file in the data directory.
+You can add, edit, and manage custom events directly within the application using the Custom Events tab. This provides a user-friendly interface for creating and organizing your own events.
+
+For more advanced users, you can also manually modify the `events.json` file in the data directory.
 
 ## Cross-Platform Support
 
@@ -145,8 +157,8 @@ For more details on the testing framework, see [./README_TESTS.md](./README_TEST
 
 ## Version History
 
-- **v0.1** - Initial release with complete event system and UI. some bugs
-- **v1.0** - Version adds a ton of events, features, testing
+- **v0.1** - Initial release with complete event system and UI
+- **v1.0** - Added custom events editor, unrealistic events, improved UI, and expanded event pools
 
 ## License
 
