@@ -238,6 +238,83 @@
                 "regular-season-mid",
                 "regular-season-end"
             ]
+        },
+        {
+            "id": 4,
+            "title": "The Monkey's Paw Contract",
+            "description": "A strange, hunched figure claiming to be an ancient agent approaches {target} with a special contract offer. 'One signature and I can grant what you most desire,' he whispers.",
+            "impact": "The agent slides a parchment contract toward your {target}. Do you let them sign?",
+            "target_options": ["all-players"],
+            "adult_content": true,
+            "options": [
+                {
+                    "description": "Absolutely not. This seems highly suspicious.",
+                    "impact": "You tear up the contract and send the agent away. Nothing happens, but you have a strange feeling you avoided something terrible."
+                },
+                {
+                    "description": "Let {target} sign the contract.",
+                    "impact": "The agent grins wickedly as your player signs. 'Now choose your blessing,' he says with a disturbing smile.",
+                    "options": [
+                        {
+                            "description": "Strength Beyond Measure",
+                            "impact": "Your {target} chooses physical power. The agent cackles.",
+                            "impact_random_options": {
+                                "Success! Your {target} gains +3 strength and becomes an unstoppable force.": 0.05,
+                                "The curse activates. Your {target} gains +2 strength but loses -2 speed.": 0.25,
+                                "The curse twists your wish. Your {target} gains +1 strength but ages 3 years instantly.": 0.25,
+                                "The curse backfires completely. Your {target} loses -2 strength and is injured for 4 weeks.": 0.30,
+                                "The contract dissolves in smoke and your {target} collapses. Your player develops a strange aversion to football fields and is out for the rest of the season.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Speed Like The Wind",
+                            "impact": "Your {target} chooses incredible speed. The agent rubs his hands together gleefully.",
+                            "impact_random_options": {
+                                "Success! Your {target} gains +3 speed and becomes lightning fast.": 0.05,
+                                "The curse activates. Your {target} gains +2 speed but loses -2 in catching/carrying (depending on position).": 0.30,
+                                "The curse twists your wish. Your {target} gains +1 speed but develops chronic hamstring issues, suffering random injuries throughout the season.": 0.25,
+                                "The curse backfires completely. Your {target} loses -2 speed and their awareness drops by 5 points.": 0.25,
+                                "The contract bursts into flames. Your {target} can no longer play in divisional games this season due to extreme fatigue that doctors can't explain.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Knowledge of The Game",
+                            "impact": "Your {target} requests football intelligence. The agent nods slowly with a sinister smile.",
+                            "impact_random_options": {
+                                "Success! Your {target} gains +5 to awareness and play recognition.": 0.05,
+                                "The curse activates. Your {target} gains +3 awareness but loses -2 to speed and -3 to acceleration as they overthink everything.": 0.30,
+                                "The curse twists your wish. Your {target} becomes obsessed with film study, gaining +2 awareness but missing one game every 3 weeks due to mental exhaustion (this season).": 0.25,
+                                "The curse backfires completely. Your {target} becomes paranoid that other teams know all their moves, losing -5 awareness.": 0.25,
+                                "The contract vanishes with a puff of smoke. Your {target} can now perfectly predict plays but freezes in big moments, he cannot play in primetime games or playoffs this season.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Career Longevity",
+                            "impact": "Your {target} asks for a longer career. The agent's eyes glow ominously.",
+                            "impact_random_options": {
+                                "Success! Your {target} stops aging entirely for the next 3 seasons (or de-ages 3 years).": 0.05,
+                                "The curse activates. Your {target} loses 1 year of age, but their development trait is now normal (any dev trait upgrade this season will be reset to normal).": 0.25,
+                                "The curse twists your wish. Your {target} gets a guaranteed 3 more years of playing (de-ages 3 years), but the lose their memory (awareness drops to 40).": 0.30,
+                                "The curse backfires completely. Your {target} rapidly ages 5 years and loses 50% of their contract value as their performance declines.": 0.25,
+                                "The contract dissolves into the air. Your {target} wakes up 3 years younger but without a contract. They are now a free agent and can sign with any team except yours for the rest of their career.": 0.15
+                            }
+                        }
+                    ]
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0,
+                "rookie": 0.01,
+                "pro": 0.05,
+                "all-madden": 0.075,
+                "diabolical": 0.1
+            },
+            "category": "gamble",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid"
+            ]
         }
     ]
 }
