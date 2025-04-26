@@ -689,8 +689,12 @@ class EventManager:
         )
     
     def reload_config(self):
-        """Reload the configuration"""
+        """Reload the configuration from the data manager"""
         self.config = self.data_manager.load_config()
+        
+        # Also reload events from the embedded file to ensure we always have the latest
+        self.events = self.data_manager.load_events()
+        self.unrealistic_events = self.data_manager.load_unrealistic_events()
     
     def reload_events(self):
         """Reload the events data"""

@@ -53,34 +53,118 @@ class DataManager:
             return self._create_default_config()
     
     def load_events(self):
-        """Load the events file
+        """Load the events file directly from the embedded resources
         
         Returns:
             dict: The events data
         """
-        if not os.path.exists(self.events_path):
-            return {"events": []}
+        # First try to find the embedded events file
+        source_events_path = None
         
-        try:
-            with open(self.events_path, 'r') as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return {"events": []}
+        if getattr(sys, 'frozen', False):
+            # For PyInstaller onedir mode
+            exe_path = os.path.abspath(sys.executable)
+            exe_dir = os.path.dirname(exe_path)
+            
+            # Try various locations
+            possible_paths = [
+                # PyInstaller's temp folder with bundled data (for onefile mode)
+                os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'events.json') if hasattr(sys, '_MEIPASS') else None,
+                # Adjacent to executable in the same directory (for onedir mode)
+                os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'events.json'),
+                # In parent directory (for macOS app bundles)
+                os.path.join(os.path.dirname(exe_dir), 'madden_franchise_qt', 'data', 'events.json'),
+                # Directly in the executable directory
+                os.path.join(exe_dir, 'events.json')
+            ]
+            
+            # Try each path
+            for path in possible_paths:
+                if path and os.path.exists(path):
+                    source_events_path = path
+                    print(f"Found embedded events.json at {path}")
+                    break
+        else:
+            # When running from source code, check in the source directory
+            potential_source = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'events.json')
+            if os.path.exists(potential_source):
+                source_events_path = potential_source
+        
+        # Load from the source if found
+        if source_events_path and os.path.exists(source_events_path):
+            try:
+                with open(source_events_path, 'r') as f:
+                    return json.load(f)
+            except json.JSONDecodeError:
+                print(f"Error decoding events file: {source_events_path}")
+        
+        # Fallback to user data directory if embedded file not found
+        if os.path.exists(self.events_path):
+            try:
+                with open(self.events_path, 'r') as f:
+                    return json.load(f)
+            except json.JSONDecodeError:
+                pass
+        
+        # If all else fails, return empty events
+        return {"events": []}
     
     def load_unrealistic_events(self):
-        """Load the unrealistic events file
+        """Load the unrealistic events file directly from the embedded resources
         
         Returns:
             dict: The unrealistic events data
         """
-        if not os.path.exists(self.unrealistic_events_path):
-            return {"unrealistic_events": []}
+        # First try to find the embedded events file
+        source_events_path = None
         
-        try:
-            with open(self.unrealistic_events_path, 'r') as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return {"unrealistic_events": []}
+        if getattr(sys, 'frozen', False):
+            # For PyInstaller onedir mode
+            exe_path = os.path.abspath(sys.executable)
+            exe_dir = os.path.dirname(exe_path)
+            
+            # Try various locations
+            possible_paths = [
+                # PyInstaller's temp folder with bundled data (for onefile mode)
+                os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'unrealistic_events.json') if hasattr(sys, '_MEIPASS') else None,
+                # Adjacent to executable in the same directory (for onedir mode)
+                os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'unrealistic_events.json'),
+                # In parent directory (for macOS app bundles)
+                os.path.join(os.path.dirname(exe_dir), 'madden_franchise_qt', 'data', 'unrealistic_events.json'),
+                # Directly in the executable directory
+                os.path.join(exe_dir, 'unrealistic_events.json')
+            ]
+            
+            # Try each path
+            for path in possible_paths:
+                if path and os.path.exists(path):
+                    source_events_path = path
+                    print(f"Found embedded unrealistic_events.json at {path}")
+                    break
+        else:
+            # When running from source code, check in the source directory
+            potential_source = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'unrealistic_events.json')
+            if os.path.exists(potential_source):
+                source_events_path = potential_source
+        
+        # Load from the source if found
+        if source_events_path and os.path.exists(source_events_path):
+            try:
+                with open(source_events_path, 'r') as f:
+                    return json.load(f)
+            except json.JSONDecodeError:
+                print(f"Error decoding unrealistic events file: {source_events_path}")
+        
+        # Fallback to user data directory if embedded file not found
+        if os.path.exists(self.unrealistic_events_path):
+            try:
+                with open(self.unrealistic_events_path, 'r') as f:
+                    return json.load(f)
+            except json.JSONDecodeError:
+                pass
+        
+        # If all else fails, return empty events
+        return {"unrealistic_events": []}
     
     def save_config(self, config):
         """Save the configuration data
@@ -277,50 +361,92 @@ class DataManager:
             return False, f"Error creating new franchise: {str(e)}", None, []
     
     def _ensure_events_file_exists(self, source_dir):
-        """Make sure events.json exists in the data directory
+        """Make sure events.json exists in the data directory and is up to date
         
         Args:
             source_dir: Original source directory to copy from if needed
         """
-        if not os.path.exists(self.events_path):
-            # Try to copy from the source directory or bundled resources
-            try:
-                # First check in the source directory
-                source_events_path = os.path.join(source_dir, 'data', 'events.json')
-                if os.path.exists(source_events_path):
-                    shutil.copy2(source_events_path, self.events_path)
-                    return
-                
-                # If running as executable, the file might be in a different location
-                if getattr(sys, 'frozen', False):
-                    # For PyInstaller onedir mode
-                    exe_path = os.path.abspath(sys.executable)
-                    exe_dir = os.path.dirname(exe_path)
-                    
-                    # Try various locations
-                    possible_paths = [
-                        # PyInstaller's temp folder with bundled data (for onefile mode)
-                        os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'events.json') if hasattr(sys, '_MEIPASS') else None,
-                        # Adjacent to executable in the same directory (for onedir mode)
-                        os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'events.json'),
-                        # In parent directory (for macOS app bundles)
-                        os.path.join(os.path.dirname(exe_dir), 'madden_franchise_qt', 'data', 'events.json'),
-                        # Directly in the executable directory
-                        os.path.join(exe_dir, 'events.json')
-                    ]
-                    
-                    # Try each path
-                    for path in possible_paths:
-                        if path and os.path.exists(path):
-                            shutil.copy2(path, self.events_path)
-                            print(f"Copied events.json from {path}")
-                            return
-                    
-                    print(f"Warning: Could not find events.json in any of the expected locations: {possible_paths}")
-            except Exception as e:
-                print(f"Warning: Could not copy events.json template: {e}")
+        source_events_path = None
+        source_events_found = False
+        
+        # Try to locate the source events file
+        try:
+            # First check in the source directory
+            potential_source = os.path.join(source_dir, 'data', 'events.json')
+            if os.path.exists(potential_source):
+                source_events_path = potential_source
+                source_events_found = True
             
-            # If we couldn't find the template, create a minimal one
+            # If running as executable, the file might be in a different location
+            if getattr(sys, 'frozen', False) and not source_events_found:
+                # For PyInstaller onedir mode
+                exe_path = os.path.abspath(sys.executable)
+                exe_dir = os.path.dirname(exe_path)
+                
+                # Try various locations
+                possible_paths = [
+                    # PyInstaller's temp folder with bundled data (for onefile mode)
+                    os.path.join(sys._MEIPASS, 'madden_franchise_qt', 'data', 'events.json') if hasattr(sys, '_MEIPASS') else None,
+                    # Adjacent to executable in the same directory (for onedir mode)
+                    os.path.join(exe_dir, 'madden_franchise_qt', 'data', 'events.json'),
+                    # In parent directory (for macOS app bundles)
+                    os.path.join(os.path.dirname(exe_dir), 'madden_franchise_qt', 'data', 'events.json'),
+                    # Directly in the executable directory
+                    os.path.join(exe_dir, 'events.json')
+                ]
+                
+                # Try each path
+                for path in possible_paths:
+                    if path and os.path.exists(path):
+                        source_events_path = path
+                        source_events_found = True
+                        print(f"Found events.json at {path}")
+                        break
+                
+                if not source_events_found:
+                    print(f"Warning: Could not find events.json in any of the expected locations: {possible_paths}")
+            
+            # Now determine if we should copy the file
+            should_copy = False
+            
+            # If the destination doesn't exist, we need to copy
+            if not os.path.exists(self.events_path):
+                should_copy = True
+            # If the source is newer than the destination, we should update
+            elif source_events_found:
+                # Compare modification times
+                source_mtime = os.path.getmtime(source_events_path)
+                dest_mtime = os.path.getmtime(self.events_path)
+                
+                if source_mtime > dest_mtime:
+                    print(f"Source events file is newer ({source_mtime} vs {dest_mtime}), updating...")
+                    should_copy = True
+                
+                # Also compare content to detect changes
+                if not should_copy:
+                    try:
+                        with open(source_events_path, 'r') as f_source:
+                            source_content = f_source.read()
+                        with open(self.events_path, 'r') as f_dest:
+                            dest_content = f_dest.read()
+                        
+                        if source_content != dest_content:
+                            print("Events file content has changed, updating...")
+                            should_copy = True
+                    except Exception as e:
+                        print(f"Error comparing file contents: {e}")
+            
+            # Copy if needed
+            if should_copy and source_events_found:
+                shutil.copy2(source_events_path, self.events_path)
+                print(f"Updated events.json from {source_events_path}")
+                return
+                
+        except Exception as e:
+            print(f"Warning: Error handling events.json file: {e}")
+        
+        # If we get here and the file still doesn't exist, create a minimal one
+        if not os.path.exists(self.events_path):
             print("Creating a minimal empty events.json file")
             with open(self.events_path, 'w') as f:
                 json.dump({"events": []}, f) 

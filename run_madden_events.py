@@ -8,6 +8,10 @@ import sys
 import traceback
 import importlib.util
 
+# Fix for Qt dialogs on macOS
+if sys.platform == 'darwin':
+    os.environ['QT_MAC_WANTS_LAYER'] = '1'
+
 # Set the directory to the root of the project
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)

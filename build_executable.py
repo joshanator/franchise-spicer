@@ -149,6 +149,20 @@ def build_executable():
         elif system == "Darwin":
             exe_dir = os.path.join(build_dir, f"{app_name}.app")
             exe_path = exe_dir  # For macOS, the .app folder is the executable
+            
+            # Create a boot script for macOS to fix pop-up dialogs
+            print("Creating macOS boot script to fix pop-up dialogs...")
+            boot_script_dir = os.path.join("build", app_name, "runtime_hooks")
+            os.makedirs(boot_script_dir, exist_ok=True)
+            
+            boot_script_path = os.path.join(boot_script_dir, "mac_fix.py")
+            with open(boot_script_path, "w") as f:
+                f.write("import os\n")
+                f.write("# Fix for Qt dialogs on macOS\n")
+                f.write("os.environ['QT_MAC_WANTS_LAYER'] = '1'\n")
+            
+            # Add the boot script to the command
+            cmd.extend(["--runtime-hook", boot_script_path])
         else:
             exe_dir = os.path.join(build_dir, app_name)
             exe_path = os.path.join(exe_dir, app_name)
