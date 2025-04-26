@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QSize, Signal, QRect
 from PySide6.QtGui import QFont, QIcon, QColor, QPixmap, QPainter, QPen
+from PySide6.QtWidgets import QApplication
 
 import json
 import os
@@ -48,6 +49,11 @@ class CustomEventsTab(QWidget):
         self.custom_events = []
         self._init_ui()
         self.current_event_index = -1
+        self.current_option_index = -1
+        self.current_result_index = -1
+        self.current_nested_option_index = -1
+        self.current_nested_suboption_index = -1
+        self.current_nested_random_impact_index = -1
         self.load_custom_events()
     
     def _init_ui(self):
@@ -209,6 +215,267 @@ class CustomEventsTab(QWidget):
         season_group.setLayout(season_layout)
         self.editor_layout.addWidget(season_group)
         
+        # Options (choices) section - MOVED ABOVE TARGET OPTIONS
+        options_group = QGroupBox("Event Options (Player Choices)")
+        options_layout = QVBoxLayout()
+        
+        # Options row for mutually exclusive choices
+        options_row = QHBoxLayout()
+        
+        self.has_options = QCheckBox("This event has player choices")
+        self.has_options.stateChanged.connect(self.toggle_options_section)
+        options_row.addWidget(self.has_options)
+        
+        # Add random results checkbox to options group
+        self.has_results = QCheckBox("This event has random results")
+        self.has_results.stateChanged.connect(self.toggle_results_section)
+        options_row.addWidget(self.has_results)
+        
+        options_layout.addLayout(options_row)
+        
+        # Create a widget to hold both the options list and results widgets
+        self.options_widget = QWidget()
+        self.options_layout = QVBoxLayout(self.options_widget)
+        
+        # Player choice options section
+        self.player_options_widget = QWidget()
+        player_options_layout = QVBoxLayout(self.player_options_widget)
+        
+        player_options_layout.addWidget(QLabel("Options:"))
+        self.options_list = QListWidget()
+        self.options_list.currentRowChanged.connect(self.on_option_selected)
+        player_options_layout.addWidget(self.options_list)
+        
+        options_btn_layout = QHBoxLayout()
+        
+        self.add_option_btn = QPushButton("Add Option")
+        self.add_option_btn.clicked.connect(self.add_option)
+        options_btn_layout.addWidget(self.add_option_btn)
+        
+        self.delete_option_btn = QPushButton("Delete Option")
+        self.delete_option_btn.clicked.connect(self.delete_option)
+        options_btn_layout.addWidget(self.delete_option_btn)
+        
+        player_options_layout.addLayout(options_btn_layout)
+        
+        # Option editor
+        self.option_editor = QWidget()
+        option_editor_layout = QVBoxLayout(self.option_editor)
+        
+        basic_option_layout = QFormLayout()
+        self.option_description = QLineEdit()
+        basic_option_layout.addRow("Option Text:", self.option_description)
+        
+        self.option_impact = QTextEdit()
+        self.option_impact.setMaximumHeight(80)
+        basic_option_layout.addRow("Option Impact:", self.option_impact)
+        
+        option_editor_layout.addLayout(basic_option_layout)
+        
+        # Random impact options
+        self.has_random_impacts = QCheckBox("This option has random outcomes")
+        self.has_random_impacts.stateChanged.connect(self.toggle_random_impacts)
+        option_editor_layout.addWidget(self.has_random_impacts)
+        
+        self.random_impacts_widget = QWidget()
+        random_impacts_layout = QVBoxLayout(self.random_impacts_widget)
+        
+        random_impacts_layout.addWidget(QLabel("Random Outcomes:"))
+        self.random_impacts_list = QListWidget()
+        self.random_impacts_list.currentRowChanged.connect(self.on_random_impact_selected)
+        random_impacts_layout.addWidget(self.random_impacts_list)
+        
+        random_impacts_btn_layout = QHBoxLayout()
+        self.add_random_impact_btn = QPushButton("Add Outcome")
+        self.add_random_impact_btn.clicked.connect(self.add_random_impact)
+        random_impacts_btn_layout.addWidget(self.add_random_impact_btn)
+        
+        self.delete_random_impact_btn = QPushButton("Delete Outcome")
+        self.delete_random_impact_btn.clicked.connect(self.delete_random_impact)
+        random_impacts_btn_layout.addWidget(self.delete_random_impact_btn)
+        
+        random_impacts_layout.addLayout(random_impacts_btn_layout)
+        
+        self.random_impact_editor = QWidget()
+        random_impact_editor_layout = QFormLayout(self.random_impact_editor)
+        
+        self.random_impact_text = QTextEdit()
+        self.random_impact_text.setMaximumHeight(80)
+        random_impact_editor_layout.addRow("Outcome Text:", self.random_impact_text)
+        
+        self.random_impact_probability = QDoubleSpinBox()
+        self.random_impact_probability.setRange(0, 1)
+        self.random_impact_probability.setSingleStep(0.05)
+        self.random_impact_probability.setDecimals(2)
+        random_impact_editor_layout.addRow("Probability:", self.random_impact_probability)
+        
+        random_impacts_layout.addWidget(self.random_impact_editor)
+        
+        # Nested options
+        self.has_nested_options = QCheckBox("This option has sub-options")
+        self.has_nested_options.stateChanged.connect(self.toggle_nested_options)
+        option_editor_layout.addWidget(self.has_nested_options)
+        
+        self.nested_options_widget = QWidget()
+        nested_options_layout = QVBoxLayout(self.nested_options_widget)
+        
+        nested_options_layout.addWidget(QLabel("Sub-Options:"))
+        self.nested_options_list = QListWidget()
+        self.nested_options_list.currentRowChanged.connect(self.on_nested_option_selected)
+        nested_options_layout.addWidget(self.nested_options_list)
+        
+        nested_options_btn_layout = QHBoxLayout()
+        self.add_nested_option_btn = QPushButton("Add Sub-Option")
+        self.add_nested_option_btn.clicked.connect(self.add_nested_option)
+        nested_options_btn_layout.addWidget(self.add_nested_option_btn)
+        
+        self.delete_nested_option_btn = QPushButton("Delete Sub-Option")
+        self.delete_nested_option_btn.clicked.connect(self.delete_nested_option)
+        nested_options_btn_layout.addWidget(self.delete_nested_option_btn)
+        
+        nested_options_layout.addLayout(nested_options_btn_layout)
+        
+        # Nested option editor - integrated into the same widget
+        self.nested_option_editor = QWidget()
+        nested_option_editor_layout = QVBoxLayout(self.nested_option_editor)
+        
+        nested_basic_layout = QFormLayout()
+        self.nested_option_description = QLineEdit()
+        nested_basic_layout.addRow("Sub-Option Text:", self.nested_option_description)
+        
+        self.nested_option_impact = QTextEdit()
+        self.nested_option_impact.setMaximumHeight(80)
+        nested_basic_layout.addRow("Sub-Option Impact:", self.nested_option_impact)
+        
+        nested_option_editor_layout.addLayout(nested_basic_layout)
+        
+        # Add support for deeper nesting (recursive sub-options)
+        self.has_nested_suboptions = QCheckBox("This sub-option has its own sub-options")
+        self.has_nested_suboptions.stateChanged.connect(self.toggle_nested_suboptions)
+        nested_option_editor_layout.addWidget(self.has_nested_suboptions)
+        
+        self.nested_suboptions_widget = QWidget()
+        nested_suboptions_layout = QVBoxLayout(self.nested_suboptions_widget)
+        
+        nested_suboptions_layout.addWidget(QLabel("Sub-Sub-Options:"))
+        self.nested_suboptions_list = QListWidget()
+        self.nested_suboptions_list.currentRowChanged.connect(self.on_nested_suboption_selected)
+        nested_suboptions_layout.addWidget(self.nested_suboptions_list)
+        
+        nested_suboptions_btn_layout = QHBoxLayout()
+        self.add_nested_suboption_btn = QPushButton("Add Sub-Sub-Option")
+        self.add_nested_suboption_btn.clicked.connect(self.add_nested_suboption)
+        nested_suboptions_btn_layout.addWidget(self.add_nested_suboption_btn)
+        
+        self.delete_nested_suboption_btn = QPushButton("Delete Sub-Sub-Option")
+        self.delete_nested_suboption_btn.clicked.connect(self.delete_nested_suboption)
+        nested_suboptions_btn_layout.addWidget(self.delete_nested_suboption_btn)
+        
+        nested_suboptions_layout.addLayout(nested_suboptions_btn_layout)
+        
+        nested_option_editor_layout.addWidget(self.nested_suboptions_widget)
+        
+        # Add support for random impacts in nested options too
+        self.has_nested_random_impacts = QCheckBox("This sub-option has random outcomes")
+        self.has_nested_random_impacts.stateChanged.connect(self.toggle_nested_random_impacts)
+        nested_option_editor_layout.addWidget(self.has_nested_random_impacts)
+        
+        self.nested_random_impacts_widget = QWidget()
+        nested_random_impacts_layout = QVBoxLayout(self.nested_random_impacts_widget)
+        
+        nested_random_impacts_layout.addWidget(QLabel("Random Outcomes:"))
+        self.nested_random_impacts_list = QListWidget()
+        self.nested_random_impacts_list.currentRowChanged.connect(self.on_nested_random_impact_selected)
+        nested_random_impacts_layout.addWidget(self.nested_random_impacts_list)
+        
+        nested_random_impacts_btn_layout = QHBoxLayout()
+        self.add_nested_random_impact_btn = QPushButton("Add Outcome")
+        self.add_nested_random_impact_btn.clicked.connect(self.add_nested_random_impact)
+        nested_random_impacts_btn_layout.addWidget(self.add_nested_random_impact_btn)
+        
+        self.delete_nested_random_impact_btn = QPushButton("Delete Outcome")
+        self.delete_nested_random_impact_btn.clicked.connect(self.delete_nested_random_impact)
+        nested_random_impacts_btn_layout.addWidget(self.delete_nested_random_impact_btn)
+        
+        nested_random_impacts_layout.addLayout(nested_random_impacts_btn_layout)
+        
+        self.nested_random_impact_editor = QWidget()
+        nested_random_impact_editor_layout = QFormLayout(self.nested_random_impact_editor)
+        
+        self.nested_random_impact_text = QTextEdit()
+        self.nested_random_impact_text.setMaximumHeight(80)
+        nested_random_impact_editor_layout.addRow("Outcome Text:", self.nested_random_impact_text)
+        
+        self.nested_random_impact_probability = QDoubleSpinBox()
+        self.nested_random_impact_probability.setRange(0, 1)
+        self.nested_random_impact_probability.setSingleStep(0.05)
+        self.nested_random_impact_probability.setDecimals(2)
+        nested_random_impact_editor_layout.addRow("Probability:", self.nested_random_impact_probability)
+        
+        nested_random_impacts_layout.addWidget(self.nested_random_impact_editor)
+        nested_option_editor_layout.addWidget(self.nested_random_impacts_widget)
+        
+        # Integrate the nested option editor directly below the list
+        nested_options_layout.addWidget(self.nested_option_editor)
+        
+        # Add the nested options widget to option editor layout
+        option_editor_layout.addWidget(self.nested_options_widget)
+        option_editor_layout.addWidget(self.random_impacts_widget)
+        
+        # Add the editor to the player options layout
+        player_options_layout.addWidget(self.option_editor)
+        
+        # Add the player options widget to the options layout
+        self.options_layout.addWidget(self.player_options_widget)
+        
+        # Results widget for event random results
+        self.results_widget = QWidget()
+        results_layout = QVBoxLayout(self.results_widget)
+        
+        results_layout.addWidget(QLabel("Possible Results:"))
+        self.results_list = QListWidget()
+        self.results_list.currentRowChanged.connect(self.on_result_selected)
+        results_layout.addWidget(self.results_list)
+        
+        results_btn_layout = QHBoxLayout()
+        self.add_result_btn = QPushButton("Add Result")
+        self.add_result_btn.clicked.connect(self.add_result)
+        results_btn_layout.addWidget(self.add_result_btn)
+        
+        self.delete_result_btn = QPushButton("Delete Result")
+        self.delete_result_btn.clicked.connect(self.delete_result)
+        results_btn_layout.addWidget(self.delete_result_btn)
+        
+        results_layout.addLayout(results_btn_layout)
+        
+        self.result_editor = QWidget()
+        result_editor_layout = QFormLayout(self.result_editor)
+        
+        self.result_text = QLineEdit()
+        result_editor_layout.addRow("Result Text:", self.result_text)
+        
+        self.impact_text = QTextEdit()
+        self.impact_text.setMaximumHeight(80)
+        result_editor_layout.addRow("Impact Text:", self.impact_text)
+        
+        self.result_probability = QDoubleSpinBox()
+        self.result_probability.setRange(0, 1)
+        self.result_probability.setSingleStep(0.05)
+        self.result_probability.setDecimals(2)
+        result_editor_layout.addRow("Probability:", self.result_probability)
+        
+        results_layout.addWidget(self.result_editor)
+        
+        # Add results widget to options widget
+        self.options_layout.addWidget(self.results_widget)
+        
+        # Finalize options group
+        self.options_widget.setLayout(self.options_layout)
+        options_layout.addWidget(self.options_widget)
+        
+        options_group.setLayout(options_layout)
+        self.editor_layout.addWidget(options_group)
+        
         # Target options
         target_group = QGroupBox("Target Options")
         target_layout = QVBoxLayout()
@@ -248,8 +515,8 @@ class CustomEventsTab(QWidget):
         positions = {
             "Offense QB": ["QB1", "QB2", "QB3"],
             "Offense RB": ["RB1", "RB2", "RB3", "FB1"],
-            "Offense WR": ["WR1", "WR2", "WR3", "WR4", "WR5"],
-            "Offense TE": ["TE1", "TE2", "TE3"],
+            "Offense WR": ["WR1", "WR2", "WR3", "WR4"],
+            "Offense TE": ["TE1", "TE2"],
             "Offense Line": ["LT1", "LT2", "LG1", "LG2", "C1", "C2", "RG1", "RG2", "RT1", "RT2"],
             "Defense Line": ["LE1", "LE2", "DT1", "DT2", "DT3", "RE1", "RE2"],
             "Defense LB": ["LOLB1", "LOLB2", "MLB1", "MLB2", "ROLB1", "ROLB2"],
@@ -307,47 +574,20 @@ class CustomEventsTab(QWidget):
         difficulty_group.setLayout(difficulty_layout)
         self.editor_layout.addWidget(difficulty_group)
         
-        # Options (choices) section
-        options_group = QGroupBox("Event Options (Player Choices)")
-        options_layout = QVBoxLayout()
-        
-        self.has_options = QCheckBox("This event has player choices")
-        self.has_options.stateChanged.connect(self.toggle_options_section)
-        options_layout.addWidget(self.has_options)
-        
-        self.options_widget = QWidget()
-        self.options_layout = QVBoxLayout(self.options_widget)
-        
-        self.options_list = QListWidget()
-        self.options_list.currentRowChanged.connect(self.on_option_selected)
-        self.options_layout.addWidget(QLabel("Options:"))
-        self.options_layout.addWidget(self.options_list)
-        
-        options_btn_layout = QHBoxLayout()
-        
-        self.add_option_btn = QPushButton("Add Option")
-        self.add_option_btn.clicked.connect(self.add_option)
-        options_btn_layout.addWidget(self.add_option_btn)
-        
-        self.delete_option_btn = QPushButton("Delete Option")
-        self.delete_option_btn.clicked.connect(self.delete_option)
-        options_btn_layout.addWidget(self.delete_option_btn)
-        
-        self.options_layout.addLayout(options_btn_layout)
-        
-        # Option editor
-        self.option_editor = QWidget()
-        option_editor_layout = QFormLayout(self.option_editor)
-        
-        self.option_description = QLineEdit()
-        option_editor_layout.addRow("Option Text:", self.option_description)
-        
-        self.option_impact = QTextEdit()
-        self.option_impact.setMaximumHeight(80)
-        option_editor_layout.addRow("Option Impact:", self.option_impact)
-        
-        self.options_layout.addWidget(self.option_editor)
+        # Initialize hidden widgets
         self.option_editor.hide()  # Hide until an option is selected
+        self.random_impacts_widget.hide()  # Hide until random impacts are enabled
+        self.random_impact_editor.hide()  # Hide until a random impact is selected
+        self.nested_options_widget.hide()  # Hide until nested options are enabled
+        self.nested_option_editor.hide()  # Hide until a nested option is selected
+        self.nested_suboptions_widget.hide()  # Hide until nested suboptions are enabled
+        self.nested_random_impacts_widget.hide()  # Hide until nested random impacts are enabled
+        self.nested_random_impact_editor.hide()  # Hide until a nested random impact is selected
+        
+        # Make sure these are initially hidden
+        self.player_options_widget.hide()
+        self.results_widget.hide()
+        self.options_widget.hide()
         
         self.options_widget.setLayout(self.options_layout)
         options_layout.addWidget(self.options_widget)
@@ -370,7 +610,35 @@ class CustomEventsTab(QWidget):
     
     def toggle_options_section(self, state):
         """Toggle visibility of the options section based on checkbox state"""
-        self.options_widget.setVisible(state == Qt.CheckState.Checked.value)
+        is_checked = state == Qt.CheckState.Checked.value
+        
+        # Make options and random results mutually exclusive
+        if is_checked:
+            self.has_results.setChecked(False)
+        
+        # Update visibility
+        self.options_widget.setVisible(is_checked)
+        self.player_options_widget.setVisible(is_checked)
+        self.results_widget.hide()
+        
+        # Force UI refresh
+        QApplication.processEvents()
+    
+    def toggle_results_section(self, state):
+        """Toggle visibility of the results section based on checkbox state"""
+        is_checked = state == Qt.CheckState.Checked.value
+        
+        # Make options and random results mutually exclusive
+        if is_checked:
+            self.has_options.setChecked(False)
+        
+        # Update visibility
+        self.options_widget.setVisible(is_checked)
+        self.results_widget.setVisible(is_checked)
+        self.player_options_widget.hide()
+        
+        # Force UI refresh
+        QApplication.processEvents()
     
     def enable_editor(self, enabled):
         """Enable or disable the event editor
@@ -380,6 +648,18 @@ class CustomEventsTab(QWidget):
         """
         self.editor_widget.setEnabled(enabled)
         self.save_event_btn.setEnabled(enabled)
+        
+        # Reset visibility of option sections when enabling/disabling editor
+        if enabled:
+            # Show only what's needed based on checkboxes
+            self.options_widget.setVisible(self.has_options.isChecked() or self.has_results.isChecked())
+            self.player_options_widget.setVisible(self.has_options.isChecked())
+            self.results_widget.setVisible(self.has_results.isChecked())
+        else:
+            # Hide all when disabling
+            self.options_widget.hide()
+            self.player_options_widget.hide()
+            self.results_widget.hide()
     
     def update_target_options(self, state):
         """Update target options based on selection state"""
@@ -616,6 +896,20 @@ class CustomEventsTab(QWidget):
         for difficulty, spinner in self.difficulty_weights.items():
             spinner.setValue(weights.get(difficulty, 0.2))
         
+        # Set result options
+        has_results = 'result_options' in event and isinstance(event['result_options'], list) and len(event['result_options']) > 0
+        self.has_results.setChecked(has_results)
+        self.results_widget.setVisible(has_results)
+        
+        if has_results:
+            self.results_list.clear()
+            self.result_editor.hide()
+            self.current_result_index = -1
+            
+            for result in event['result_options']:
+                result_text = result.get('result', 'Unnamed Result')
+                self.results_list.addItem(result_text)
+        
         # Set options - Fix for TypeError: convert to boolean explicitly
         has_options = False
         if 'options' in event:
@@ -623,14 +917,22 @@ class CustomEventsTab(QWidget):
                 has_options = True
         
         self.has_options.setChecked(has_options)
-        self.options_widget.setVisible(has_options)
         
-        self.options_list.clear()
-        self.option_editor.hide()
+        # Ensure proper visibility
+        self.options_widget.setVisible(has_options or has_results)
+        self.player_options_widget.setVisible(has_options)
+        self.results_widget.setVisible(has_results)
         
         if has_options:
+            self.options_list.clear()
+            self.option_editor.hide()
+            self.current_option_index = -1
+            
             for option in event['options']:
                 self.options_list.addItem(option.get('description', 'Unnamed Option'))
+        
+        # Force UI refresh
+        QApplication.processEvents()
         
         # Enable the editor
         self.enable_editor(True)
@@ -671,19 +973,194 @@ class CustomEventsTab(QWidget):
         """
         if row < 0 or self.current_event_index < 0 or not self.has_options.isChecked():
             self.option_editor.hide()
+            self.current_option_index = -1
             return
             
         event = self.custom_events[self.current_event_index]
         if 'options' not in event or row >= len(event['options']):
             self.option_editor.hide()
+            self.current_option_index = -1
             return
             
         option = event['options'][row]
+        self.current_option_index = row
         
         self.option_description.setText(option.get('description', ''))
         self.option_impact.setText(option.get('impact', ''))
         
+        # Check for random impacts
+        has_random_impacts = 'impact_random_options' in option and isinstance(option['impact_random_options'], dict)
+        self.has_random_impacts.setChecked(has_random_impacts)
+        self.random_impacts_widget.setVisible(has_random_impacts)
+        
+        if has_random_impacts:
+            self.random_impacts_list.clear()
+            for impact_text, probability in option['impact_random_options'].items():
+                self.random_impacts_list.addItem(f"{impact_text} ({probability:.2f})")
+        
+        # Check for nested options
+        has_nested_options = 'options' in option and isinstance(option['options'], list) and len(option['options']) > 0
+        self.has_nested_options.setChecked(has_nested_options)
+        self.nested_options_widget.setVisible(has_nested_options)
+        
+        if has_nested_options:
+            self.nested_options_list.clear()
+            for nested_option in option['options']:
+                self.nested_options_list.addItem(nested_option.get('description', 'Unnamed Sub-Option'))
+        
         self.option_editor.show()
+    
+    def on_random_impact_selected(self, row):
+        """Handle random impact selection in the list
+        
+        Args:
+            row: The row index of the selected random impact
+        """
+        if row < 0 or self.current_option_index < 0 or not self.has_random_impacts.isChecked():
+            self.random_impact_editor.hide()
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        
+        if 'impact_random_options' not in option:
+            self.random_impact_editor.hide()
+            return
+            
+        # Get the impact text and probability
+        impact_texts = list(option['impact_random_options'].keys())
+        if row >= len(impact_texts):
+            self.random_impact_editor.hide()
+            return
+            
+        impact_text = impact_texts[row]
+        probability = option['impact_random_options'][impact_text]
+        
+        self.random_impact_text.setText(impact_text)
+        self.random_impact_probability.setValue(probability)
+        
+        self.random_impact_editor.show()
+    
+    def on_nested_option_selected(self, row):
+        """Handle nested option selection in the list
+        
+        Args:
+            row: The row index of the selected nested option
+        """
+        if row < 0 or self.current_option_index < 0 or not self.has_nested_options.isChecked():
+            self.nested_option_editor.hide()
+            self.current_nested_option_index = -1
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        
+        if 'options' not in option or row >= len(option['options']):
+            self.nested_option_editor.hide()
+            self.current_nested_option_index = -1
+            return
+            
+        nested_option = option['options'][row]
+        self.current_nested_option_index = row
+        
+        self.nested_option_description.setText(nested_option.get('description', ''))
+        self.nested_option_impact.setText(nested_option.get('impact', ''))
+        
+        # Check for nested sub-options (recursive)
+        has_nested_suboptions = 'options' in nested_option and isinstance(nested_option['options'], list) and len(nested_option['options']) > 0
+        self.has_nested_suboptions.setChecked(has_nested_suboptions)
+        self.nested_suboptions_widget.setVisible(has_nested_suboptions)
+        
+        if has_nested_suboptions:
+            self.nested_suboptions_list.clear()
+            for suboption in nested_option['options']:
+                self.nested_suboptions_list.addItem(suboption.get('description', 'Unnamed Sub-Sub-Option'))
+        
+        # Check for random impacts in nested option
+        has_nested_random_impacts = 'impact_random_options' in nested_option and isinstance(nested_option['impact_random_options'], dict)
+        self.has_nested_random_impacts.setChecked(has_nested_random_impacts)
+        self.nested_random_impacts_widget.setVisible(has_nested_random_impacts)
+        
+        if has_nested_random_impacts:
+            self.nested_random_impacts_list.clear()
+            for impact_text, probability in nested_option['impact_random_options'].items():
+                self.nested_random_impacts_list.addItem(f"{impact_text} ({probability:.2f})")
+        
+        # Show editor (integrated in the same view instead of as a popup)
+        self.nested_option_editor.show()
+        
+        # Force UI refresh
+        QApplication.processEvents()
+    
+    def on_nested_suboption_selected(self, row):
+        """Handle nested sub-option selection in the list"""
+        if row < 0 or self.current_nested_option_index < 0 or not self.has_nested_suboptions.isChecked():
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        nested_option = option['options'][self.current_nested_option_index]
+        
+        if 'options' not in nested_option or row >= len(nested_option['options']):
+            return
+            
+        self.current_nested_suboption_index = row
+        # We could add more levels of editing here if needed
+    
+    def on_nested_random_impact_selected(self, row):
+        """Handle nested random impact selection in the list"""
+        if row < 0 or self.current_nested_option_index < 0 or not self.has_nested_random_impacts.isChecked():
+            self.nested_random_impact_editor.hide()
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        nested_option = option['options'][self.current_nested_option_index]
+        
+        if 'impact_random_options' not in nested_option:
+            self.nested_random_impact_editor.hide()
+            return
+            
+        # Get the impact text and probability
+        impact_texts = list(nested_option['impact_random_options'].keys())
+        if row >= len(impact_texts):
+            self.nested_random_impact_editor.hide()
+            return
+            
+        impact_text = impact_texts[row]
+        probability = nested_option['impact_random_options'][impact_text]
+        
+        self.nested_random_impact_text.setText(impact_text)
+        self.nested_random_impact_probability.setValue(probability)
+        
+        self.nested_random_impact_editor.show()
+        self.current_nested_random_impact_index = row
+    
+    def on_result_selected(self, row):
+        """Handle result selection in the list
+        
+        Args:
+            row: The row index of the selected result
+        """
+        if row < 0 or self.current_event_index < 0 or not self.has_results.isChecked():
+            self.result_editor.hide()
+            self.current_result_index = -1
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        if 'result_options' not in event or row >= len(event['result_options']):
+            self.result_editor.hide()
+            self.current_result_index = -1
+            return
+            
+        result = event['result_options'][row]
+        self.current_result_index = row
+        
+        self.result_text.setText(result.get('result', ''))
+        self.impact_text.setText(result.get('impact_text', ''))
+        self.result_probability.setValue(result.get('probability', 0.5))
+        
+        self.result_editor.show()
     
     def create_new_event(self):
         """Create a new custom event"""
@@ -698,7 +1175,7 @@ class CustomEventsTab(QWidget):
             'id': new_id,
             'title': 'New Custom Event',
             'description': 'This is a custom event. Edit this description.',
-            'impact': 'Define the impact of this event.',
+            'impact': 'Define the impact of this event. If impact is random or allow player choices add those at bottm of this page',
             'category': 'attribute',
             'enabled': True,
             'season_stages': ['pre-season', 'regular-season-mid'],
@@ -782,6 +1259,71 @@ class CustomEventsTab(QWidget):
         self.options_list.addItem(new_option['description'])
         self.options_list.setCurrentRow(len(event['options']) - 1)
     
+    def add_random_impact(self):
+        """Add a new random impact to the current option"""
+        if self.current_event_index < 0 or self.current_option_index < 0:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        
+        if 'impact_random_options' not in option:
+            option['impact_random_options'] = {}
+            
+        # Add a new random impact
+        new_impact = "New random outcome"
+        option['impact_random_options'][new_impact] = 0.5
+        
+        # Update the list
+        self.random_impacts_list.addItem(f"{new_impact} (0.50)")
+        self.random_impacts_list.setCurrentRow(len(option['impact_random_options']) - 1)
+    
+    def add_nested_option(self):
+        """Add a new nested option to the current option"""
+        if self.current_event_index < 0 or self.current_option_index < 0:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        
+        if 'options' not in option:
+            option['options'] = []
+            
+        # Add a new nested option
+        new_nested_option = {
+            'description': 'New Sub-Option',
+            'impact': 'Define the impact of this sub-option.'
+        }
+        
+        option['options'].append(new_nested_option)
+        
+        # Update the list
+        self.nested_options_list.addItem(new_nested_option['description'])
+        self.nested_options_list.setCurrentRow(len(option['options']) - 1)
+    
+    def add_result(self):
+        """Add a new result to the current event"""
+        if self.current_event_index < 0:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        
+        if 'result_options' not in event:
+            event['result_options'] = []
+            
+        # Add a new result
+        new_result = {
+            'result': 'New Result',
+            'impact_text': 'Define the impact of this result.',
+            'probability': 0.5
+        }
+        
+        event['result_options'].append(new_result)
+        
+        # Update the list
+        self.results_list.addItem(new_result['result'])
+        self.results_list.setCurrentRow(len(event['result_options']) - 1)
+    
     def delete_option(self):
         """Delete the currently selected option"""
         if self.current_event_index < 0:
@@ -811,6 +1353,108 @@ class CustomEventsTab(QWidget):
             
             # Hide option editor
             self.option_editor.hide()
+    
+    def delete_random_impact(self):
+        """Delete the currently selected random impact"""
+        if self.current_event_index < 0 or self.current_option_index < 0:
+            return
+            
+        row = self.random_impacts_list.currentRow()
+        if row < 0:
+            return
+            
+        # Ask for confirmation
+        reply = QMessageBox.question(
+            self, "Confirm Delete",
+            "Are you sure you want to delete this random outcome?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.No:
+            return
+            
+        # Remove the random impact
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        
+        if 'impact_random_options' in option:
+            impact_texts = list(option['impact_random_options'].keys())
+            if row < len(impact_texts):
+                del option['impact_random_options'][impact_texts[row]]
+                
+                # Update list
+                self.random_impacts_list.takeItem(row)
+                
+                # Hide editor if last item was removed
+                if len(option['impact_random_options']) == 0:
+                    del option['impact_random_options']
+                    self.random_impact_editor.hide()
+    
+    def delete_nested_option(self):
+        """Delete the currently selected nested option"""
+        if self.current_event_index < 0 or self.current_option_index < 0:
+            return
+            
+        row = self.nested_options_list.currentRow()
+        if row < 0:
+            return
+            
+        # Ask for confirmation
+        reply = QMessageBox.question(
+            self, "Confirm Delete",
+            "Are you sure you want to delete this sub-option?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.No:
+            return
+            
+        # Remove the nested option
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        
+        if 'options' in option and row < len(option['options']):
+            del option['options'][row]
+            
+            # Update list
+            self.nested_options_list.takeItem(row)
+            
+            # Hide editor if last item was removed
+            if len(option['options']) == 0:
+                del option['options']
+                self.nested_option_editor.hide()
+    
+    def delete_result(self):
+        """Delete the currently selected result"""
+        if self.current_event_index < 0:
+            return
+            
+        row = self.results_list.currentRow()
+        if row < 0:
+            return
+            
+        # Ask for confirmation
+        reply = QMessageBox.question(
+            self, "Confirm Delete",
+            "Are you sure you want to delete this result?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.No:
+            return
+            
+        # Remove the result
+        event = self.custom_events[self.current_event_index]
+        if 'result_options' in event and row < len(event['result_options']):
+            del event['result_options'][row]
+            
+            # Update list
+            self.results_list.takeItem(row)
+            
+            # Hide editor if last item was removed
+            if len(event['result_options']) == 0:
+                del event['result_options']
+                self.result_editor.hide()
     
     def save_current_event(self):
         """Save the current event"""
@@ -875,17 +1519,121 @@ class CustomEventsTab(QWidget):
             
         event['difficulty_weights'] = weights
         
+        # Handle result options
+        if self.has_results.isChecked():
+            # If there's a currently selected result, save its current state
+            if self.current_result_index >= 0:
+                if 'result_options' not in event:
+                    event['result_options'] = []
+                
+                if self.current_result_index < len(event['result_options']):
+                    result = event['result_options'][self.current_result_index]
+                    result['result'] = self.result_text.text()
+                    result['impact_text'] = self.impact_text.toPlainText()
+                    result['probability'] = self.result_probability.value()
+                    
+                    # Update display in the list
+                    self.results_list.item(self.current_result_index).setText(result['result'])
+        else:
+            # Remove results if the checkbox is unchecked
+            if 'result_options' in event:
+                del event['result_options']
+        
         # Handle options
         if self.has_options.isChecked():
             # If there's a currently selected option, save its current state
-            option_row = self.options_list.currentRow()
-            if option_row >= 0 and 'options' in event and option_row < len(event['options']):
-                option = event['options'][option_row]
-                option['description'] = self.option_description.text()
-                option['impact'] = self.option_impact.toPlainText()
+            if self.current_option_index >= 0:
+                if 'options' not in event:
+                    event['options'] = []
                 
-                # Update the display in the list
-                self.options_list.item(option_row).setText(option['description'])
+                if self.current_option_index < len(event['options']):
+                    option = event['options'][self.current_option_index]
+                    option['description'] = self.option_description.text()
+                    option['impact'] = self.option_impact.toPlainText()
+                    
+                    # Handle random impacts - we now support this together with nested options
+                    if self.has_random_impacts.isChecked():
+                        if self.random_impacts_list.currentRow() >= 0:
+                            # Save the current random impact
+                            if 'impact_random_options' not in option:
+                                option['impact_random_options'] = {}
+                            
+                            impact_texts = list(option.get('impact_random_options', {}).keys())
+                            current_row = self.random_impacts_list.currentRow()
+                            
+                            if current_row < len(impact_texts):
+                                old_impact_text = impact_texts[current_row]
+                                probability = option['impact_random_options'].pop(old_impact_text, 0.5)
+                                
+                                new_impact_text = self.random_impact_text.toPlainText()
+                                new_probability = self.random_impact_probability.value()
+                                
+                                option['impact_random_options'][new_impact_text] = new_probability
+                                
+                                # Update the list display
+                                self.random_impacts_list.item(current_row).setText(f"{new_impact_text} ({new_probability:.2f})")
+                    else:
+                        # Remove random impacts if the checkbox is unchecked
+                        if 'impact_random_options' in option:
+                            del option['impact_random_options']
+                    
+                    # Handle nested options - can coexist with random impacts now
+                    if self.has_nested_options.isChecked():
+                        if self.current_nested_option_index >= 0:
+                            # Save the current nested option
+                            if 'options' not in option:
+                                option['options'] = []
+                            
+                            if self.current_nested_option_index < len(option['options']):
+                                nested_option = option['options'][self.current_nested_option_index]
+                                nested_option['description'] = self.nested_option_description.text()
+                                nested_option['impact'] = self.nested_option_impact.toPlainText()
+                                
+                                # Handle nested sub-options (recursive)
+                                if self.has_nested_suboptions.isChecked():
+                                    # We don't need to save sub-sub-option details here
+                                    # as they're only edited/viewed, not changed in this form
+                                    pass
+                                else:
+                                    # Remove nested sub-options if the checkbox is unchecked
+                                    if 'options' in nested_option:
+                                        del nested_option['options']
+                                
+                                # Handle nested random impacts
+                                if self.has_nested_random_impacts.isChecked():
+                                    if self.current_nested_random_impact_index >= 0:
+                                        # Save the current nested random impact
+                                        if 'impact_random_options' not in nested_option:
+                                            nested_option['impact_random_options'] = {}
+                                        
+                                        impact_texts = list(nested_option.get('impact_random_options', {}).keys())
+                                        if self.current_nested_random_impact_index < len(impact_texts):
+                                            old_impact_text = impact_texts[self.current_nested_random_impact_index]
+                                            nested_option['impact_random_options'].pop(old_impact_text, 0.5)
+                                            
+                                            new_impact_text = self.nested_random_impact_text.toPlainText()
+                                            new_probability = self.nested_random_impact_probability.value()
+                                            
+                                            nested_option['impact_random_options'][new_impact_text] = new_probability
+                                            
+                                            # Update the list display
+                                            self.nested_random_impacts_list.item(self.current_nested_random_impact_index).setText(
+                                                f"{new_impact_text} ({new_probability:.2f})"
+                                            )
+                                else:
+                                    # Remove nested random impacts if checkbox is unchecked
+                                    if 'impact_random_options' in nested_option:
+                                        del nested_option['impact_random_options']
+                                
+                                # Update the list display
+                                self.nested_options_list.item(self.current_nested_option_index).setText(nested_option['description'])
+                    else:
+                        # Remove nested options if the checkbox is unchecked
+                        if 'options' in option:
+                            del option['options']
+                    
+                    # Update the display in the list
+                    self.options_list.item(self.current_option_index).setText(option['description'])
         else:
             # Remove options if the checkbox is unchecked
             if 'options' in event:
@@ -903,6 +1651,58 @@ class CustomEventsTab(QWidget):
         self.save_custom_events()
         
         QMessageBox.information(self, "Saved", "Event saved successfully!")
+    
+    def toggle_random_impacts(self, state):
+        """Toggle visibility of the random impacts section based on checkbox state"""
+        is_checked = state == Qt.CheckState.Checked.value
+        self.random_impacts_widget.setVisible(is_checked)
+        
+        # Make sub-options and random impacts mutually exclusive
+        if is_checked:
+            self.has_nested_options.setChecked(False)
+            self.nested_options_widget.setVisible(False)
+            self.nested_option_editor.hide()
+        
+        if state != Qt.CheckState.Checked.value:
+            self.random_impact_editor.hide()
+    
+    def toggle_nested_options(self, state):
+        """Toggle visibility of the nested options section based on checkbox state"""
+        is_checked = state == Qt.CheckState.Checked.value
+        self.nested_options_widget.setVisible(is_checked)
+        
+        # Make sub-options and random impacts mutually exclusive
+        if is_checked:
+            self.has_random_impacts.setChecked(False)
+            self.random_impacts_widget.setVisible(False)
+            self.random_impact_editor.hide()
+            
+        if state != Qt.CheckState.Checked.value:
+            self.nested_option_editor.hide()
+    
+    def toggle_nested_suboptions(self, state):
+        """Toggle visibility of the nested sub-options section based on checkbox state"""
+        is_checked = state == Qt.CheckState.Checked.value
+        self.nested_suboptions_widget.setVisible(is_checked)
+        
+        # Make sub-sub-options and random impacts mutually exclusive
+        if is_checked:
+            self.has_nested_random_impacts.setChecked(False)
+            self.nested_random_impacts_widget.setVisible(False)
+            self.nested_random_impact_editor.hide()
+    
+    def toggle_nested_random_impacts(self, state):
+        """Toggle visibility of the nested random impacts section based on checkbox state"""
+        is_checked = state == Qt.CheckState.Checked.value
+        self.nested_random_impacts_widget.setVisible(is_checked)
+        
+        # Make sub-sub-options and random impacts mutually exclusive
+        if is_checked:
+            self.has_nested_suboptions.setChecked(False)
+            self.nested_suboptions_widget.setVisible(False)
+            
+        if state != Qt.CheckState.Checked.value:
+            self.nested_random_impact_editor.hide()
     
     def show_help(self):
         """Show help dialog explaining custom events"""
@@ -943,4 +1743,135 @@ class CustomEventsTab(QWidget):
         </ul>
         """
         
-        QMessageBox.information(self, "Custom Events Help", help_text) 
+        QMessageBox.information(self, "Custom Events Help", help_text)
+
+    def add_nested_suboption(self):
+        """Add a new nested sub-option to the current nested option"""
+        if self.current_event_index < 0 or self.current_option_index < 0 or self.current_nested_option_index < 0:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        nested_option = option['options'][self.current_nested_option_index]
+        
+        if 'options' not in nested_option:
+            nested_option['options'] = []
+            
+        # Add a new nested sub-option
+        new_suboption = {
+            'description': 'New Sub-Sub-Option',
+            'impact': 'Define the impact of this sub-sub-option.'
+        }
+        
+        nested_option['options'].append(new_suboption)
+        
+        # Update the list
+        self.nested_suboptions_list.addItem(new_suboption['description'])
+        self.nested_suboptions_list.setCurrentRow(len(nested_option['options']) - 1)
+    
+    def delete_nested_suboption(self):
+        """Delete the currently selected nested sub-option"""
+        if (self.current_event_index < 0 or self.current_option_index < 0 or 
+            self.current_nested_option_index < 0 or self.current_nested_suboption_index < 0):
+            return
+            
+        # Ask for confirmation
+        reply = QMessageBox.question(
+            self, "Confirm Delete",
+            "Are you sure you want to delete this sub-sub-option?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.No:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        nested_option = option['options'][self.current_nested_option_index]
+        
+        if 'options' in nested_option and self.current_nested_suboption_index < len(nested_option['options']):
+            del nested_option['options'][self.current_nested_suboption_index]
+            
+            # Update list
+            self.nested_suboptions_list.takeItem(self.current_nested_suboption_index)
+            self.current_nested_suboption_index = -1
+            
+            # Remove options array if empty
+            if len(nested_option['options']) == 0:
+                del nested_option['options']
+    
+    def add_nested_random_impact(self):
+        """Add a new random impact to the current nested option"""
+        if self.current_event_index < 0 or self.current_option_index < 0 or self.current_nested_option_index < 0:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        nested_option = option['options'][self.current_nested_option_index]
+        
+        if 'impact_random_options' not in nested_option:
+            nested_option['impact_random_options'] = {}
+            
+        # Add a new random impact
+        new_impact = "New nested random outcome"
+        nested_option['impact_random_options'][new_impact] = 0.5
+        
+        # Update the list
+        self.nested_random_impacts_list.addItem(f"{new_impact} (0.50)")
+        self.nested_random_impacts_list.setCurrentRow(len(nested_option['impact_random_options']) - 1)
+    
+    def delete_nested_random_impact(self):
+        """Delete the currently selected nested random impact"""
+        if (self.current_event_index < 0 or self.current_option_index < 0 or 
+            self.current_nested_option_index < 0 or self.current_nested_random_impact_index < 0):
+            return
+            
+        # Ask for confirmation
+        reply = QMessageBox.question(
+            self, "Confirm Delete",
+            "Are you sure you want to delete this nested random outcome?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.No:
+            return
+            
+        event = self.custom_events[self.current_event_index]
+        option = event['options'][self.current_option_index]
+        nested_option = option['options'][self.current_nested_option_index]
+        
+        if 'impact_random_options' in nested_option:
+            impact_texts = list(nested_option['impact_random_options'].keys())
+            if self.current_nested_random_impact_index < len(impact_texts):
+                del nested_option['impact_random_options'][impact_texts[self.current_nested_random_impact_index]]
+                
+                # Update list
+                self.nested_random_impacts_list.takeItem(self.current_nested_random_impact_index)
+                self.current_nested_random_impact_index = -1
+                
+                # Remove impacts dict if empty
+                if len(nested_option['impact_random_options']) == 0:
+                    del nested_option['impact_random_options']
+                    self.nested_random_impact_editor.hide()
+    
+    def add_option(self):
+        """Add a new option to the current event"""
+        if self.current_event_index < 0:
+            return
+            
+        # Add option to the event
+        event = self.custom_events[self.current_event_index]
+        
+        if 'options' not in event:
+            event['options'] = []
+            
+        new_option = {
+            'description': 'New Option',
+            'impact': 'Define the impact of this option.'
+        }
+        
+        event['options'].append(new_option)
+        
+        # Update the list
+        self.options_list.addItem(new_option['description'])
+        self.options_list.setCurrentRow(len(event['options']) - 1) 

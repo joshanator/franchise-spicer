@@ -1,0 +1,113 @@
+{
+  "events": [
+    {
+      "id": 7,
+      "title": "New Custom Event",
+      "description": "This is a custom event. Edit this description.",
+      "impact": "Define the impact of this event.",
+      "category": "season-challenge",
+      "season_stages": [
+        "pre-season",
+        "regular-season-mid"
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.10000000000000002,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "enabled": true,
+      "options": [
+        {
+          "description": "New Option",
+          "impact": "Define the impact of this option.",
+          "options": [
+            {
+              "description": "New Sub-Option",
+              "impact": "Define the impact of this sub-option."
+            },
+            {
+              "description": "New Sub-Option",
+              "impact": "Define the impact of this sub-option."
+            }
+          ]
+        },
+        {
+          "description": "New Option",
+          "impact": "Define the impact of this option.",
+          "impact_random_options": {
+            "New random outcome": 0.5
+          }
+        }
+      ],
+      "is_temporary": false
+    },
+    {
+      "id": 8,
+      "title": "New Custom Event",
+      "description": "This is a custom event. Edit this description.",
+      "impact": "Define the impact of this event.",
+      "category": "attribute",
+      "enabled": false,
+      "season_stages": [
+        "pre-season",
+        "regular-season-mid"
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      }
+    },
+    {
+      "id": 9,
+      "title": "New Custom Event",
+      "description": "This is a custom event. Edit this description.",
+      "impact": "Define the impact of this event. If impact is random or allow player choices add those at bottm of this page",
+      "category": "season-challenge",
+      "enabled": true,
+      "season_stages": [
+        "pre-season",
+        "regular-season-mid"
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.0,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "options": [
+        {
+          "description": "New Option",
+          "impact": "Define the impact of this option.",
+          "options": [
+            {
+              "description": "New Sub-Option",
+              "impact": "Define the impact of this sub-option.",
+              "options": [
+                {
+                  "description": "New Sub-Sub-Option",
+                  "impact": "Define the impact of this sub-sub-option."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "is_temporary": false
+    }
+  ]
+}
