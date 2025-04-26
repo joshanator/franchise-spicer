@@ -2839,6 +2839,51 @@
         "regular-season-start",
         "regular-season-middle"
       ]
+    },
+    {
+      "id": 81,
+      "title": "Shut down that Pipeline!",
+      "description": "Due to {reason}, your team cannot draft players from {school}.",
+      "impact": "You are prohibited from selecting any players from {school} in this years draft.",
+      "reason_options": [
+        "academic integrity violations",
+        "institutional conflicts of interest",
+        "prior recruiting violations",
+        "past player development issues",
+        "performance enhancing substance scandals"
+      ],
+      "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
+      "difficulty_weights": {
+        "cupcake": 0.02,
+        "rookie": 0.15,
+        "pro": 0.25,
+        "all-madden": 0.35,
+        "diabolical": 0.45
+      },
+      "category": "draft",
+      "season_stages": [
+        "off-season",
+        "playoffs"
+      ]
+    },
+    {
+      "id": 82,
+      "title": "Build that Pipeline!",
+      "description": "Your owner has strong ties to {school} and demands you draft a player from there before the end of round 3.",
+      "impact": "You must select at least one player from {school} by the end of the 3rd round (unless no players from that school are available).",
+      "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
+      "difficulty_weights": {
+        "cupcake": 0.02,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "draft",
+      "season_stages": [
+        "off-season",
+        "playoffs"
+      ]
     }
   ]
 }

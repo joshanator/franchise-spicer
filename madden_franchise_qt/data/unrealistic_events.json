@@ -361,6 +361,52 @@
                 "regular-season-mid",
                 "regular-season-end"
             ]
+        },
+        {
+            "id": 6,
+            "title": "Free cupcake?",
+            "description": "You are walking down a street with {target} when you both see a cupcake sitting on the sidewalk. Your player will eat anything and lunges for it. Do you let them?",
+            "impact": "Is that safe to eat?",
+            "target_options": ["all-players"],
+            "options": [
+                {
+                    "description": "No! Bad! You dont eat food off the ground.",
+                    "impact": "Your player is properly scolded and you continue on your way. He looks at you with a disappointed look in his eyes. -1 to awareness."
+                },
+                {
+                    "description": "No. Ill get you some real food.",
+                    "impact": "You get your player some McDonalds and thats good enough for him. Nothing happens."
+                },
+                {
+                    "description": "Yea why not",
+                    "impact": "Your player eats the cupcake and immediately regrets it.",
+                    "impact_random_options": {
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -1 to every stat. The cupcake is cursed!": 0.02,
+                        "Growing boys need real food. Your player loses 2 inches of height.": 0.03,
+                        "Growing boys need real food. Your player loses an inch of height.": 0.1,
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -1 to 2 relevant stats of your choice. The cupcake is cursed!": 0.15,
+                        "Your player eats the cupcake and immediately regrets it. The player loses -1 speed permanently. Sugar Crash.": 0.15,
+                        "Your player eats the cupcake and immediately regrets it. Your player has a mid-life crisis and suddenly he is 1 year older. +1 age": 0.05,
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -10 awareness for the next game": 0.15,
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -5 speed and -5 acceleration for the next game": 0.1,
+                        "Your player eats the cupcake and somehow feels fine. Nothing happens.": 0.25
+                    }
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.0001,
+                "rookie": 0.001,
+                "pro": 0.006,
+                "all-madden": 0.01,
+                "diabolical": 0.1
+            },
+            "category": "debuff",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end"
+            ]
         }
     ]
 }

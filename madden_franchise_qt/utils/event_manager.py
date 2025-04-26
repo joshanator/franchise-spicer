@@ -478,7 +478,7 @@ class EventManager:
             print(f"Trainer impact: {trainer_impact}")
         
         # Handle simple random selection fields
-        for field_type in ['reason_options', 'round_options', 'games_options', 'penalty_options']:
+        for field_type in ['reason_options', 'round_options', 'games_options', 'penalty_options', 'position_options', 'school_options']:
             if field_type in processed_event:
                 chosen_value = random.choice(processed_event[field_type])
                 field_name = field_type.replace('_options', '')

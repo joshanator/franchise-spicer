@@ -54,6 +54,10 @@ def count_event_scenarios(event):
         # Account for position options
         if 'position_options' in event and event['position_options']:
             base_count *= len(event['position_options'])
+            
+        # Account for school options
+        if 'school_options' in event and event['school_options']:
+            base_count *= len(event['school_options'])
         
         # Account for trainer options and their impacts
         if 'trainer_options' in event and event['trainer_options']:
