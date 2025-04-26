@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QGroupBox, QTextEdit, QMessageBox,
-    QFrame, QSizePolicy, QDialog, QScrollArea, QInputDialog
+    QFrame, QSizePolicy, QDialog, QScrollArea, QInputDialog, QComboBox
 )
 from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QSize, QTimer
 from PySide6.QtGui import QFont, QColor, QPalette
@@ -65,18 +65,13 @@ class EventTab(QWidget):
         # Type selection (realistic vs unrealistic)
         type_layout = QHBoxLayout()
         type_layout.addWidget(QLabel("Event Type:"))
-        self.realistic_button = QPushButton("Realistic")
-        self.realistic_button.setCheckable(True)
-        self.realistic_button.setChecked(True)
-        self.unrealistic_button = QPushButton("Unrealistic")
-        self.unrealistic_button.setCheckable(True)
         
-        # Make buttons toggle each other
-        self.realistic_button.clicked.connect(lambda: self.unrealistic_button.setChecked(not self.realistic_button.isChecked()))
-        self.unrealistic_button.clicked.connect(lambda: self.realistic_button.setChecked(not self.unrealistic_button.isChecked()))
+        # Replace toggle buttons with dropdown
+        self.event_type_dropdown = QComboBox()
+        self.event_type_dropdown.addItem("Realistic")
+        self.event_type_dropdown.addItem("Unrealistic")
+        type_layout.addWidget(self.event_type_dropdown)
         
-        type_layout.addWidget(self.realistic_button)
-        type_layout.addWidget(self.unrealistic_button)
         debug_layout.addLayout(type_layout)
         
         # Trigger button
@@ -249,7 +244,7 @@ class EventTab(QWidget):
             pass
             
         # Determine event type
-        is_unrealistic = self.unrealistic_button.isChecked()
+        is_unrealistic = self.event_type_dropdown.currentText() == "Unrealistic"
         
         # Call the event manager to get the specific event
         event = self.event_manager.get_specific_event(event_id, is_unrealistic)
