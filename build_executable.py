@@ -377,9 +377,9 @@ def build_executable():
                 platforms = ["windows", "macos", "linux"]
                 for plat in platforms:
                     if plat == platform_name:
-                        f.write(f"✅ {plat.capitalize()}: Built successfully on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                        f.write(f"[BUILT] {plat.capitalize()}: Built successfully on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                     else:
-                        f.write(f"❌ {plat.capitalize()}: Not built yet. Run build_executable.py on a {plat.capitalize()} machine.\n")
+                        f.write(f"[NOT BUILT] {plat.capitalize()}: Not built yet. Run build_executable.py on a {plat.capitalize()} machine.\n")
                 
                 f.write("\nTo complete all builds, run this script on each platform type.\n")
                 f.write("Once all builds are complete, collect them in one place for distribution.\n")
