@@ -304,15 +304,24 @@ class EventTab(QWidget):
         # Update display
         self.event_title.setText(event.get('title', 'Unknown Event'))
         
+        # Get target if available for substitution
+        target = event.get('selected_target', '')
+        
         # Display description without impact information
         description = event.get('processed_description', event.get('description', ''))
+        # Substitute {target} in description if available
+        if target and '{target}' in description:
+            description = description.replace('{target}', target)
         self.description_text.setPlainText(description)
         
         # Display impact separately
-        self.impact_text.setPlainText(event.get('impact', ''))
+        impact = event.get('impact', '')
+        # Substitute {target} in impact if available
+        if target and '{target}' in impact:
+            impact = impact.replace('{target}', target)
+        self.impact_text.setPlainText(impact)
         
         # Set target if available
-        target = event.get('selected_target', '')
         if target:
             self.target_label.setText(target)
         else:
@@ -486,15 +495,24 @@ class EventTab(QWidget):
         # Update display
         self.event_title.setText(event.get('title', 'Unknown Event'))
         
+        # Get target if available for substitution
+        target = event.get('selected_target', '')
+        
         # Display description without impact information
         description = event.get('processed_description', event.get('description', ''))
+        # Substitute {target} in description if available
+        if target and '{target}' in description:
+            description = description.replace('{target}', target)
         self.description_text.setPlainText(description)
         
         # Display impact separately
-        self.impact_text.setPlainText(event.get('impact', ''))
+        impact = event.get('impact', '')
+        # Substitute {target} in impact if available
+        if target and '{target}' in impact:
+            impact = impact.replace('{target}', target)
+        self.impact_text.setPlainText(impact)
         
         # Set target if available
-        target = event.get('selected_target', '')
         if target:
             self.target_label.setText(target)
         else:
@@ -674,38 +692,6 @@ class EventTab(QWidget):
         if hasattr(main_window, 'effects_tab') and hasattr(main_window.effects_tab, 'refresh'):
             main_window.effects_tab.refresh()
     
-    def _process_impact_random_options(self, option):
-        """Process random impact options from an option
-        
-        Args:
-            option: The option with random impact options
-            
-        Returns:
-            The selected impact text
-        """
-        import random
-        
-        # Get the random impact options (dictionary with impact text as keys and probabilities as values)
-        impact_options = option.get('impact_random_options', {})
-        
-        # If no impact options are available, return the standard impact
-        if not impact_options:
-            return option.get('impact', '')
-        
-        # Extract the options and their weights
-        options = list(impact_options.keys())
-        weights = list(impact_options.values())
-        
-        # Select a random impact based on the provided weights
-        # random.choices returns a list, so we take the first item
-        selected_impact = random.choices(population=options, weights=weights, k=1)[0]
-        
-        # Show a status message with the randomly selected impact
-        self._show_status_message(f"Random outcome: {selected_impact}")
-        
-        # Return the selected impact
-        return selected_impact
-        
     def _show_options_dialog(self, event):
         """Show a dialog with options for the user to choose from and return the modified event
         
@@ -724,11 +710,20 @@ class EventTab(QWidget):
         # Create layout
         layout = QVBoxLayout(dialog)
         
+        # Get target if available for substitution
+        target = event.get('selected_target', '')
+        
         # Add event description
-        description = QLabel(event.get('processed_description', event.get('description', '')))
-        description.setWordWrap(True)
-        description.setStyleSheet("font-size: 12px; margin-bottom: 10px;")
-        layout.addWidget(description)
+        description = event.get('processed_description', event.get('description', ''))
+        
+        # Substitute {target} if target is available
+        if target and '{target}' in description:
+            description = description.replace('{target}', target)
+            
+        description_label = QLabel(description)
+        description_label.setWordWrap(True)
+        description_label.setStyleSheet("font-size: 12px; margin-bottom: 10px;")
+        layout.addWidget(description_label)
         
         # Create scroll area for options
         scroll = QScrollArea()
@@ -748,6 +743,10 @@ class EventTab(QWidget):
         options = event.get('options', [])
         for i, option in enumerate(options):
             option_text = option.get('processed_description', option.get('description', f"Option {i+1}"))
+            
+            # Substitute {target} in option text if target is available
+            if target and '{target}' in option_text:
+                option_text = option_text.replace('{target}', target)
             
             option_button = QPushButton(option_text)
             option_button.setStyleSheet("text-align: left; padding: 10px; font-size: 12px;")
@@ -772,8 +771,16 @@ class EventTab(QWidget):
             option_description = option.get('processed_description', option.get('description', ''))
             option_impact = option.get('impact', '')
 
+            # Substitute {target} in option description if target is available
+            if target and '{target}' in option_description:
+                option_description = option_description.replace('{target}', target)
+            
             if 'impact_random_options' in option:
-                option_impact = self._process_impact_random_options(option)
+                # Process impact random options and handle target substitution 
+                option_impact = self._process_impact_random_options(option, target)
+            elif target and '{target}' in option_impact:
+                # Substitute {target} in option impact if target is available
+                option_impact = option_impact.replace('{target}', target)
 
             # Save the selected option details for _accept_event to use
             event['selected_option'] = option_index
@@ -839,6 +846,43 @@ class EventTab(QWidget):
         
         return event
     
+    def _process_impact_random_options(self, option, target=''):
+        """Process random impact options from an option
+        
+        Args:
+            option: The option with random impact options
+            target: The target of the event, if any
+            
+        Returns:
+            The selected impact text
+        """
+        import random
+        
+        # Get the random impact options (dictionary with impact text as keys and probabilities as values)
+        impact_options = option.get('impact_random_options', {})
+        
+        # If no impact options are available, return the standard impact
+        if not impact_options:
+            return option.get('impact', '')
+        
+        # Extract the options and their weights
+        options = list(impact_options.keys())
+        weights = list(impact_options.values())
+        
+        # Select a random impact based on the provided weights
+        # random.choices returns a list, so we take the first item
+        selected_impact = random.choices(population=options, weights=weights, k=1)[0]
+        
+        # Substitute {target} in selected impact if target is available
+        if target and '{target}' in selected_impact:
+            selected_impact = selected_impact.replace('{target}', target)
+        
+        # Show a status message with the randomly selected impact
+        self._show_status_message(f"Random outcome: {selected_impact}")
+        
+        # Return the selected impact
+        return selected_impact
+    
     def _show_status_message(self, message, error=False):
         """Show a status message
         
@@ -884,18 +928,31 @@ class EventTab(QWidget):
                     # Update the target label
                     self.target_label.setText(target_display)
                     
-                    # Update description if it contains the position or old name
+                    # Update description if it contains the position, old name, or {target}
                     desc = self.description_text.toPlainText()
                     if self.player_position in desc:
                         desc = desc.replace(self.player_position, target_display)
                     if current_name and current_name in desc:
                         desc = desc.replace(current_name, player_name)
+                    if '{target}' in desc:
+                        desc = desc.replace('{target}', target_display)
                     self.description_text.setPlainText(desc)
+                    
+                    # Update impact if it contains the position, old name, or {target}
+                    impact = self.impact_text.toPlainText()
+                    if self.player_position in impact:
+                        impact = impact.replace(self.player_position, target_display)
+                    if current_name and current_name in impact:
+                        impact = impact.replace(current_name, player_name)
+                    if '{target}' in impact:
+                        impact = impact.replace('{target}', target_display)
+                    self.impact_text.setPlainText(impact)
                     
                     # Update the current event
                     self.current_event['selected_target'] = target_display
-                    # Store updated description in the event too
+                    # Store updated description and impact in the event too
                     self.current_event['processed_description'] = desc
+                    self.current_event['impact'] = impact
                 
                 # Show success message
                 action_verb = "updated" if current_name else "added"
@@ -922,6 +979,22 @@ class EventTab(QWidget):
             
             # Update the current event with the custom target
             self.current_event['selected_target'] = custom_target
+            
+            # Update description if it contains {target}
+            desc = self.description_text.toPlainText()
+            if '{target}' in desc:
+                desc = desc.replace('{target}', custom_target)
+                self.description_text.setPlainText(desc)
+                # Store updated description in the event too
+                self.current_event['processed_description'] = desc
+            
+            # Update impact if it contains {target}
+            impact = self.impact_text.toPlainText()
+            if '{target}' in impact:
+                impact = impact.replace('{target}', custom_target)
+                self.impact_text.setPlainText(impact)
+                # Store updated impact in the event too
+                self.current_event['impact'] = impact
             
             # Show success message
             self._show_status_message(f"Custom target set to '{custom_target}' for this event only")
