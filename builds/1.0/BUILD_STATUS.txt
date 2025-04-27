@@ -1,9 +1,0 @@
-Madden Franchise Generator v1.0 - Build Status
-==================================================
-
-❌ Windows: Not built yet. Run build_executable.py on a Windows machine.
-✅ Macos: Built successfully on 2025-04-26 23:24:57
-❌ Linux: Not built yet. Run build_executable.py on a Linux machine.
-
-To complete all builds, run this script on each platform type.
-Once all builds are complete, collect them in one place for distribution.

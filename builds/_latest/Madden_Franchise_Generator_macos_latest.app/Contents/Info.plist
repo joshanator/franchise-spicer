@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Madden Franchise Generator v1.0</string>
+	<string>Madden Franchise Generator v0.1</string>
 	<key>CFBundleExecutable</key>
-	<string>Madden Franchise Generator v1.0</string>
+	<string>Madden Franchise Generator v0.1</string>
 	<key>CFBundleIconFile</key>
-	<string>app_icon.icns</string>
+	<string>icon-windowed.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>Madden Franchise Generator v1.0</string>
+	<string>Madden Franchise Generator v0.1</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Madden Franchise Generator v1.0</string>
+	<string>Madden Franchise Generator v0.1</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
