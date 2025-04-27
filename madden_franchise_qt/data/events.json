@@ -2904,6 +2904,144 @@
         "regular-season-start",
         "regular-season-middle"
       ]
+    },
+    {
+      "id": 84,
+      "title": "Friday Night Lights",
+      "description": "A local high school has invited your {target} to give an inspirational speech to their struggling team.",
+      "impact": "Your player's leadership improves +2 awareness.",
+      "target_options": [ "all-players" ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.4,
+        "pro": 0.3,
+        "all-madden": 0.15,
+        "diabolical": 0.05
+      },
+      "category": "community",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-middle"
+      ]
+    },
+    {
+      "id": 85,
+      "title": "The Frozen Tundra",
+      "description": "A brutal cold front has arrived just in time for your playoff game. Temperatures will be near zero with wind chills well below that. Your {target} has never played in conditions this extreme and you are helping them prepare for the upcoming game.",
+      "impact": "How you prepare your {target} for the extreme cold could significantly impact their performance.",
+      "target_options": [ "all-players" ],
+      "options": [
+        {
+          "description": "Cold Weather Equipment",
+          "impact": "Equip your {target} with specialized cold-weather gear.",
+          "options": [
+            {
+              "description": "Cutting-Edge Thermal Technology",
+              "impact": "Invest in the latest high-tech cold weather gear that promises maximum warmth without restricting movement.",
+              "impact_random_options": {
+                "The gear works phenomenally! Your {target} stays warm and maintains full mobility. No negative effects from the cold for the upcoming game.": 0.35,
+                "The thermal technology helps, but not perfectly. Your {target} has -1 to Speed but otherwise performs normally in the cold conditions.": 0.40,
+                "The gear is too bulky despite the claims. Your {target} loses -1 to Agility, -1 to Speed, -1 acceleration for the upcoming game.": 0.15,
+                "The experimental technology burns your {target} and they are sent to the hospital. They are out for the next 2 games.": 0.10
+              }
+            },
+            {
+              "description": "Bare Arms, Cold Heart",
+              "impact": "Your {target} chooses to go minimal on cold gear to maintain complete mobility, showing toughness.",
+              "impact_random_options": {
+                "The mental toughness display works! Your {target} ignores the cold through sheer willpower and gains +2 to all physical attributes for the upcoming game as adrenaline kicks in.": 0.25,
+                "Your {target} handles it surprisingly well, maintaining normal performance and intimidating opponents with their toughness.": 0.35,
+                "The bravado backfires as the cold affects performance. Your {target} loses -1 to Agility, -1 to Speed, -1 acceleration for the upcoming game.": 0.30,
+                "This was a terrible idea. Your {target} develops mild frostbite on their extremities and they need to sit out the next game.": 0.10
+              }
+            },
+            {
+              "description": "Traditional Cold Weather Approach. Stick with the time-tested heavy layers, thermal socks, and hand warmers between plays.",
+              "impact": "Stick with the time-tested heavy layers, thermal socks, and hand warmers between plays.",
+              "impact_random_options": {
+                "The traditional approach works perfectly. Your {target} stays reasonably warm and performs normally in the upcoming game.": 0.60,
+                "The layering helps but slightly restricts movement. Your {target} loses -1 to Agility but otherwise performs normally in the upcoming game.": 0.25,
+                "The traditional gear isn't enough for these extreme conditions. Your {target} struggles with cold hands/feet and loses -1 to all skill attributes for the upcoming game.": 0.10,
+                "Your {target} overheats from too many layers and has to remove some mid-game, leading to temperature regulation issues throughout the contest. They cannot play the 2nd and 4th quarters.": 0.05
+              }
+            }
+          ]
+        },
+        {
+          "description": "Cold Weather Training",
+          "impact": "Prepare your {target} with specialized training for the conditions.",
+          "options": [
+            {
+              "description": "Ice Bath Conditioning",
+              "impact": "Subject your {target} to progressively colder ice baths leading up to the game to acclimate their body.",
+              "impact_random_options": {
+                "The conditioning works brilliantly! Your {target}'s body adapts to the cold and they gain +1 to all physical attributes in the next game.": 0.30,
+                "The ice bath training helps, but not completely. Your {target} performs normally despite the extreme cold.": 0.40,
+                "The training was too intense. Your {target} is physically acclimated but mentally dreading the cold, they sit out the next game.": 0.20,
+                "The extreme conditioning method backfires. Your {target} develops a cold/flu before the game and plays at diminished capacity (-30 to Stamina for the next game).": 0.10
+              }
+            },
+            {
+              "description": "Cold Weather Ball Handling",
+              "impact": "Focus specifically on handling a cold, hard football with reduced finger dexterity.",
+              "impact_random_options": {
+                "The specialized training pays huge dividends! Your {target} masters cold-weather ball handling and gains +2 to Catching/Carrying/Throwing Accuracy/Blockshed short (position appropriate) permanently.": 0.30,
+                "The focused training helps significantly. Your {target} gains +1 to Catching/Carrying/Throwing Accuracy/Blockshed short (position appropriate) permanently.": 0.45,
+                "The training helps somewhat but not completely. Your {target} performs normally despite the cold football.": 0.15,
+                "The training created overthinking. Your {target} becomes too conscious of their grip and loses -1 to Catching/Carrying/Throwing Accuracy/Blockshed short (position appropriate) permanently.": 0.10
+              }
+            }
+          ]
+        },
+        {
+          "description": "Mental Preparation",
+          "impact": "Focus on psychological strategies for dealing with the extreme cold.",
+          "options": [
+            {
+              "description": "Visualization Techniques",
+              "impact": "Your {target} works with a sports psychologist on visualizing performance in extreme cold.",
+              "impact_random_options": {
+                "The mental techniques work remarkably well! Your {target} remains completely focused despite the cold and gains +5 to Awareness for the upcoming game.": 0.40,
+                "The visualization helps your {target} stay mentally sharp. They gain +1 permanently.": 0.35,
+                "The techniques help somewhat but the reality of the cold is still shocking. Your {target} skips the first quarter to fully adjust to the conditions.": 0.15,
+                "They vizualize a cold and barren wasteland. One they could never survive in. They sit out the next game.": 0.10
+              }
+            },
+            {
+              "description": "Cold Weather Veterans' Advice",
+              "impact": "Connect your {target} with veterans who've mastered playing in extreme cold conditions.",
+              "impact_random_options": {
+                "The veteran advice provides invaluable insights! Your {target} adopts crucial techniques and gains +1 to Awareness and +1 to a key skill attribute permanently.": 0.35,
+                "The tips and tricks from veterans help your {target} prepare appropriately. They perform normally despite the extreme cold.": 0.40,
+                "Some of the advice conflicts and confuses your {target}. They overthink during the game and lose -5 to Awareness for the upcoming game.": 0.15,
+                "The veterans' horror stories about the cold create anxiety. Your {target} becomes overly concerned about the conditions and loses focus on gameplay -2 awareness permanently.": 0.10
+              }
+            },
+            {
+              "description": "Embrace the Elements",
+              "impact": "Philosophical approach - teach your {target} to embrace and love the cold as a competitive advantage.",
+              "impact_random_options": {
+                "Your {target} fully adopts the cold-warrior mentality! They thrive in the harsh conditions and gain +2 to all physical attributes for the upcoming game.": 0.25,
+                "The mindset shift works well. Your {target} sees the cold as their ally and gains +1 to Awareness and Play Recognition permanently.": 0.35,
+                "The philosophical approach helps mentally but doesn't change physical reality. Your {target} has great attitude but still suffers -1 to all physical attribute in the next game": 0.30,
+                "The approach backfires when the actual cold hits. Your {target} feels betrayed by their mental preparation and becomes frustrated during the game. He exits after the first quarter and does not return": 0.10
+              }
+            }
+          ]
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.02,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.18,
+        "diabolical": 0.25
+      },
+      "category": "gameplay",
+      "season_stages": [
+        "regular-season-end",
+        "playoffs"
+      ]
     }
   ]
 }
