@@ -266,6 +266,10 @@ class EventTab(QWidget):
         # Update the UI with the event information (code already exists in _roll_event)
         self.setUpdatesEnabled(False)
         
+        # Hide custom target button by default at the very beginning
+        if hasattr(self, 'add_custom_target_button'):
+            self.add_custom_target_button.setVisible(False)
+        
         # TODO: pull out into a function that updates current_event for all target references
         # Check if this event has a target player without a name
         has_player_target = False
@@ -318,7 +322,7 @@ class EventTab(QWidget):
         self.accept_button.setEnabled(True)
         self.reroll_button.setEnabled(True)
         
-        # If there's a player target, show the update name button
+        # If there's a player target, show the update name button and ensure custom target button is hidden
         if has_player_target:
             # Check if we already have the button, if not create it
             if not hasattr(self, 'update_player_name_button'):
@@ -347,6 +351,10 @@ class EventTab(QWidget):
             
             self.update_player_name_button.setVisible(True)
             
+            # Ensure custom target button is hidden when we have a player target
+            if hasattr(self, 'add_custom_target_button'):
+                self.add_custom_target_button.setVisible(False)
+            
             # Show a notification
             player_name = self.event_manager.config.get('roster', {}).get(self.player_position, "")
             if not player_name or not player_name.strip():
@@ -367,9 +375,16 @@ class EventTab(QWidget):
             if hasattr(self, 'update_player_name_button'):
                 self.update_player_name_button.setVisible(False)
             
-            # If target is N/A or empty, show the custom target button
-            if not target or target.strip() == "":
-                # Check if we already have the button, if not create it
+            # Determine if we should show the custom target button
+            show_custom_target_button = False
+            
+            # Only show custom target button if there's truly no target specified
+            if not target or target.strip() == "" or target.strip() == "N/A":
+                # No valid target found, so show the custom target button
+                show_custom_target_button = True
+            
+            # Check if we already have the button, if not create it
+            if show_custom_target_button:
                 if not hasattr(self, 'add_custom_target_button'):
                     self.add_custom_target_button = QPushButton("Add Custom Target")
                     self.add_custom_target_button.clicked.connect(self._add_custom_target)
@@ -400,7 +415,7 @@ class EventTab(QWidget):
                     error=False
                 )
             else:
-                # Has a target already, hide the custom target button
+                # Make sure the button is hidden if we determined no need for it
                 if hasattr(self, 'add_custom_target_button'):
                     self.add_custom_target_button.setVisible(False)
         
@@ -433,6 +448,10 @@ class EventTab(QWidget):
         # Start update - freeze layout to prevent jumbled appearance
         self.setUpdatesEnabled(False)
         
+        # Hide custom target button by default at the very beginning
+        if hasattr(self, 'add_custom_target_button'):
+            self.add_custom_target_button.setVisible(False)
+        
         # TODO: pull out into a function that updates current_event for all target references
         # Check if this event has a target player without a name
         has_player_target = False
@@ -485,7 +504,7 @@ class EventTab(QWidget):
         self.accept_button.setEnabled(True)
         self.reroll_button.setEnabled(True)
         
-        # If there's a player target, show the update name button
+        # If there's a player target, show the update name button and ensure custom target button is hidden
         if has_player_target:
             # Check if we already have the button, if not create it
             if not hasattr(self, 'update_player_name_button'):
@@ -514,6 +533,10 @@ class EventTab(QWidget):
             
             self.update_player_name_button.setVisible(True)
             
+            # Ensure custom target button is hidden when we have a player target
+            if hasattr(self, 'add_custom_target_button'):
+                self.add_custom_target_button.setVisible(False)
+            
             # Show a notification
             player_name = self.event_manager.config.get('roster', {}).get(self.player_position, "")
             if not player_name or not player_name.strip():
@@ -534,9 +557,16 @@ class EventTab(QWidget):
             if hasattr(self, 'update_player_name_button'):
                 self.update_player_name_button.setVisible(False)
             
-            # If target is N/A or empty, show the custom target button
-            if not target or target.strip() == "":
-                # Check if we already have the button, if not create it
+            # Determine if we should show the custom target button
+            show_custom_target_button = False
+            
+            # Only show custom target button if there's truly no target specified
+            if not target or target.strip() == "" or target.strip() == "N/A":
+                # No valid target found, so show the custom target button
+                show_custom_target_button = True
+            
+            # Check if we already have the button, if not create it
+            if show_custom_target_button:
                 if not hasattr(self, 'add_custom_target_button'):
                     self.add_custom_target_button = QPushButton("Add Custom Target")
                     self.add_custom_target_button.clicked.connect(self._add_custom_target)
@@ -567,7 +597,7 @@ class EventTab(QWidget):
                     error=False
                 )
             else:
-                # Has a target already, hide the custom target button
+                # Make sure the button is hidden if we determined no need for it
                 if hasattr(self, 'add_custom_target_button'):
                     self.add_custom_target_button.setVisible(False)
         
