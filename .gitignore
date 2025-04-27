@@ -44,7 +44,7 @@ madden_franchise_qt/saves/example\ bears.json
 ._*
 
 # Resources folder (except specific icon files that should be included)
-resources/*
+# resources/*
 # Uncomment the following lines when you add icons
 # !resources/app_icon.ico
 # !resources/app_icon.icns

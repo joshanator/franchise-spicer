@@ -304,13 +304,14 @@ def apply_football_theme(app):
     app.setStyleSheet(stylesheet)
 
 
-def main():
+def main(app=None):
     """Main application entry point"""
     # Set up environment
     setup_environment()
     
-    # Create application
-    app = QApplication(sys.argv)
+    # Create application if not provided
+    if app is None:
+        app = QApplication(sys.argv)
     
     # Reset config.json to defaults at startup
     app_dir = os.path.dirname(os.path.abspath(__file__))

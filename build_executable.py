@@ -30,6 +30,116 @@ def check_pyinstaller():
     else:
         print("PyInstaller is already installed.")
 
+def check_icon_tools():
+    """Check for and install necessary tools for icon conversion"""
+    if platform.system() == "Windows":
+        try:
+            import PIL
+            print("Pillow is already installed.")
+        except ImportError:
+            print("Installing Pillow for icon conversion...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "Pillow"])
+            print("Pillow successfully installed.")
+    elif platform.system() == "Darwin":  # macOS
+        # Check if we have the iconutil command (comes with macOS)
+        try:
+            subprocess.run(["which", "iconutil"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print("iconutil is available.")
+        except subprocess.CalledProcessError:
+            print("Warning: iconutil not found. This is needed for .icns conversion.")
+            print("Please ensure your macOS developer tools are installed.")
+            
+        # Install imagemagick if not present
+        try:
+            subprocess.run(["which", "convert"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print("ImageMagick is available.")
+        except subprocess.CalledProcessError:
+            print("ImageMagick not found. Please install it with:")
+            print("brew install imagemagick")
+            # We'll continue anyway, user can install later
+
+def create_platform_icons():
+    """Create platform-specific icons from the logo1.png file"""
+    logo_path = os.path.join("resources", "logo1.png")
+    if not os.path.exists(logo_path):
+        print(f"Warning: {logo_path} not found. Icons will not be created.")
+        return None, None, None
+    
+    print(f"Creating platform icons from {logo_path}...")
+    
+    # Paths for the platform-specific icons
+    ico_path = os.path.join("resources", "app_icon.ico")
+    icns_path = os.path.join("resources", "app_icon.icns")
+    png_path = os.path.join("resources", "app_icon.png")
+    
+    # Copy logo1.png to app_icon.png
+    shutil.copy2(logo_path, png_path)
+    print(f"Created {png_path}")
+    
+    system = platform.system()
+    
+    # Create Windows .ico
+    if system == "Windows":
+        try:
+            from PIL import Image
+            img = Image.open(logo_path)
+            # Create Windows icon with multiple sizes
+            img.save(ico_path, format='ICO', sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
+            print(f"Created {ico_path}")
+        except Exception as e:
+            print(f"Error creating .ico file: {e}")
+            ico_path = None
+    else:
+        # On non-Windows, just note that .ico can't be created
+        print("Note: .ico files can only be created on Windows.")
+        ico_path = None
+    
+    # Create macOS .icns
+    if system == "Darwin":  # macOS
+        try:
+            # Create a temporary iconset directory
+            iconset_dir = os.path.join("resources", "app.iconset")
+            os.makedirs(iconset_dir, exist_ok=True)
+            
+            # Generate different size icons
+            sizes = [16, 32, 64, 128, 256, 512, 1024]
+            for size in sizes:
+                output_name = f"icon_{size}x{size}.png"
+                output_path = os.path.join(iconset_dir, output_name)
+                subprocess.run([
+                    "sips", "-z", str(size), str(size), 
+                    logo_path, "--out", output_path
+                ], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                
+                # For Retina displays
+                if size <= 512:  # Don't create 2048x2048
+                    output_name_2x = f"icon_{size}x{size}@2x.png"
+                    output_path_2x = os.path.join(iconset_dir, output_name_2x)
+                    double_size = size * 2
+                    subprocess.run([
+                        "sips", "-z", str(double_size), str(double_size), 
+                        logo_path, "--out", output_path_2x
+                    ], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            
+            # Convert the iconset to icns
+            subprocess.run([
+                "iconutil", "-c", "icns", iconset_dir, 
+                "-o", icns_path
+            ], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            
+            # Remove the temporary iconset directory
+            shutil.rmtree(iconset_dir)
+            print(f"Created {icns_path}")
+        except Exception as e:
+            print(f"Error creating .icns file: {e}")
+            icns_path = None
+    else:
+        # On non-macOS, just note that .icns can't be created
+        print("Note: .icns files can only be created on macOS.")
+        icns_path = None
+    
+    return ico_path, icns_path, png_path
+
 def create_all_platform_directories(version):
     """Create directories for all platforms"""
     platforms = {
@@ -75,19 +185,22 @@ def build_executable():
     # Create directories for all platforms
     current_platform = create_all_platform_directories(version)
     
+    # Create platform-specific icons
+    ico_path, icns_path, png_path = create_platform_icons()
+    
     # Determine platform-specific settings
     system = platform.system()
     
     if system == "Windows":
-        icon_file = "app_icon.ico"
+        icon_file = ico_path if ico_path else None
         exe_extension = ".exe"
         platform_name = "windows"
     elif system == "Darwin":  # macOS
-        icon_file = "app_icon.icns"
+        icon_file = icns_path if icns_path else None
         exe_extension = ".app"
         platform_name = "macos"
     else:  # Linux
-        icon_file = "app_icon.png"
+        icon_file = png_path if png_path else None
         exe_extension = ""
         platform_name = "linux"
     
@@ -96,9 +209,6 @@ def build_executable():
     
     # Base name for the application with version
     app_name = f"Madden Franchise Generator v{version}"
-    
-    # Check if icon file exists, use default if not
-    icon_path = os.path.join("resources", icon_file) if os.path.exists(os.path.join("resources", icon_file)) else None
     
     # Pass version to the executable
     with open('madden_franchise_qt/version.py', 'w') as f:
@@ -121,12 +231,18 @@ def build_executable():
     # Include version.txt
     cmd.extend(["--add-data", f"version.txt{os.pathsep}."])
     
+    # Include the resources folder with logo
+    cmd.extend(["--add-data", f"resources{os.pathsep}resources"])
+    
     # Cleanup flag
     cmd.append("--clean")
     
     # Add icon if available
-    if icon_path:
-        cmd.extend(["--icon", icon_path])
+    if icon_file:
+        cmd.extend(["--icon", icon_file])
+        print(f"Using icon: {icon_file}")
+    else:
+        print("No platform-specific icon available, using default.")
     
     # Add the main script
     cmd.append("run_madden_events.py")
@@ -285,6 +401,9 @@ if __name__ == "__main__":
     
     # Check for PyInstaller
     check_pyinstaller()
+    
+    # Check for icon conversion tools
+    check_icon_tools()
     
     # Check if appdirs is installed
     if importlib.util.find_spec("appdirs") is None:

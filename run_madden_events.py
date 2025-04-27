@@ -33,7 +33,18 @@ try:
     
     # Import and run the application
     from madden_franchise_qt.main import main
-    main()
+    
+    # Import QApplication and QIcon to set app icon
+    from PySide6.QtWidgets import QApplication
+    from PySide6.QtGui import QIcon
+    
+    # Set app icon
+    app = QApplication(sys.argv)
+    icon_path = os.path.join(project_root, 'resources', 'logo1.png')
+    if os.path.exists(icon_path):
+        app.setWindowIcon(QIcon(icon_path))
+    
+    main(app)  # Pass the app instance to main
     
 except Exception as e:
     print(f"Error starting application: {e}")

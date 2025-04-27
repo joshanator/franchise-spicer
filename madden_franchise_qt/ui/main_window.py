@@ -44,6 +44,12 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"TheChumpiest's Franchise Event Generator v{self.version}")
         self.setMinimumSize(QSize(900, 700))
         
+        # Set window icon
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 
+                                'resources', 'logo1.png')
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+        
         # Initialize data managers
         app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.data_manager = DataManager(app_dir)
