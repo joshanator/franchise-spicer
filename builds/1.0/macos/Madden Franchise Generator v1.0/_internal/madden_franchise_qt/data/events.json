@@ -1,0 +1,3047 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Early Retirement",
+      "description": "{target} has decided to retire early due to {reason}.",
+      "impact": "Cut {target} from roster and drop stats to 0. (You may edit their contract beforehand to remove any remaining contract obligations)",
+      "target_options": [
+        "all-players"
+      ],
+      "reason_options": [
+        "injury concerns",
+        "family reasons",
+        "career change",
+        "mental health",
+        "CTE concerns",
+        "Losing passion for the game"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.01,
+        "all-madden": 0.04,
+        "diabolical": 0.08
+      },
+      "category": "roster",
+      "season_stages": [
+        "pre-season",
+        "regular-season-end",
+        "regular-season-start",
+        "off-season"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Draft Pick Penalty",
+      "description": "Team is penalized for {reason} and has their {round} round pick confiscated.",
+      "impact": "When your {round} pick (or next pick if available) comes up in the draft, select the lowest rated punter. You may remove garunteed money from contract before cutting him after the draft.",
+      "reason_options": [
+        "salary cap violation",
+        "tampering",
+        "illegal practice sessions",
+        "recruitment violations"
+      ],
+      "round_options": [
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.4,
+        "diabolical": 0.6
+      },
+      "category": "team",
+      "season_stages": [
+        "playoffs",
+        "off-season"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Franchise Tag Holdout",
+      "description": "Your player is pissed he was franchise tagged. They believe they deserve a new contract and they wont play until they get one.",
+      "impact": "If you have a player on a franchise tag they cannot play until a new contract is negotiated or they leave the team.",
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.3,
+        "all-madden": 0.6,
+        "diabolical": 0.9
+      },
+      "category": "contract",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Poor Conditioning",
+      "description": "{target} showed up to training camp with his belly hanging out and oreo crumbs on his practice jersey.",
+      "impact": "Lower stamina by 5, speed/acceleration by 1, and raise weight by 10",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.1,
+        "pro": 0.3,
+        "all-madden": 0.6,
+        "diabolical": 0.9
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Sprinter Challenge",
+      "description": "{target} challenged a famous sprinter to a race and {result}!",
+      "impact": "{impact_text}",
+      "target_options": [
+        "RB1",
+        "WR1",
+        "WR2",
+        "CB1",
+        "FS1"
+      ],
+      "result_options": [
+        {
+          "result": "won",
+          "impact_text": "Speed increases by 2",
+          "probability": 0.3
+        },
+        {
+          "result": "lost",
+          "impact_text": "Speed decreases by 1",
+          "probability": 0.7
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "random-challenge",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Coach's Pet",
+      "description": "{target} seen giving coach a back rub and telling him how great he is.",
+      "impact": "+1 permanent awareness boost and must start the next 2 weeks regardless of performance",
+      "target_options": [
+        "QB2",
+        "RB2",
+        "RB3",
+        "WR3",
+        "WR4",
+        "TE2",
+        "CB3",
+        "FS2",
+        "MLB2",
+        "ROLB2",
+        "LOLB2"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "lineup",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "PED Suspension",
+      "description": "{target} suspended for {games} games after testing positive for performance enhancing drugs.",
+      "impact": "{target} unavailable for specified number of games",
+      "target_options": [
+        "all-players"
+      ],
+      "games_options": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.8
+      },
+      "category": "suspension",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 8,
+      "title": "Betting Scandal",
+      "description": "{target} caught betting on games and suspended for {games} games.",
+      "impact": "{target} unavailable for specified number of games",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "TE1",
+        "LT1",
+        "LG1",
+        "C1",
+        "RG1",
+        "RT1",
+        "LE1",
+        "DT1",
+        "MLB1",
+        "CB1",
+        "FS1",
+        "SS1"
+      ],
+      "games_options": [
+        2,
+        5,
+        8
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.8
+      },
+      "category": "suspension",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 9,
+      "title": "Bad Influence",
+      "description": "Player seen waving gun around on live with Antonio Brown, causing coach to address quesitons in next press conference.",
+      "impact": "{target} loses -4 awareness and -5 predictability",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Wanna be like Mike",
+      "description": "{target} caught dunking basketball at local rec center",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Chew out your player and ban them from playing basketball. You dont injure yourself on my payroll.",
+          "impact": "They better listen.",
+          "impact_random_options": {
+            "Player ignores your warning and continues to play basketball. You suspend them for 4 games.": 0.3,
+            "Player ignores your warning and continues to they injure themeselves. They are out for the season.": 0.1,
+            "Player ignores your warning and continues to they injure themeselves. They are out for 2 games.": 0.1,
+            "Player ignores your warning and continues to they injure themeselves. They are out for 5 games.": 0.1,
+            "Player is chastised appropriately and promises to never play basketball again.": 0.4
+          }
+        },
+        {
+          "description": "Let them play basketball. They are a great player and will be fine.",
+          "impact": "Will it backfire?",
+          "impact_random_options": {
+            "It backfires. They injure themselves and are out for the season.": 0.1,
+            "It backfires. They injure themselves and are out for 2 games.": 0.4,
+            "It backfires. They injure themselves and are out for 5 games.": 0.2,
+            "Its fine. They continue to mess around without injuries.": 0.1,
+            "Its not just okay. But they get great conditioning and are better than ever. +3 Jumping, +1 Stamina": 0.2
+          }
+        },
+        {
+          "description": "Suspend them for 1 game. No tolerance on my team",
+          "impact": "They better listen.",
+          "impact_random_options": {
+            "Player ignores your warning and continues to play basketball. You suspend them for 4 games.": 0.1,
+            "Player ignores your warning and continues to they injure themeselves. They are out for 2 games.": 0.1,
+            "Player ignores your warning and continues to they injure themeselves. They are out for 5 games.": 0.1,
+            "Player is chastised appropriately and promises to never play basketball again.": 0.7
+          }
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Season Challenge",
+      "description": "{target} called himself 'Mr. 2K' and vowed to rush for 2,000 yards this season.",
+      "target_options": [
+        "RB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.4,
+        "pro": 0.4,
+        "all-madden": 0.4,
+        "diabolical": 0.4
+      },
+      "category": "season-challenge",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ],
+      "options": [
+        {
+          "description": "Support the challenge",
+          "impact": "If player reaches 2,000+ rushing yards, increase development trait by one level. If he reaches 2,000+ total yards but not rushing yards, no change. If he fails to reach 2,000 total yards, drop development trait by one level."
+        },
+        {
+          "description": "'More like Mr. 1K' - Set more realistic expectations",
+          "impact": "If player reaches 1,000+ rushing yards, they receive +1 Break Tackle and +1 Speed. If not, player gets -2 Speed and -2 Acceleration"
+        },
+        {
+          "description": "Discourage the challenge completely",
+          "impact": "Player becomes disgruntled and loses -2 Awareness"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Trade Deadline",
+      "description": "Your {target} has stated that they no longer want to play for the team. They have demanded a trade.",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "TE1",
+        "LT1",
+        "LG1",
+        "C1",
+        "RG1",
+        "RT1",
+        "LE1",
+        "DT1",
+        "MLB1",
+        "CB1",
+        "FS1",
+        "SS1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.7,
+        "diabolical": 0.9
+      },
+      "category": "trade",
+      "season_stages": [
+        "regular-season-mid"
+      ],
+      "options": [
+        {
+          "description": "Trade the player",
+          "impact": "Find the best available trade offer and accept it without countering"
+        },
+        {
+          "description": "Convince player to stay",
+          "impact": "Player stays on team but loses a step: -1 speed, -1 awareness"
+        },
+        {
+          "description": "Bench the player",
+          "impact": "Player sits out for atleast 5 games, then returns with -2 primary attribute, -2 awareness. Backup player receives +2 primary attribute, +1 awareness, +1 speed."
+        },
+        {
+          "description": "Release the player",
+          "impact": "Player is immediately cut from the team, incurring any cap penalties. Backup player receives +2 primary attribute, +1 awareness."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Deflategate 2.0",
+      "description": "Your {target} has been accused of tampering with game balls to gain a competitive advantage.",
+      "impact": "{target} suspended for 4 games and team loses a 1st round draft pick",
+      "target_options": [
+        "QB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.01,
+        "all-madden": 0.02,
+        "diabolical": 0.05
+      },
+      "category": "suspension",
+      "season_stages": [
+        "regular-season-end",
+        "playoffs"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 14,
+      "title": "Comeback Player",
+      "description": "{target} defies the odds and returns from a career-threatening situation and is returning stronger than ever.",
+      "impact": "{target} gains +1 to all physical attributes and moves up one development trait",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.05,
+        "pro": 0.01,
+        "all-madden": 0.005,
+        "diabolical": 0.001
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "A Russell Wilson Level Decline",
+      "description": "Your veteran {target} is showing signs of rapid decline.",
+      "impact": "{target} loses 3 points in throw power, accuracy, and awareness.",
+      "target_options": [
+        "QB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.15
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Contract Holdout",
+      "description": "Star {target} refuses to play without a raise and is sitting out.",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "DE1",
+        "CB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.25,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "contract",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ],
+      "options": [
+        {
+          "description": "Pay the player what they want",
+          "impact": "Player returns to team with a new contract at 20% higher salary and a pep to their step: +1 speed, +1 awareness"
+        },
+        {
+          "description": "Negotiate a smaller increase",
+          "impact": "Player returns with 10% higher salary"
+        },
+        {
+          "description": "Refuse to negotiate",
+          "impact": "Player sits out for 4 games, then returns with -5 awareness for remainder of season"
+        },
+        {
+          "description": "Trade the player",
+          "impact": "Must trade player immediately for best available offer"
+        },
+        {
+          "description": "Release the player",
+          "impact": "Player is immediately released from team, incurring any cap penalties. Backup player receives +1 primary attribute, +1 awareness."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Antonio Brown Exit",
+      "description": "{target} has a public meltdown during game, leaving the field shirtless and waving to fans.",
+      "impact": "{target} immediately released from team and cannot be re-signed",
+      "target_options": [
+        "WR1",
+        "WR2",
+        "CB1",
+        "RB1",
+        "TE1",
+        "FS1",
+        "SS1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.001,
+        "rookie": 0.005,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.2
+      },
+      "category": "roster",
+      "season_stages": [
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Concussion Protocol",
+      "description": "{target} has suffered multiple concussions and must sit out {games} games for health concerns.",
+      "impact": "{target} unavailable for specified games. -1 to awareness permanently.",
+      "target_options": [
+        "all-players"
+      ],
+      "games_options": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "injury",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 19,
+      "title": "Catching Balls for Dummies",
+      "description": "{position} spent the offseason training their catching skills with {trainer} and has shown remarkable improvement.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "RB1",
+        "RB2",
+        "WR1",
+        "WR2",
+        "WR3",
+        "WR4",
+        "TE1",
+        "TE2"
+      ],
+      "trainer_options": [
+        "Larry Fitzgerald",
+        "Marques Colston",
+        "Cooper Kupp",
+        "Santonio Holmes",
+        "Jakobi Meyers",
+        "Tony Gonzalez",
+        "Deandre Hopkins",
+        "Roddy White",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Larry Fitzgerald": "Player gains +1 catching, +1 to catch in traffic, +1 to spectacular catch. Am I elite now coach?",
+        "Marques Colston": "Player gains +1 to catch in traffic, +1 to spectacular catch. Am I elite now coach?",
+        "Cooper Kupp": "Player gains +1 to catch in traffic, +1 to catch. Am I elite now coach?",
+        "Santonio Holmes": "Player gains +2 to spectacular catch. Am I elite now coach?",
+        "Jakobi Meyers": "Player gains +1 to catch. Am I elite now coach?",
+        "Tony Gonzalez": "Player gains +12 to catch in traffic, +1 to catch. Am I elite now coach?",
+        "Deandre Hopkins": "Player gains +1 to catch in traffic, +1 to spectacular catch. Am I elite now coach?",
+        "Roddy White": "Player gains +1 to catch in traffic, +1 to catch. Am I elite now coach?",
+        "a renowned sport scientist": "Player gains +1 stamina, +1 to catch, +1 to catch in traffic. Am I elite now coach?",
+        "His high school football coach": "Player gains +1 to stamina, +1 to catch. Am I elite now coach?",
+        "His father": "Player gains +1 to catch. Daddy says I have the best hands in the league. What do you think coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.4,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Trench Training D",
+      "description": "{target} worked on hand techniques with {trainer} in the offseason.",
+      "impact": "{trainer_impact}",
+      "trainer_options": [
+        "Aaron Donald",
+        "Geno Atkins",
+        "Warren Sapp",
+        "Ndamukong Suh",
+        "Julius Peppers",
+        "Micheal Strahan",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Aaron Donald": "Player gains +3 to block shedding, +2 power moves, +1 finesse moves. Am I elite now coach?",
+        "Geno Atkins": "Player gains +1 to block shedding, +2 finesse moves. Am I elite now coach?",
+        "Warren Sapp": "Player gains +2 to block shedding, +2 power moves, +1 Awareness. Am I elite now coach?",
+        "Ndamukong Suh": "Player gains +1 to block shedding, +2 power moves, +1 Awareness, -5 predictability. Am I elite now coach?",
+        "Julius Peppers": "Player gains +1 Speed, +1 power moves, +1 finesse moves. Am I elite now coach?",
+        "Micheal Strahan": "Player gains +2 to block shedding, +2 power moves. Am I elite now coach?",
+        "a renowned sport scientist": "Player gains +1 to block shedding, +2 stamina, +1 strength. I paid the money to be elite now coach?",
+        "His high school football coach": "Player gains +1 to block shedding, +2 Stamina. Am I elite now coach?",
+        "His father": "Player gains -1 to block shedding, -2 to finesse moves, +2 Stamina, +1 Strength. Daddy says I'm elite now, right coach?"
+      },
+      "target_options": [
+        "LE1",
+        "LE2",
+        "RE1",
+        "RE2",
+        "DT1",
+        "DT2",
+        "DT3"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.2,
+        "pro": 0.15,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 21,
+      "title": "Social Media Drama",
+      "description": "Player has been liking tweets criticizing the coaching staff and team management.",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.25,
+        "pro": 0.5,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "options": [
+        {
+          "description": "Team meeting to address concerns",
+          "impact": "As a show of discipline, the player is benched for the next two games"
+        },
+        {
+          "description": "Fine the player",
+          "impact": "Player gets -2 to two primary attributes for 3 games"
+        },
+        {
+          "description": "Ignore the situation",
+          "impact": "Choose 2 random starters and give them -2 awareness."
+        },
+        {
+          "description": "One-on-one meeting with coach",
+          "impact": "Player receives +1 to Awareness. A random player on the team loses respect for the coaches and receives -3 to Awareness."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "title": "Harrison Butker Controversy",
+      "description": "Kicker made controversial political statements at a graduation ceremony causing team distraction.",
+      "target_options": [
+        "K1"
+      ],
+      "options": [
+        {
+          "description": "Cut your kicker, he is not worth the distraction",
+          "impact": "Player is released from team"
+        },
+        {
+          "description": "Suspend the player for 2 games.",
+          "impact": "That'll show him. Kicker is suspended for 2 games."
+        },
+        {
+          "description": "Stand up for your player",
+          "impact_random_options": {
+            "Ooh you really shouldnt have done that. He said some really suspect stuff. Kicker is supended by the league for 4 games. Your team puts you on leave for a week. You must either sim your next game or only choose the first available suggested play each snap.": 0.5,
+            "Your loyalty is admirable. Your kicker issues a public apology. He gains +3 to awareness from the confidence boost you gave him.": 0.5
+          }
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 23,
+      "title": "The Burrow - Chase Connection",
+      "description": "QB1 and WR1 spent entire offseason training together and building chemistry.",
+      "impact": "+5 to QB1 and WR1 awareness for the season",
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.4,
+        "pro": 0.3,
+        "all-madden": 0.2,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 24,
+      "title": "Hard Knocks Focus",
+      "description": "{target} has been featured prominently on Hard Knocks, bringing extra attention and pressure.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "TE1",
+        "DE1",
+        "MLB1",
+        "CB1",
+        "DT1",
+        "FS1",
+        "SS1"
+      ],
+      "result_options": [
+        {
+          "impact_text": "Player thrives under pressure. He gains +2 to all relevant attributes for first 4 games of regular season",
+          "probability": 0.5,
+          "result": "result_1"
+        },
+        {
+          "impact_text": "Player crumbles under pressure. He loses -2 to all relevant attributes for first 4 games of regular season",
+          "probability": 0.5,
+          "result": "result_2"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 25,
+      "title": "Jim Irsay Level Meddling",
+      "description": "Team owner has demanded {target} be benched for the next game regardless of performance.",
+      "impact": "Must bench specified player for next game",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "CB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "lineup",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 26,
+      "title": "Patrick Mahomes Voice",
+      "description": "{target} is suffering from voice issues and can't call audibles in the next game.",
+      "impact": "-10 awareness for next game, no hot routes or audibles allowed",
+      "target_options": [
+        "QB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end",
+        "playoffs"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 27,
+      "title": "Urban Meyer Scandal",
+      "description": "Head coach caught in inappropriate behavior at a restaurant after not traveling with team.",
+      "impact": "Head coach suspended for the next 2 games. You must either sim your next game or only choose the first available suggested play each snap.",
+      "target_options": ["HC"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 28,
+      "title": "Prime Workout",
+      "description": "Player trained at Deion Sanders' camp in the offseason.",
+      "impact": "+1 speed, +1 agility, +2 man coverage, +1 zone coverage",
+      "target_options": [
+        "CB1",
+        "CB2",
+        "FS1",
+        "SS1",
+        "WR1",
+        "WR2",
+        "WR3"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.3,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.02
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 29,
+      "title": "Aaron Rodgers Ayahuasca trip",
+      "description": "{target} took a spiritual journey with Aaron Rodgers in the offseason",
+      "impact": "{impact_text}",
+      "adult_content": true,
+      "result_options": [
+        {
+          "impact_text": "Player claims to see the field in a new way. He gains +3 awareness, +2 throw under pressure.",
+          "probability": 0.4,
+          "result": "result_1"
+        },
+        {
+          "impact_text": "Ayahuasca doesnt do anything for him. Just sounds like he's high. he loses -2 Awareness.",
+          "probability": 0.4,
+          "result": "result_2"
+        },
+        {
+          "impact_text": "Player absolutely bugs out on the retreat. He loses -6 Awareness",
+          "probability": 0.2,
+          "result": "result_3"
+        }
+      ],
+      "target_options": [
+        "QB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 30,
+      "title": "Taylor Swift Effect",
+      "description": "{target} is dating a celebrity and gaining mainstream attention.",
+      "impact": "{target} loses -5 to awareness due to distraction for 4 games",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end",
+        "playoffs"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 31,
+      "title": "Tyreek Hill Speed Challenge",
+      "description": "{target} challenged Tyreek Hill to a race and {result}.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "WR1",
+        "WR2",
+        "RB1",
+        "CB1",
+        "CB2",
+        "FS1",
+        "SS1"
+      ],
+      "result_options": [
+        {
+          "result": "won",
+          "impact_text": "+3 speed, +2 acceleration",
+          "probability": 0.2
+        },
+        {
+          "result": "lost but was close",
+          "impact_text": "+1 acceleration",
+          "probability": 0.3
+        },
+        {
+          "result": "lost badly",
+          "impact_text": "-1 speed, -1 acceleration",
+          "probability": 0.5
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "mini-challenge",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 32,
+      "title": "Deshaun Watson's Physical Trainers cant get a break",
+      "description": "{target} is involved in off-field misconduct and facing league suspension.",
+      "impact": "{target} suspended for 11 games and team fined $5 million (subtract from available cap)",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "suspension",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 33,
+      "title": "Bill Belichick Influence",
+      "description": "Defensive coordinator studied under Belichick and has implemented advanced schemes.",
+      "impact": "Choose one position group to receive +1 play recognition for the season",
+      "difficulty_weights": {
+        "cupcake": 0.6,
+        "rookie": 0.4,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 34,
+      "title": "Andy Reid BBQ",
+      "description": "Coach took entire offense to famous BBQ restaurant for team bonding.",
+      "impact": "Starting Offensive line +3 to run/pass block, starting skill positions -1 speed due to weight gain",
+      "difficulty_weights": {
+        "cupcake": 0.6,
+        "rookie": 0.5,
+        "pro": 0.4,
+        "all-madden": 0.25,
+        "diabolical": 0.1
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 35,
+      "title": "EDGE Training",
+      "description": "{target} worked on pass rush techniques with {trainer} in the offseason.",
+      "impact": "{trainer_impact}",
+      "trainer_options": [
+        "Dwight Freeney",
+        "T.J. Watt",
+        "Von Miller",
+        "Khalil Mack",
+        "Clay Matthews",
+        "Chandler Jones",
+        "Demarcus Ware",
+        "Lawrence Taylor",
+        "Micah Parsons",
+        "His father",
+        "His high school football coach",
+        "a renowned sport scientist"
+      ],
+      "trainer_impacts": {
+        "Dwight Freeney": "Player gains +1 to Finesse moves, +1 speed, +1 acceleration, and gains the spin move. Ready to lead the league in sacks, coach?",
+        "T.J. Watt": "Player gains +1 to power moves, +1 to block shedding. Ready to lead the league in sacks, coach?",
+        "Von Miller": "Player gains +2 to finesse moves, +1 to acceleration. Ready to lead the league in sacks, coach?",
+        "Khalil Mack": "Player gains +2 to power moves, +2 to Strength, gains the bull rush move. Ready to lead the league in sacks, coach?",
+        "Clay Matthews": "Player gains +1 to finesse moves, +1 to block shedding, +1 to awareness. Ready to lead the league in sacks, coach?",
+        "Chandler Jones": "Player gains +1 to finesse moves, +1 to power moves, +1 to pursuit. Ready to lead the league in sacks, coach?",
+        "Demarcus Ware": "Player gains +2 to power moves, +2 to finesse moves, +1 to acceleration. Ready to lead the league in sacks, coach?",
+        "Lawrence Taylor": "Player gains +2 to power moves, +2 to hit power, +1 to pursuit. Ready to lead the league in sacks, coach?",
+        "Micah Parsons": "Player gains 1 to speed, +1 to finesse moves, +1 to acceleration. Ready to lead the league in sacks, coach?",
+        "His father": "Player gains -1 to power moves, -1 to finesse moves, +1 to block shedding, +2 stamina, +1 strength. Daddy says im ready to lead the league in sacks, right coach?",
+        "His high school football coach": "Player gains +1 to block shedding, +1 to stamina. Ready to lead the league in sacks, coach?",
+        "a renowned sport scientist": "Player gains +1 to power moves, +1 to finesse moves, +1 to stamina. Ready to lead the league in sacks, coach?"
+      },
+      "target_options": [
+        "LE1",
+        "LE2",
+        "RE1",
+        "RE2",
+        "LOLB1",
+        "LOLB2",
+        "ROLB1",
+        "ROLB2"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 36,
+      "title": "Travis Kelce Podcast",
+      "description": "{target} launched a podcast and is spending time recording instead of studying film.",
+      "impact": "-2 awareness",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 37,
+      "title": "Justin Tucker Challenge",
+      "description": "Kicker challenged to make a 65+ yard field goal in practice with team watching. and he {result}",
+      "impact": "{impact_text}",
+      "target_options": [
+        "K1"
+      ],
+      "result_options": [
+        {
+          "result": "made it",
+          "impact_text": "+3 kick power, +2 accuracy",
+          "probability": 0.2
+        },
+        {
+          "result": "DOINK'd it",
+          "impact_text": "+1 kick power, -2 awareness",
+          "probability": 0.1
+        },
+        {
+          "result": "Had the distance but missed it",
+          "impact_text": "+1 kick power, -2 accuracy",
+          "probability": 0.3
+        },
+        {
+          "result": "missed it",
+          "impact_text": "-3 kick power, -2 accuracy",
+          "probability": 0.4
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.5,
+        "pro": 0.5,
+        "all-madden": 0.5,
+        "diabolical": 0.5
+      },
+      "category": "random-challenge",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 38,
+      "title": "Tough Guy Matthew Stafford Injury",
+      "description": "{target} playing through undisclosed injury that affects throwing motion.",
+      "target_options": [
+        "QB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 1
+      },
+      "category": "injury",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "options": [
+        {
+          "description": "Rest the player for 4 games",
+          "impact": "player is benched for 4 games, but returns at full strength."
+        },
+        {
+          "description": "Play through the injury",
+          "impact": "-1 to throw power permanently, but player remains available for all games"
+        },
+        {
+          "description": "Get a second opinion",
+          "impact": "Maybe our luck will improve with a different doctor.",
+          "impact_random_options": {
+            "Player avoids permanent injury with only 1 game missed": 0.3,
+            "Player avoids permanent injury with 2 games missed": 0.3,
+            "2nd opinion confirms diagnosis. Player is out for 4 games": 0.3,
+            "Doctor hands out some painkillers and tells the player to ignore the problem, resulting in lasting damage, Quarterback in -2 throw power permanently": 0.1
+          }
+        },
+        {
+          "description": "Experimental treatment",
+          "impact": "70% chance of recovery with no games missed, 30% chance of season-ending injury",
+          "impact_random_options": {
+            "Full recovery, no games missed": 0.7,
+            "Severe injury, season-ending": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "title": "Dan Campbell Intensity",
+      "description": "Head coach gave motivational speech that has players ready to 'bite kneecaps'.",
+      "impact": "Add +1 hit power, tackle to 3 players on the defense.",
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.4,
+        "pro": 0.3,
+        "all-madden": 0.2,
+        "diabolical": 0.1
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 40,
+      "title": "Playing Time Demand",
+      "description": "{target} is unhappy with their current playing time and demands more snaps.",
+      "target_options": [
+        "WR2",
+        "WR3",
+        "RB2",
+        "TE2",
+        "CB2",
+        "CB3",
+        "SS2",
+        "FS2",
+        "MLB2",
+        "LOLB2",
+        "ROLB2",
+        "DT2",
+        "DE2"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.5,
+        "pro": 0.6,
+        "all-madden": 0.7,
+        "diabolical": 0.8
+      },
+      "category": "roster",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ],
+      "options": [
+        {
+          "description": "Start {target} for the next two games",
+          "impact": "{target} receives +2 Awareness and +1 to primary attribute due to motivation. {target} must start for next 2 games."
+        },
+        {
+          "description": "Ignore the request",
+          "impact": "{target} receives -2 Awareness and may request a trade later in the season."
+        },
+        {
+          "description": "Bench the player completely",
+          "impact": "{target} receives -5 Awareness and will request a trade immediately."
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "title": "Draft Day Meddling",
+      "description": "The teams owner wants to secure a different future in the draft. They want a {position}.",
+      "impact": "Your highest round pick in the draft must be a {position}.",
+      "position_options": [
+        "QB",
+        "WR",
+        "CB",
+        "DE",
+        "OT"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.4
+      },
+      "category": "draft",
+      "season_stages": [
+        "off-season"
+      ]
+    },
+    {
+      "id": 42,
+      "title": "Draft Day Research",
+      "description": "A {position} has been identified as a position of need. The owner wants you to prioritize this position in the draft.",
+      "impact": "One of your draft picks must be a {position}.",
+      "position_options": [
+        "QB",
+        "WR",
+        "CB",
+        "OT",
+        "OG",
+        "DT",
+        "FS",
+        "SS",
+        "MLB",
+        "LOLB",
+        "ROLB",
+        "DT",
+        "DE",
+        "K",
+        "P"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.3,
+        "pro": 0.5,
+        "all-madden": 0.6,
+        "diabolical": 0.7
+      },
+      "category": "draft",
+      "season_stages": [
+        "off-season"
+      ]
+    },
+    {
+      "id": 43,
+      "title": "Penny Pinching Owner",
+      "description": "The team owner is feeling the financial pressure and is cutting into your budget.",
+      "impact": "{impact_text}",
+      "result_options": [
+        {
+          "impact_text": "You are limited to 4 total free agents this off-season",
+          "probability": 0.2,
+          "result": "result_1"
+        },
+        {
+          "impact_text": "You must trade/release a player that will save you atlease $5 million in cap space.",
+          "probability": 0.2,
+          "result": "result_2"
+        },
+        {
+          "impact_text": "You may not pay any free agent more than $15 million dollars per year.",
+          "probability": 0.15,
+          "result": "result_3"
+        },
+        {
+          "impact_text": "You may not pay any free agent more than $10 million dollars per year.",
+          "probability": 0.1,
+          "result": "result_4"
+        },
+        {
+          "impact_text": "Garenteed money is a scam. You may not make any offer with more than $5 million guaranteed per year.",
+          "probability": 0.1,
+          "result": "result_5"
+        },
+        {
+          "impact_text": "You may not sign any free agents this off-season.",
+          "probability": 0.05,
+          "result": "result_6"
+        },
+        {
+          "impact_text": "Trim the fat. Cut 2 bench players.",
+          "probability": 0.1,
+          "result": "result_7"
+        },
+        {
+          "impact_text": "Trim the fat. Cut 5 bench players.",
+          "probability": 0.05,
+          "result": "result_8"
+        },
+        {
+          "impact_text": "Trim the meat. Cut 1 bench player and 1 starter.",
+          "probability": 0.05,
+          "result": "result_9"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.2,
+        "pro": 0.4,
+        "all-madden": 0.6,
+        "diabolical": 0.8
+      },
+      "category": "free-agency",
+      "season_stages": [
+        "off-season"
+      ]
+    },
+    {
+      "id": 45,
+      "title": "Is that Kadarius Toney out there?",
+      "description": "{target} was absolutely cooking in last weeks game. Atleast until the ball was thrown to him.",
+      "impact": "{target} recieves +2 to all route running attributes, but -3 to all catching attributes.",
+      "target_options": [
+        "WR1",
+        "WR2",
+        "WR3",
+        "WR4"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.25,
+        "rookie": 0.25,
+        "pro": 0.25,
+        "all-madden": 0.25,
+        "diabolical": 0.25
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 46,
+      "title": "Sue Stomp",
+      "description": "Haven't seen someone stomp on a player like that since Ndamukong Suh.",
+      "impact": "{target} is suspended for 6 games due to stomping on an opponent head after a tackle. Brutal.",
+      "target_options": [
+        "DT1",
+        "DT2",
+        "DT3",
+        "LE1",
+        "LE2",
+        "RE1",
+        "RE2"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "suspension",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 47,
+      "title": "Cody Parkey Curse",
+      "description": "Your Kicker has been seeing Cody Parkey in his nightmares. He's not himself, at practice this week he doinked 5 straight field goals.",
+      "impact": "Kicker has -10 to accuracy for the next 2 games. if in that time the kicker misses 2 or more field goals, the curse is permanent. else he returns to form and gains +3 permanent accuracy (added to original accuracy).",
+      "target_options": [
+        "K"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "mini-challenge",
+      "season_stages": [
+        "regular-season-end",
+        "playoffs"
+      ],
+      "is_temporary": true
+    },
+    {
+      "id": 48,
+      "title": "What will you do?",
+      "description": "At practice this week, your team exposes that {target} went on a date with your daughter. Word is he might have gotten lucky.",
+      "impact": "",
+      "adult_content": true,
+      "options": [
+        {
+          "description": "Let it slide. Your daughter is a grown woman and can date who she wants.",
+          "impact": "Nothing happens. Wow does that make you a good parent or what?... I guess that depends on the player."
+        },
+        {
+          "description": "Fight him. Right there at practice. You can take him.",
+          "impact": "{target} is suspended for 4 games. Team loses morale and -1 to all attributes for the next 2 games.",
+          "impact_random_options": {
+            "You win the fight. {target} is injured and out for a game. Your ego is intact.": 0.4,
+            "You dont just lose the fight, you get demolished. Your ego is bruised and so are your ribs. You have to sit out the next game. For the next game you must either sim, or pick only the first play suggested to you no matter what.": 0.4,
+            "The players break it up just in time. They're all laughing and joking about it. Your ego is bruised, but you're still the boss.": 0.2
+          }
+        },
+        {
+          "description": "Bench him. He aint getting lucky on the field thats for sure.",
+          "impact": "{target} is benched for the next 2 games."
+        },
+        {
+          "description": "Cut him. You dont need him, and you certaintly dont need him around your daughter.",
+          "impact": "{target} is cut immediately. He will not resign with your team as long as you are still in charge."
+        }
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "roster",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 49,
+      "title": "My agent says we can't be friends",
+      "description": "The agent for your {target} has informed you that they will not accept any negotiations this season.",
+      "impact": "if {target} is up for any extensions this season they will ignore all offers. You can still franchise tag them if you want.",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "contract",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 50,
+      "title": "No love for short Kings",
+      "description": "your player {target} has grown insecure about their height after a girl refused to go on a date with them. His friend told him about a surgery where they break your shins and extend your legs, sounds painful. Now he wants to have it done.",
+      "impact": "Can I do it coach?",
+      "options": [
+        {
+          "description": "Yea why not",
+          "impact": "Player is out for the rest of the season. they return next year with 2 inches added to their height, -2 SPD, -2 AGL, -2 ACC, -2 JMP"
+        },
+        {
+          "description": "No way! Are you stupid?",
+          "impact": "Player loses -5 awareness for the next 2 games, while he mopes around the locker room."
+        },
+        {
+          "description": "Say no but with a kind pep talk, 'There's a great girl out there for you and she wont care that you're short'",
+          "impact": "Player is encouraged and lets the issue drop."
+        }
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 51,
+      "title": "QBs need role models",
+      "description": "Your {target} wants to improve their throwing motion. They ready to watch some tape, and put in the work.",
+      "impact": "Your player wants to know whose tape they should watch to improve their game. What player should your QB try to emulate?",
+      "target_options": [
+        "QB1",
+        "QB2"
+      ],
+      "options": [
+        {
+          "description": "Tom Brady",
+          "impact": "Your player will watch Tom Brady's tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Brady's throwing motion. Update their throwing motion to match Brady's, and add +1 to Play Action, +1 Awareness.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Brady's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Brady's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Brady's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        },
+        {
+          "description": "Patrick Mahomes",
+          "impact": "Your player will watch Patrick Mahomes' tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Mahomes' throwing motion. Update their throwing motion to match Mahomes's, and add +1 to Throw on Run, +1 Throw Power.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Mahomes's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Mahomes's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Mahomes's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        },
+        {
+          "description": "Aaron Rodgers",
+          "impact": "Your player will watch Aaron Rodgers' tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Rodgers' throwing motion. Update their throwing motion to match Rodgers's, and add +1 to deep and medium accuracies, +1 Awareness.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Rodgers's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Rodgers's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Rodgers's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        },
+        {
+          "description": "Josh Allen",
+          "impact": "Your player will watch Josh Allen's tape and try to improve their game.",
+          "impact_random_options": {
+            "Your quarterback grinds hard and suceeds in emulating Allen's throwing motion. Update their throwing motion to match Allen's, and add +1 to breaksack, +1 throw power.": 0.4,
+            "Your quarterback grinds hard and suceeds in emulating Allen's throwing motion, but in the process their footwork suffers. Update their throwing motion to match Allen's, but they lose 3 PAC (Play action), 2 TOR (throw on run)": 0.3,
+            "Your quarterback trys for 2 days before giving up. Man thats hard work huh. The lose 4 Toughness": 0.2,
+            "Your quarterback not only fails to emulate Allen's throwing motion, but they also mess up their throw in the process. They lose -2 to all throwing accuracies": 0.1
+          }
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 52,
+      "title": "Trade-phobia",
+      "description": "Your GM got fleeced in a trade at his last job. He's afraid to make a mistake like that again.",
+      "impact": "{impact_text}",
+      "result_options": [
+        {
+          "impact_text": "You cannot trade-down in the nfl draft this season",
+          "probability": 0.4,
+          "result": "result_1"
+        },
+        {
+          "impact_text": "You cannot trade down or up in the nfl draft this season",
+          "probability": 0.4,
+          "result": "result_2"
+        },
+        {
+          "impact_text": "You may not make any trades this off-season (unless required by event)",
+          "probability": 0.2,
+          "result": "result_3"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.01,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.4
+      },
+      "category": "draft",
+      "season_stages": [
+        "playoffs",
+        "off-season"
+      ]
+    },
+    {
+      "id": 53,
+      "title": "Participation {award}",
+      "description": "Not every player gets recognized and thats a shame. Everyone deserves a {award}.",
+      "impact": "Choose a player that has never been recognized for an award. They will receive +1 to {stat} skill attributes of your choice.",
+      "award_options": [
+        "trophy",
+        "ribbon"
+      ],
+      "stat_options": [
+        1,
+        2,
+        3
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.2,
+        "pro": 0.01,
+        "all-madden": 0,
+        "diabolical": 0
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 54,
+      "title": "Oxygen Chamber Therapy",
+      "description": "{target} has been sleeping in a hyperbaric oxygen chamber to improve recovery and performance.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "all-players"
+      ],
+      "result_options": [
+        {
+          "result": "success",
+          "impact_text": "Player gains +2 stamina and +1 injury",
+          "probability": 0.6
+        },
+        {
+          "result": "failure",
+          "impact_text": "The therapy backfires, player loses -1 stamina, -1 injury",
+          "probability": 0.4
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 55,
+      "title": "Hometown Hero",
+      "description": "{target} is from the city where your next opponent is located. The media is making a big deal about the homecoming.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "TE1",
+        "MLB1",
+        "CB1",
+        "FS1",
+        "SS1"
+      ],
+      "result_options": [
+        {
+          "impact_text": "Player locks in and plays with extra intensity. +10 to Awareness for the next game.",
+          "probability": 0.5,
+          "result": "result_1"
+        },
+        {
+          "impact_text": "Your player folds under the pressure, he loses sleep and has -10 to Awareness for the next game.",
+          "probability": 0.5,
+          "result": "result_2"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.1,
+        "pro": 0.1,
+        "all-madden": 0.1,
+        "diabolical": 0.1
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 56,
+      "title": "Fan Favorite",
+      "description": "The fans have voted {target} as their favorite player. The team is giving away bobbleheads at the next home game.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1",
+        "TE1",
+        "LOLB1",
+        "MLB1",
+        "ROLB1",
+        "CB1",
+        "SS1"
+      ],
+      "target_impacts": {
+        "QB1": "Player gets a permanent +2 awareness and +1 throw under pressure due to fan support",
+        "RB1": "Player gets a permanent +2 awareness and +1 break tackle due to fan support",
+        "WR1": "Player gets a permanent +2 awareness and +1 catching in traffic due to fan support",
+        "TE1": "Player gets a permanent +2 awareness and +1 spectacular catch due to fan support",
+        "LOLB1": "Player gets a permanent +2 awareness and +1 block shedding due to fan support",
+        "MLB1": "Player gets a permanent +2 awareness and +1 tackle due to fan support",
+        "ROLB1": "Player gets a permanent +2 awareness and +1 pursuit due to fan support",
+        "CB1": "Player gets a permanent +2 awareness and +1 man coverage due to fan support",
+        "SS1": "Player gets a permanent +2 awareness and +1 hit power due to fan support"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.3,
+        "pro": 0.15,
+        "all-madden": 0.05,
+        "diabolical": 0.01
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 57,
+      "title": "New Conditioning Coach",
+      "description": "The team has hired a revolutionary new conditioning coach from Europe. Choose a position group for the conditioning coach to focus on.",
+      "impact": "Choose a position group for the conditioning coach to focus on.",
+      "options": [
+        {
+          "description": "Offensive Line",
+          "impact": "All starting offensive linemen gain +2 stamina."
+        },
+        {
+          "description": "Defensive Line",
+          "impact": "All starting defensive linemen gain +2 stamina."
+        },
+        {
+          "description": "Linebackers",
+          "impact": "All starting linebackers gain +2 stamina."
+        },
+        {
+          "description": "Defensive Backs",
+          "impact": "All starting defensive backs gain +2 stamina."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.3,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 58,
+      "title": "Weight Room Warrior",
+      "description": "{target} has been spending extra hours in the weight room.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "all-players"
+      ],
+      "result_options": [
+        {
+          "impact_text": "Player gains +2 strength and +1 trucking/breaking tackles",
+          "probability": 0.7,
+          "result": "result_1"
+        },
+        {
+          "impact_text": "Player pushed too hard and suffered a minor injury. -1 injury and stamina",
+          "probability": 0.3,
+          "result": "result_2"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 59,
+      "title": "Midnight Film Study",
+      "description": "{target} has been staying up until midnight studying film of opponents.",
+      "impact": "Player gains +3 awareness but -1 stamina due to lack of sleep",
+      "target_options": [
+        "QB1",
+        "MLB1",
+        "FS1",
+        "CB1"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.6,
+        "rookie": 0.4,
+        "pro": 0.2,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 60,
+      "title": "Position Change Experiment",
+      "description": "Coaches are considering moving {target} to a new position to better utilize their skills.",
+      "impact": "You must change the player's position to a related position (e.g., CB to FS, LB to DE, etc.). After 3 games, if the coaches decide to revert them back to their original position, they lose -2 Awareness.",
+      "target_options": [
+        "CB2",
+        "FS2",
+        "SS2",
+        "LOLB2",
+        "ROLB2",
+        "MLB2",
+        "WR3",
+        "TE2",
+        "RB2"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "roster",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 61,
+      "title": "Breakout Candidate",
+      "description": "Analysts are predicting {target} will have a breakout season this year.",
+      "impact": "{impact_text}",
+      "target_options": [
+        "QB2",
+        "RB2",
+        "WR2",
+        "WR3",
+        "TE2",
+        "CB2",
+        "MLB2",
+        "FS2",
+        "SS2"
+      ],
+      "target_impacts": {
+        "QB2": "If quarterback throws for 3,500+ yards or 25+ TDs with fewer than 15 INTs, they gain +1 development trait at end of season",
+        "RB2": "If running back rushes for 1,000+ yards or scores 8+ rushing TDs, they gain +1 development trait at end of season",
+        "WR2": "If wide receiver has 800+ receiving yards or 6+ receiving TDs, they gain +1 development trait at end of season",
+        "WR3": "If wide receiver has 700+ receiving yards or 5+ receiving TDs, they gain +1 development trait at end of season",
+        "TE2": "If tight end has 500+ receiving yards or 5+ receiving TDs, they gain +1 development trait at end of season",
+        "CB2": "If cornerback has 5+ INTs or 10+ passes defended, they gain +1 development trait at end of season",
+        "MLB2": "If linebacker has 80+ tackles and 5+ sacks or 2+ INTs, they gain +1 development trait at end of season",
+        "FS2": "If free safety has 3+ INTs and 70+ tackles, they gain +1 development trait at end of season",
+        "SS2": "If strong safety has 80+ tackles and 3+ forced fumbles or 2+ INTs, they gain +1 development trait at end of season"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.7,
+        "rookie": 0.6,
+        "pro": 0.45,
+        "all-madden": 0.25,
+        "diabolical": 0.15
+      },
+      "category": "season-challenge",
+      "season_stages": [
+        "pre-season"
+      ]
+    },
+    {
+      "id": 62,
+      "title": "Quarterback Competition",
+      "description": "The backup quarterback has been pushing for the starting job in practice.",
+      "options": [
+        {
+          "description": "Stick with the starter",
+          "impact": "Starter remains QB1. Backup QB is d."
+        },
+        {
+          "description": "Hold an open competition",
+          "impact": "Who will it be?",
+          "impact_random_options": {
+            "The competition is fierce, they are neck and neck. Backup QB gains +1 Awareness, + Throw Accuracy short.": 0.4,
+            "The starting QB dominates the competition. What did you expect? -2 Awareness for the backup QB.": 0.4,
+            "The Backup QB demolishes the starting QB. He gains +1 dev trait, + to all accuracies. He must be the starter for the next 3 games.": 0.2
+          }
+        },
+        {
+          "description": "Make the backup the new starter",
+          "impact": "Former starter is pissed and requests a trade. He must be added to trade finder and an option must be selected. (no counter offers). The new starter gains +1 to all accuracies"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.25,
+        "rookie": 0.25,
+        "pro": 0.25,
+        "all-madden": 0.25,
+        "diabolical": 0.25
+      },
+      "category": "roster",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 63,
+      "title": "Viral Trick Play",
+      "description": "One of your team's trick plays went viral on social media after being executed perfectly in practice.",
+      "impact": "So much for the element of surprise. For the next 5 games, your team cannot use fake punts/field goals.",
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 64,
+      "title": "Locker Room Divide",
+      "description": "Your team is experiencing a serious locker room divide that's affecting team chemistry.",
+      "options": [
+        {
+          "description": "Team meeting to address issues",
+          "impact": "Players shut up. But some dont feel heard. Choose 2 starters to lose -2 awareness permanently."
+        },
+        {
+          "description": "Ignore the problems",
+          "impact": "Bad move. The divide grows and a fight breaks out. Choose 2 starters to bench for the next 3 games."
+        },
+        {
+          "description": "Trade the troublemakers",
+          "impact": "You must trade at least 2 starters for draft picks only (no players in return). Their backups become starters and recieve +1 to 2 stats of your choice."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.15,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 65,
+      "title": "Failed Drug Test",
+      "description": "{target} has failed a random drug test administered by the league.",
+      "impact": "{target} is suspended for 4 games with no appeals possible.",
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.15,
+        "all-madden": 0.3,
+        "diabolical": 0.5
+      },
+      "category": "suspension",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 66,
+      "title": "Bust bust bust",
+      "description": "Your highest draft pick from last year is a complete bust.",
+      "impact": "The player's development to normal and they lose -2 to Awareness.",
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.05,
+        "all-madden": 0.1,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 67,
+      "title": "Mo money mo problems",
+      "description": "it wasnt long ago when {target} signed a new contract, but they sure did spend it fast.",
+      "impact": "He came to your office to beg for more money.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Cut him. If they cant manage their finances, then they arent responsible enough to be on your team.",
+          "impact": "Player is cut and cannot be re-signed for the rest of the season."
+        },
+        {
+          "description": "Offer to let him move into your house until he gets his finances in order.",
+          "impact": "{impact_text}",
+          "result_options": [
+            {
+              "impact_text": "Player glady accepts your offer. He fits right in with the family and he is able to spend more time focusing on the gamme. +1 Awareness permanently.",
+              "probability": 0.3
+            },
+            {
+              "impact_text": "Player moves into your house. Hes kind of a deadbeat and spends all day playing video games. -2 Awareness permanently.",
+              "probability": 0.3
+            },
+            {
+              "impact_text": "Player moves into your home and prompty robs you silly. Add 2 million to bonus in his contract before cutting him. He may never be re-signed",
+              "probability": 0.2
+            },
+            {
+              "impact_text": "Player insults your offer and storms out of your office. He is cut and cannot be re-signed for the rest of the season.",
+              "probability": 0.2
+            }
+          ]
+        },
+        {
+          "description": "Pay the man. NFL salaries are practically minimum wage.",
+          "impact": "Add $2 million/year as a signing bonus to his contract for the remainder of his contract."
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 68,
+      "title": "Media Criticism",
+      "description": "The media has been relentlessly critical of {target}, affecting their mental state.",
+      "options": [
+        {
+          "description": "Hold a press conference to defend the player",
+          "impact": "Will you actually back this player up?",
+          "options": [
+            {
+              "description": "Yes. And I promise to start him for the next 5 weeks to prove it.",
+              "impact": "Player gains +1 to two skill attributes of your choice. But they must start the next 5 games."
+            },
+            {
+              "description": "Nahh",
+              "impact": "Player is absolutely clowned on social media and crashes out. He loses -7 awareness permanetly. "
+            }
+          ]
+        },
+        {
+          "description": "Tell player to ignore the noise",
+          "impact": "He tries. He really does. But the media is relentless. He loses -2 awareness permanently."
+        },
+        {
+          "description": "Bench player for a bit to let things cool down",
+          "impact": "Player must be benched for two games, after which they return with normal attributes."
+        }
+      ],
+      "target_options": [
+        "all-players"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.25,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 69,
+      "title": "Return Specialist",
+      "description": "{target} spent a week practicing with {trainer} over the offseason.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "RB1",
+        "RB2",
+        "RB3",
+        "WR1",
+        "WR2",
+        "WR3",
+        "WR4",
+        "CB1",
+        "CB2",
+        "CB3",
+        "CB4",
+        "FS1",
+        "FS2",
+        "SS1",
+        "SS2"
+      ],
+      "trainer_options": [
+        "Devin Hester",
+        "DeSean Jackson",
+        "Josh Cribbs",
+        "Cordelle Patterson",
+        "Dante Hall",
+        "Leon Washington"
+      ],
+      "trainer_impacts": {
+        "Devin Hester": "Player gains +1 Change of Direction, +1 Speed, +5 Return. Will this be enough to earn them some return-man reps?",
+        "DeSean Jackson": "Player gains +1 Speed, +3 Return. Will this be enough to earn them some return-man reps?",
+        "Josh Cribbs": "Player gains +1 Juke, +4 Return. Will this be enough to earn them some return-man reps?",
+        "Cordelle Patterson": "Player gains +1 Break Tackle, +2 Return. Will this be enough to earn them some return-man reps?",
+        "Dante Hall": "Player gains +3 Juke, +1 Spin, +1 Return. Will this be enough to earn them some return-man reps?",
+        "Leon Washington": "Player gains +2 Return. Will this be enough to earn them some return-man reps?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.8,
+        "rookie": 0.4,
+        "pro": 0.16,
+        "all-madden": 0.07,
+        "diabolical": 0.03
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 70,
+      "title": "Trench Training O",
+      "description": "{target} worked on blocking techniques with {trainer} in the offseason.",
+      "impact": "{trainer_impact}",
+      "trainer_options": [
+        "Joe Thomas",
+        "Trent Williams",
+        "Jason Kelce",
+        "Zack Martin",
+        "David Bakhtiari",
+        "Quenton Nelson",
+        "Larry Allen",
+        "Orlando Pace",
+        "Jonathan Ogden",
+        "His high school football coach",
+        "His father",
+        "a renowned sport scientist"
+      ],
+      "trainer_impacts": {
+        "Joe Thomas": "Player gains +3 to pass block finesse, +1 to run block, +1 awareness. Am I elite now coach?",
+        "Trent Williams": "Player gains +2 to pass block power, +2 to run block power, +1 strength. Am I elite now coach?",
+        "Jason Kelce": "Player gains +1 to pass block finesse, +2 to run block power, +2 awareness. Am I elite now coach?",
+        "Zack Martin": "Player gains +1 to pass block finesse, +1 to run block power, +1 awareness. Am I elite now coach?",
+        "David Bakhtiari": "Player gains +1 to pass block finesse, +1 to run block power. Am I elite now coach?",
+        "Quenton Nelson": "Player gains +2 to run block power, +1 to strength, +1 impact blocking. Am I elite now coach?",
+        "Larry Allen": "Player gains +2 to run block power, +2 to strength, +1 impact blocking. Am I elite now coach?",
+        "Orlando Pace": "Player gains +3 to pass block power, +2 to pass block finesse, +1 awareness. Am I elite now coach?",
+        "Jonathan Ogden": "Player gains +2 to pass block power, +2 to run block power, +1 Strength. Am I elite now coach?",
+        "His high school football coach": "Player gains +1 to run block power, +2 stamina. Am I elite now coach?",
+        "His father": "Player gains -1 to pass block finesse, -1 to run block power, +2 stamina, +1 strength. Daddy says I'm elite now, right coach?",
+        "a renowned sport scientist": "Player gains +1 to pass block finesse, +1 to run block finesse, +2 stamina. I paid the money to be elite now coach?"
+      },
+      "target_options": [
+        "LT1",
+        "LT2",
+        "LG1",
+        "LG2",
+        "C1",
+        "C2",
+        "RG1",
+        "RG2",
+        "RT1",
+        "RT2",
+        "FB1",
+        "TE1",
+        "TE2"
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.2,
+        "pro": 0.15,
+        "all-madden": 0.1,
+        "diabolical": 0.05
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 71,
+      "title": "Route Running Refinement",
+      "description": "{target} spent the offseason perfecting route-running techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "WR1",
+        "WR2",
+        "WR3",
+        "WR4",
+        "TE1",
+        "TE2"
+      ],
+      "trainer_options": [
+        "Jerry Rice",
+        "Davante Adams",
+        "Stefon Diggs",
+        "Julian Edelman",
+        "Wes Welker",
+        "Keenan Allen",
+        "Antonio Brown",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Jerry Rice": "Player gains +2 to short route running, +2 to medium route running, +1 to deep route running. Am I running crisp routes now coach?",
+        "Davante Adams": "Player gains +1 to release, +1 to short route running, +1 to medium route running. Am I running crisp routes now coach?",
+        "Stefon Diggs": "Player gains +1 to medium route running, +1 to deep route running, +1 to change of direction. Am I running crisp routes now coach?",
+        "Julian Edelman": "Player gains +3 to short route running. Am I running crisp routes now coach?",
+        "Wes Welker": "Player gains +1 to short route running, +1 to medium route running, +1 to change of direction. Am I running crisp routes now coach?",
+        "Keenan Allen": "Player gains +2 to medium route running, +1 to short route running. Am I running crisp routes now coach?",
+        "Antonio Brown": "Player gains +1 to short route running, +1 to medium route running, +1 to deep route running, -5 predictability. Am I running crisp routes now coach?",
+        "a renowned sport scientist": "Player gains +1 to short route running, +1 to medium route running, +1 stamina. I paid the money to run perfect routes now coach?",
+        "His high school football coach": "Player gains +1 to short route running, +1 stamina. Am I running crisp routes now coach?",
+        "His father": "Player gains -1 to short route running, +2 stamina. Daddy says my routes are perfect now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 72,
+      "title": "Lockdown Coverage Class",
+      "description": "{target} spent the offseason improving coverage skills with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "CB1",
+        "CB2",
+        "CB3",
+        "CB4",
+        "FS1",
+        "FS2",
+        "SS1",
+        "SS2"
+      ],
+      "trainer_options": [
+        "Deion Sanders",
+        "Darrelle Revis",
+        "Ed Reed",
+        "Charles Woodson",
+        "Richard Sherman",
+        "Jaylon Johnson",
+        "Champ Bailey",
+        "Patrick Peterson",
+        "Asante Samuel Jr",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Deion Sanders": "Player gains +2 to man coverage, +1 to speed. Prime Time says I'm locking receivers down now coach?",
+        "Darrelle Revis": "Player gains +3 to man coverage, +1 to press. Welcome to Revis Island. (lite)",
+        "Ed Reed": "Player gains +2 to zone coverage, +2 to play recognition, +1 to catching. Ball hawk abilities unlocked now coach?",
+        "Charles Woodson": "Player gains +1 to man coverage, +1 to zone coverage, +1 to tackle. Complete defensive back now coach?",
+        "Richard Sherman": "Player gains +3 to zone coverage, +1 to press, +1 to awareness. Am I the best corner in the game now coach?",
+        "Jaylon Johnson": "Player gains +1 to man coverage, +1 to zone coverage, +1 to press. Complete defensive back now coach?",
+        "Troy Polamalu": "Player gains +1 to zone coverage, +2 to play recognition, +1 to hit power. Ill hop right over that line just watch.",
+        "Champ Bailey": "Player gains +2 to man coverage, +2 to zone coverage, +1 to awareness. Shutdown corner now coach?",
+        "Patrick Peterson": "Player gains +1 to man coverage, +1 to speed, +1 to acceleration. Complete defensive back now coach?",
+        "Asante Samuel Jr": "Player gains +1 to man coverage +1 to zone coverage, -3 to press coverage, -1 to tackling. Complete defensive back now coach?",
+        "a renowned sport scientist": "Player gains +1 to man coverage, +1 to zone coverage, +1 stamina. I paid the money to be a lock-down defender now coach?",
+        "His high school football coach": "Player gains +1 to zone coverage, +1 stamina. Coverage skills improved now coach?",
+        "His father": "Player gains -1 to man coverage, -1 to zone coverage, +2 stamina. Daddy says I'm a ball hawk now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 73,
+      "title": "Tackling Academy",
+      "description": "{target} spent the offseason improving tackling techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "MLB1",
+        "MLB2",
+        "LOLB1",
+        "LOLB2",
+        "ROLB1",
+        "ROLB2",
+        "SS1",
+        "SS2",
+        "FS1",
+        "FS2"
+      ],
+      "trainer_options": [
+        "Ray Lewis",
+        "Luke Kuechly",
+        "Brian Urlacher",
+        "Bobby Wagner",
+        "Patrick Willis",
+        "John Lynch",
+        "Brian Dawkins",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Ray Lewis": "Player gains +1 to tackle, +2 to hit power, +1 to pursuit. Bringing that raw intensity to every hit now coach?",
+        "Luke Kuechly": "Player gains +3 to tackle, +2 to play recognition, +1 to pursuit. Reading the play and making the stop now coach?",
+        "Brian Urlacher": "Player gains +2 to tackle, +1 to hit power, +2 to pursuit. Sideline to sideline tackling machine now coach?",
+        "Bobby Wagner": "Player gains +1 to tackle, +1 to pursuit, +1 to awareness. Tackling with perfect form now coach?",
+        "Patrick Willis": "Player gains +2 to tackle, +1 to hit power, +2 to pursuit. Bringing that intimidating presence now coach?",
+        "John Lynch": "Player gains +2 to hit power, +1 to tackle, +1 to play recognition. Ready to deliver those bone-jarring hits now coach?",
+        "Brian Dawkins": "Player gains +2 to hit power, +2 to tackle, +1 to speed. Bringing that Weapon X mentality now coach?",
+        "a renowned sport scientist": "Player gains +1 to tackle, +1 to pursuit, +1 stamina. I paid the money to perfect my tackling now coach?",
+        "His high school football coach": "Player gains +1 to tackle, +1 stamina. Form tackling improved now coach?",
+        "His father": "Player gains -1 to tackle, +1 to hit power, +2 stamina. Daddy says I'm putting guys on their back now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 74,
+      "title": "Running Back Workshop",
+      "description": "{target} spent the offseason refining running techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "RB1",
+        "RB2",
+        "RB3",
+        "FB1"
+      ],
+      "trainer_options": [
+        "Barry Sanders",
+        "Emmitt Smith",
+        "LaDainian Tomlinson",
+        "Marshall Faulk",
+        "Adrian Peterson",
+        "Christian McCaffrey",
+        "Derrick Henry",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Barry Sanders": "Player gains +2 to juke move, +2 to change of direction, +1 to elusiveness. Making defenders miss in phone booths now coach?",
+        "Emmitt Smith": "Player gains +1 to ball carrier vision, +1 to break tackle, +1 to carrying. Finding the holes and protecting the ball now coach?",
+        "LaDainian Tomlinson": "Player gains +1 to juke move, +1 to spin move, +1 to stiff arm, +1 to catching. Complete running back now coach?",
+        "Marshall Faulk": "Player gains +1 to ball carrier vision, +1 to catching, +1 to route running. Dual-threat back now coach?",
+        "Adrian Peterson": "Player gains +2 to break tackle, +2 to stiff arm, +1 to truck. Running through defenders now coach?",
+        "Christian McCaffrey": "Player gains +1 to ball carrier vision, +1 to juke move, +1 to catching. All-purpose back now coach?",
+        "Derrick Henry": "Player gains +3 to truck, +1 to stiff arm, +1 to break tackle. Bringing that King Henry power now coach?",
+        "a renowned sport scientist": "Player gains +1 to ball carrier vision, +1 to carrying, +1 stamina. I paid the money to maximize my running skills now coach?",
+        "His high school football coach": "Player gains +1 to ball carrier vision, +1 stamina. Running fundamentals improved now coach?",
+        "His father": "Player gains +1 to carrying, +1 stamina. Daddy says I'm a beast with the ball now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.25,
+        "pro": 0.15,
+        "all-madden": 0.08,
+        "diabolical": 0.04
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 75,
+      "title": "Quarterback Camp",
+      "description": "{target} spent the offseason refining their technique with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "QB1",
+        "QB2"
+      ],
+      "trainer_options": [
+        "Tom Brady",
+        "Peyton Manning",
+        "Aaron Rodgers",
+        "Patrick Mahomes",
+        "Drew Brees",
+        "Josh Allen",
+        "Terry Bradshaw",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Tom Brady": "Player gains +2 to short accuracy, +1 to medium accuracy, +2 to awareness. Reading defenses like a book now coach?",
+        "Peyton Manning": "Player gains +1 to short accuracy, +2 to medium accuracy, +2 to play action. Mastering the pocket now coach?",
+        "Aaron Rodgers": "Player gains +1 to medium accuracy, +2 to deep accuracy, +1 to throw on run. Throwing dimes on the move now coach?",
+        "Patrick Mahomes": "Player gains +1 to throw power, +1 to deep accuracy, +1 to throw on run. No-look passes in my arsenal now coach?",
+        "Drew Brees": "Player gains +3 to short accuracy, +1 to medium accuracy, +1 to play action. Surgical precision now coach?",
+        "Josh Allen": "Player gains +1 to throw power, +1 to deep accuracy, +1 to break sack. Bringing that cannon arm now coach?",
+        "Terry Bradshaw": "Player gains +1 to deep accuracy, +1 to awareness. Quarterback skills never go away, right coach?",
+        "a renowned sport scientist": "Player gains +1 to throw power, +1 stamina. I paid the money to optimize my throwing now coach?",
+        "His high school football coach": "Player gains +1 to short accuracy, +1 stamina. Fundamentals improved now coach?",
+        "His father": "Player gains -1 to play action, +1 to short accuracy, +1 awareness. Daddy says I'm ready to lead the team now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.2,
+        "pro": 0.1,
+        "all-madden": 0.06,
+        "diabolical": 0.025
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 76,
+      "title": "Kicking Specialist Workshop",
+      "description": "{target} spent the offseason perfecting kicking techniques with {trainer}.",
+      "impact": "{trainer_impact}",
+      "target_options": [
+        "K1",
+        "P1"
+      ],
+      "trainer_options": [
+        "Justin Tucker",
+        "Adam Vinatieri",
+        "Johnny Hekker",
+        "Sebastian Janikowski",
+        "Pat McAfee",
+        "a renowned sport scientist",
+        "His high school football coach",
+        "His father"
+      ],
+      "trainer_impacts": {
+        "Justin Tucker": "Player gains +2 to kick power. Splitting the uprights from 60+ yards now coach?",
+        "Adam Vinatieri": "Player gains +2 to kick accuracy, +1 to awareness. Ice in my veins for clutch kicks now coach?",
+        "Johnny Hekker": "Player gains +1 to kick power, +1 to kick accuracy, +1 to awareness. Pinning them inside the 10 now coach?",
+        "Sebastian Janikowski": "Player gains +2 to kick power. Booming those long kicks now coach?",
+        "Pat McAfee": "Player gains +1 to punt power, +1 to punt accuracy, +4 to tackle. For the brand now coach?",
+        "a renowned sport scientist": "Player gains +1 to kick power, +1 to kick accuracy, +1 stamina. I paid the money to perfect my technique now coach?",
+        "His high school football coach": "Player gains +2 to strength, +1 to stamina. My old coach just sent me to the weight room. I dont think he know much about kicking.",
+        "His father": "Player gains -2 to kick accuracy, +1 to kick power. Daddy says I'm booming them now, right coach?"
+      },
+      "difficulty_weights": {
+        "cupcake": 0.4,
+        "rookie": 0.22,
+        "pro": 0.11,
+        "all-madden": 0.06,
+        "diabolical": 0.03
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 77,
+      "title": "Coordinated Disconduct",
+      "description": "{target} was caught {reason}",
+      "impact": "{target} is {penalty}. For the remainder of the suspension or season, an assistant coach has stepped in to take their place. You must change your playbook to a default (non-coaching or custom playbook) and you must only select suggested plays.",
+      "target_options": ["OC", "DC"],
+      "reason_options": ["Soliciting services from individuals at night", "Betting on games", "Giving players performance enhancing drugs", "Using drugs in the locker room", "Giving awards to players for injuring opposing players"],
+      "penalty_options": ["suspended for 4 games", "fired from his position on the team", "suspended for 8 games", "suspended for the season"],
+      "category": "penalty",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-middle", "regular-season-end"],
+      "is_temporary": true,
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      }
+    },
+    {
+      "id": 78,
+      "title": "We need someone experienced",
+      "description": "Coach has decided that the team is too youthful, he wants to bring in a veteran prescense to help the team out.",
+      "impact": "You must cut backup under 25 years old and sign a free agent who is atleast 30 years old to replace them at that position.",
+      "category": "transaction",
+      "season_stages": ["pre-season", "regular-season-start", "regular-season-middle", "regular-season-end"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.2,
+        "diabolical": 0.3
+      }
+    },
+    {
+      "id": 79,
+      "title": "Hard Knocks Curse",
+      "description": "Your team has been selected to appear on HBO's Hard Knocks this season. The cameras are everywhere during training camp.",
+      "impact": "How will you handle the additional media scrutiny?",
+      "options": [
+        {
+          "description": "Embrace the spotlight and use it as motivation",
+          "impact": "Team morale is affected by the constant cameras.",
+          "impact_random_options": {
+            "Players thrive under the spotlight! raise your offensive blocking sliders by 3 for the first 3 games.": 0.3,
+            "The exposure helped some players but distracted others. Lower your offensive blocking sliders by 2 and raise catching sliders by 2 for the first 3 games.": 0.4,
+            "The constant cameras become a major distraction. lower your gameplay offensive blocking sliders by 5 of 3 games,": 0.3
+          },
+          "is_temporary": true
+        },
+        {
+          "description": "Limit camera access and shield players from the spotlight",
+          "impact": "How will HBO and the NFL respond?",
+          "options": [
+            {
+              "description": "Strictly enforce boundaries - no cameras in team meetings",
+              "impact": "The show lacks compelling content. NFL fines the team $5,000,000, but players maintain focus with no attribute penalties.",
+              "impact_random_options": {
+                "Players appreciate the protection. Two starters gain +2 to awareness permanently. 5m of cap room is unavailable this season.": 0.4,
+                "Players feel the coaches don't trust them. Two starters lose -2 awareness permanently. 5m of cap room is unavailable this season.": 0.3,
+                "The NFL is furious and forces extended access. All rookies lose -2 awareness permanently due to the uncomfortable situation. 5m of cap room is unavailable this season.": 0.3
+              }
+            },
+            {
+              "description": "Allow limited strategic access to protect team secrets",
+              "impact": "HBO gets enough content while team maintains some privacy.",
+              "impact_random_options": {
+                "Perfect balance achieved. No negative effects, choose one breakout star to gain +3 to a skill attribute permanently.": 0.5,
+                "The selective access creates tension and chemistry suffers. No at the line adjustments for the first 2 games of the season.": 0.5
+              }
+            }
+          ]
+        },
+        {
+          "description": "Make a star player the focus to shield others",
+          "impact": "Choose a star player to be the main focus of the show.",
+          "target_options": [
+            "QB1",
+            "RB1",
+            "WR1",
+            "TE1",
+            "MLB1",
+            "CB1"
+          ],
+          "impact_random_options": {
+            "{target} becomes a national star but the attention affects their play. -2 to awareness but +1 to skill attributes permanently.": 0.3,
+            "{target} handles the spotlight perfectly and becomes a team leader. +2 awarness, get high_motor trait, +1 toughness attributes.": 0.3,
+            "{target} gets overwhelmed by the attention and struggles. -3 awareness permanently.": 0.2,
+            "{target} gets a major endorsement deal that causes distractions. -1 to all physical attributes but gains Superstar development trait.": 0.2
+          }
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.15,
+        "pro": 0.2,
+        "all-madden": 0.25,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season"
+      ]
+    },
+    {
+      "id": 80,
+      "title": "Social Media Challenges Gone Wrong",
+      "description": "{target} has gone viral online for attempting a dangerous social media challenge in the offseason.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Implement a team-wide social media policy with fines for violations",
+          "impact": "How will the team respond to the strict policy?",
+          "impact_random_options": {
+            "Players respect the boundaries. Team morale can be reset to 50 if lower. {target} apologizes publicly.": 0.4,
+            "Several players resent the restrictions. {target} and two other players lose -2 awareness.": 0.3,
+            "Policy causes major locker room divide. You must cut a rostered player to restore order.": 0.2,
+            "Players unanimously reject policy as too controlling. {target} requests a trade immediately.": 0.1
+          }
+        },
+        {
+          "description": "Turn it into a team bonding opportunity with safer challenges",
+          "impact": "The team creates their own social media content under supervision.",
+          "impact_random_options": {
+            "Team content goes viral in a positive way! Team morale can be reset to 50 if lower..": 0.3,
+            "Some good content emerges but it's still a distraction. Two starters gain +2 awareness while two others lose -2 awareness.": 0.4,
+            "Challenge goes wrong despite supervision. {target} suffers minor injury and is out for 4 games.": 0.3
+          }
+        },
+        {
+          "description": "Make an example of {target} with a suspension",
+          "impact": "Will discipline solve the problem?",
+          "options": [
+            {
+              "description": "One-game suspension with mandatory social media training",
+              "impact": "{target} is suspended for 1 game but learns from the experience.",
+              "impact_random_options": {
+                "{target} takes responsibility and returns focused. +2 awareness and a 1 game suspension.": 0.6,
+                "{target} feels unfairly punished and becomes disgruntled. -2 awareness permanently and a 1 game suspension.": 0.4
+              },
+              "is_temporary": true
+            },
+            {
+              "description": "Heavy fine but no suspension",
+              "impact": "Financial penalty without missing games.",
+              "impact_random_options": {
+                "{target} accepts the fine and focuses on football. No lasting effects.": 0.5,
+                "{target} continues risky behavior off-camera. Suffers random -2 stength and -3 injury permanately due to unreported injury. Misses 2 games.": 0.3,
+                "Team sees coach as too soft. Three random players attempt similar stunts and each lose -2 injury permanently.": 0.2
+              }
+            },
+            {
+              "description": "Public reprimand with community service",
+              "impact": "{target} must perform community service related to safety education.",
+              "impact_random_options": {
+                "The experience is transformative. {target} gains +3 awareness and becomes a team leader.": 0.4,
+                "The punishment feels like a PR stunt. {target} loses -2 awareness but completes service.": 0.4,
+                "{target} embraces their 'bad boy' image and becomes a distraction. Must be benched and traded by midseason.": 0.2
+              }
+            }
+          ]
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.13,
+        "pro": 0.22,
+        "all-madden": 0.35,
+        "diabolical": 0.5
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-middle"
+      ]
+    },
+    {
+      "id": 81,
+      "title": "Shut down that Pipeline!",
+      "description": "Due to {reason}, your team cannot draft players from {school}.",
+      "impact": "You are prohibited from selecting any players from {school} in this years draft.",
+      "reason_options": [
+        "academic integrity violations",
+        "institutional conflicts of interest",
+        "prior recruiting violations",
+        "past player development issues",
+        "performance enhancing substance scandals"
+      ],
+      "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.35,
+        "diabolical": 0.5
+      },
+      "category": "draft",
+      "season_stages": [
+        "off-season",
+        "playoffs"
+      ]
+    },
+    {
+      "id": 82,
+      "title": "Build that Pipeline!",
+      "description": "Your owner has strong ties to {school} and demands you draft a player from there before the end of round 3.",
+      "impact": "You must select at least one player from {school} by the end of the 3rd round (unless no players from that school are available).",
+      "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
+      "difficulty_weights": {
+        "cupcake": 0,
+        "rookie": 0.08,
+        "pro": 0.15,
+        "all-madden": 0.25,
+        "diabolical": 0.35
+      },
+      "category": "draft",
+      "season_stages": [
+        "off-season",
+        "playoffs"
+      ]
+    },
+    {
+      "id": 83,
+      "title": "Mentor Needed",
+      "description": "Your talented quarterback needs veteran guidance to reach his potential.",
+      "impact": "if you have a {player} in their first or second season in the league on the roster and a {player} with 7+ years of experience on the roster, your young {player} gains +2 awareness and +1 to a skill of your choice permanently.",
+      "player_options": [ "QB", "RB", "TE", "OT", "OG", "C", "DT", "LE", "RE", "OLB", "MLB", "FS", "SS" ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.4,
+        "pro": 0.3,
+        "all-madden": 0.2,
+        "diabolical": 0.1
+      },
+      "category": "player-development",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-middle"
+      ]
+    },
+    {
+      "id": 84,
+      "title": "Friday Night Lights",
+      "description": "A local high school has invited your {target} to give an inspirational speech to their struggling team.",
+      "impact": "Your player's leadership improves +2 awareness.",
+      "target_options": [ "all-players" ],
+      "difficulty_weights": {
+        "cupcake": 0.5,
+        "rookie": 0.4,
+        "pro": 0.3,
+        "all-madden": 0.15,
+        "diabolical": 0.05
+      },
+      "category": "community",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-middle"
+      ]
+    },
+    {
+      "id": 85,
+      "title": "The Frozen Tundra",
+      "description": "A brutal cold front has arrived just in time for your playoff game. Temperatures will be near zero with wind chills well below that. Your {target} has never played in conditions this extreme and you are helping them prepare for the upcoming game.",
+      "impact": "How you prepare your {target} for the extreme cold could significantly impact their performance.",
+      "target_options": [ "all-players" ],
+      "options": [
+        {
+          "description": "Cold Weather Equipment",
+          "impact": "Equip your {target} with specialized cold-weather gear.",
+          "options": [
+            {
+              "description": "Cutting-Edge Thermal Technology",
+              "impact": "Invest in the latest high-tech cold weather gear that promises maximum warmth without restricting movement.",
+              "impact_random_options": {
+                "The gear works phenomenally! Your {target} stays warm and maintains full mobility. No negative effects from the cold for the upcoming game.": 0.35,
+                "The thermal technology helps, but not perfectly. Your {target} has -1 to Speed but otherwise performs normally in the cold conditions.": 0.40,
+                "The gear is too bulky despite the claims. Your {target} loses -1 to Agility, -1 to Speed, -1 acceleration for the upcoming game.": 0.15,
+                "The experimental technology burns your {target} and they are sent to the hospital. They are out for the next 2 games.": 0.10
+              }
+            },
+            {
+              "description": "Bare Arms, Cold Heart",
+              "impact": "Your {target} chooses to go minimal on cold gear to maintain complete mobility, showing toughness.",
+              "impact_random_options": {
+                "The mental toughness display works! Your {target} ignores the cold through sheer willpower and gains +2 to all physical attributes for the upcoming game as adrenaline kicks in.": 0.25,
+                "Your {target} handles it surprisingly well, maintaining normal performance and intimidating opponents with their toughness.": 0.35,
+                "The bravado backfires as the cold affects performance. Your {target} loses -1 to Agility, -1 to Speed, -1 acceleration for the upcoming game.": 0.30,
+                "This was a terrible idea. Your {target} develops mild frostbite on their extremities and they need to sit out the next game.": 0.10
+              }
+            },
+            {
+              "description": "Traditional Cold Weather Approach. Stick with the time-tested heavy layers, thermal socks, and hand warmers between plays.",
+              "impact": "Stick with the time-tested heavy layers, thermal socks, and hand warmers between plays.",
+              "impact_random_options": {
+                "The traditional approach works perfectly. Your {target} stays reasonably warm and performs normally in the upcoming game.": 0.60,
+                "The layering helps but slightly restricts movement. Your {target} loses -1 to Agility but otherwise performs normally in the upcoming game.": 0.25,
+                "The traditional gear isn't enough for these extreme conditions. Your {target} struggles with cold hands/feet and loses -1 to all skill attributes for the upcoming game.": 0.10,
+                "Your {target} overheats from too many layers and has to remove some mid-game, leading to temperature regulation issues throughout the contest. They cannot play the 2nd and 4th quarters.": 0.05
+              }
+            }
+          ]
+        },
+        {
+          "description": "Cold Weather Training",
+          "impact": "Prepare your {target} with specialized training for the conditions.",
+          "options": [
+            {
+              "description": "Ice Bath Conditioning",
+              "impact": "Subject your {target} to progressively colder ice baths leading up to the game to acclimate their body.",
+              "impact_random_options": {
+                "The conditioning works brilliantly! Your {target}'s body adapts to the cold and they gain +1 to all physical attributes in the next game.": 0.30,
+                "The ice bath training helps, but not completely. Your {target} performs normally despite the extreme cold.": 0.40,
+                "The training was too intense. Your {target} is physically acclimated but mentally dreading the cold, they sit out the next game.": 0.20,
+                "The extreme conditioning method backfires. Your {target} develops a cold/flu before the game and plays at diminished capacity (-30 to Stamina for the next game).": 0.10
+              }
+            },
+            {
+              "description": "Cold Weather Ball Handling",
+              "impact": "Focus specifically on handling a cold, hard football with reduced finger dexterity.",
+              "impact_random_options": {
+                "The specialized training pays huge dividends! Your {target} masters cold-weather ball handling and gains +2 to Catching/Carrying/Throwing Accuracy/Blockshed short (position appropriate) permanently.": 0.30,
+                "The focused training helps significantly. Your {target} gains +1 to Catching/Carrying/Throwing Accuracy/Blockshed short (position appropriate) permanently.": 0.45,
+                "The training helps somewhat but not completely. Your {target} performs normally despite the cold football.": 0.15,
+                "The training created overthinking. Your {target} becomes too conscious of their grip and loses -1 to Catching/Carrying/Throwing Accuracy/Blockshed short (position appropriate) permanently.": 0.10
+              }
+            }
+          ]
+        },
+        {
+          "description": "Mental Preparation",
+          "impact": "Focus on psychological strategies for dealing with the extreme cold.",
+          "options": [
+            {
+              "description": "Visualization Techniques",
+              "impact": "Your {target} works with a sports psychologist on visualizing performance in extreme cold.",
+              "impact_random_options": {
+                "The mental techniques work remarkably well! Your {target} remains completely focused despite the cold and gains +5 to Awareness for the upcoming game.": 0.40,
+                "The visualization helps your {target} stay mentally sharp. They gain +1 permanently.": 0.35,
+                "The techniques help somewhat but the reality of the cold is still shocking. Your {target} skips the first quarter to fully adjust to the conditions.": 0.15,
+                "They vizualize a cold and barren wasteland. One they could never survive in. They sit out the next game.": 0.10
+              }
+            },
+            {
+              "description": "Cold Weather Veterans' Advice",
+              "impact": "Connect your {target} with veterans who've mastered playing in extreme cold conditions.",
+              "impact_random_options": {
+                "The veteran advice provides invaluable insights! Your {target} adopts crucial techniques and gains +1 to Awareness and +1 to a key skill attribute permanently.": 0.35,
+                "The tips and tricks from veterans help your {target} prepare appropriately. They perform normally despite the extreme cold.": 0.40,
+                "Some of the advice conflicts and confuses your {target}. They overthink during the game and lose -5 to Awareness for the upcoming game.": 0.15,
+                "The veterans' horror stories about the cold create anxiety. Your {target} becomes overly concerned about the conditions and loses focus on gameplay -2 awareness permanently.": 0.10
+              }
+            },
+            {
+              "description": "Embrace the Elements",
+              "impact": "Philosophical approach - teach your {target} to embrace and love the cold as a competitive advantage.",
+              "impact_random_options": {
+                "Your {target} fully adopts the cold-warrior mentality! They thrive in the harsh conditions and gain +2 to all physical attributes for the upcoming game.": 0.25,
+                "The mindset shift works well. Your {target} sees the cold as their ally and gains +1 to Awareness and Play Recognition permanently.": 0.35,
+                "The philosophical approach helps mentally but doesn't change physical reality. Your {target} has great attitude but still suffers -1 to all physical attribute in the next game": 0.30,
+                "The approach backfires when the actual cold hits. Your {target} feels betrayed by their mental preparation and becomes frustrated during the game. He exits after the first quarter and does not return": 0.10
+              }
+            }
+          ]
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.02,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.18,
+        "diabolical": 0.25
+      },
+      "category": "gameplay",
+      "season_stages": [
+        "regular-season-end",
+        "playoffs"
+      ]
+    }
+  ]
+}
