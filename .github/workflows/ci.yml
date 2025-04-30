@@ -19,24 +19,58 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Verify requirements.txt exists
+      run: |
+        if [ ! -f "requirements.txt" ]; then
+          echo "requirements.txt not found!"
+          exit 1
+        fi
+    
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     
-    - name: Install dependencies
-      shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || 'bash' }}
+    - name: Install dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pyinstaller>=5.6.0
         pip install appdirs>=1.4.4
-        if [[ "${{ runner.os }}" == "Windows" ]]; then
-          pip install pillow
-        fi
+        pip install pillow
+    
+    - name: Install dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller>=5.6.0
+        pip install appdirs>=1.4.4
     
     - name: Build executable
-      run: python build_executable.py
+      run: |
+        python build_executable.py
+        if [ $? -ne 0 ]; then
+          echo "Build failed!"
+          exit 1
+        fi
+    
+    - name: Verify build output
+      run: |
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          if [ ! -f "builds/*/*/*.exe" ]; then
+            echo "Windows executable not found!"
+            exit 1
+          fi
+        elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+          if [ ! -d "builds/*/*/*.app" ]; then
+            echo "macOS app bundle not found!"
+            exit 1
+          fi
+        fi
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
