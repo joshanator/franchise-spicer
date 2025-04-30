@@ -19,7 +19,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Verify requirements.txt exists
+    - name: Verify requirements.txt exists (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        if (-not (Test-Path "requirements.txt")) {
+          Write-Error "requirements.txt not found!"
+          exit 1
+        }
+    
+    - name: Verify requirements.txt exists (macOS)
+      if: matrix.os == 'macos-latest'
+      shell: bash
       run: |
         if [ ! -f "requirements.txt" ]; then
           echo "requirements.txt not found!"
@@ -50,7 +61,19 @@ jobs:
         pip install pyinstaller>=5.6.0
         pip install appdirs>=1.4.4
     
-    - name: Build executable
+    - name: Build executable (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        python build_executable.py
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Build failed!"
+          exit 1
+        }
+    
+    - name: Build executable (macOS)
+      if: matrix.os == 'macos-latest'
+      shell: bash
       run: |
         python build_executable.py
         if [ $? -ne 0 ]; then
@@ -58,19 +81,29 @@ jobs:
           exit 1
         fi
     
-    - name: Verify build output
+    - name: Verify build output (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
       run: |
-        if [ "${{ matrix.os }}" == "windows-latest" ]; then
-          if [ ! -f "builds/*/*/*.exe" ]; then
-            echo "Windows executable not found!"
-            exit 1
-          fi
-        elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-          if [ ! -d "builds/*/*/*.app" ]; then
-            echo "macOS app bundle not found!"
-            exit 1
-          fi
+        $version = Get-Content "version.txt" -Raw
+        $exePath = "builds\$version\windows\Madden Franchise Generator v$version\Madden Franchise Generator v$version.exe"
+        if (-not (Test-Path $exePath)) {
+          Write-Error "Windows executable not found at: $exePath"
+          exit 1
+        }
+        Write-Host "Found executable at: $exePath"
+    
+    - name: Verify build output (macOS)
+      if: matrix.os == 'macos-latest'
+      shell: bash
+      run: |
+        version=$(cat version.txt)
+        appPath="builds/$version/macos/Madden Franchise Generator v$version.app"
+        if [ ! -d "$appPath" ]; then
+          echo "macOS app bundle not found at: $appPath"
+          exit 1
         fi
+        echo "Found app bundle at: $appPath"
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
