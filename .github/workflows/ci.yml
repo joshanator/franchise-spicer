@@ -18,6 +18,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Required for git tag operations
+    
+    - name: Get version
+      id: get_version
+      run: |
+        version=$(cat version.txt)
+        echo "version=$version" >> $GITHUB_OUTPUT
     
     - name: Verify requirements.txt exists (Windows)
       if: matrix.os == 'windows-latest'
@@ -113,10 +121,22 @@ jobs:
           builds/*/*/*
           builds/_latest/*
     
+    - name: Create Git Tag (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: bash
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -a "v${{ steps.get_version.outputs.version }}" -m "Release v${{ steps.get_version.outputs.version }}"
+        git push origin "v${{ steps.get_version.outputs.version }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     - name: Create Release
       if: matrix.os == 'windows-latest'  # Only create release once
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: v${{ steps.get_version.outputs.version }}
         files: |
           builds/*/*/*
           builds/_latest/*
