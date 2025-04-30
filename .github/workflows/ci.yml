@@ -8,6 +8,7 @@ on:
       - 'madden_franchise_qt/**'
       - 'resources/**'
       - '.github/workflows/ci.yml'
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   build:
@@ -21,11 +22,40 @@ jobs:
       with:
         fetch-depth: 0  # Required for git tag operations
     
-    - name: Get version
-      id: get_version
+    - name: Get version (Windows)
+      if: matrix.os == 'windows-latest'
+      id: get_version_win
+      shell: pwsh
+      run: |
+        $version = Get-Content "version.txt" -Raw
+        Write-Output "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    
+    - name: Get version (macOS)
+      if: matrix.os == 'macos-latest'
+      id: get_version_mac
+      shell: bash
       run: |
         version=$(cat version.txt)
         echo "version=$version" >> $GITHUB_OUTPUT
+    
+    - name: Check if release exists (Windows)
+      if: matrix.os == 'windows-latest'
+      id: check_release
+      shell: pwsh
+      run: |
+        $version = Get-Content "version.txt" -Raw
+        $tag = "v$version"
+        $releases = gh release list --limit 100
+        $releaseExists = $releases -match $tag
+        if ($releaseExists) {
+          Write-Output "release_exists=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Release $tag already exists"
+        } else {
+          Write-Output "release_exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Release $tag does not exist, will create it"
+        }
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Verify requirements.txt exists (Windows)
       if: matrix.os == 'windows-latest'
@@ -122,21 +152,21 @@ jobs:
           builds/_latest/*
     
     - name: Create Git Tag (Windows)
-      if: matrix.os == 'windows-latest'
-      shell: bash
+      if: matrix.os == 'windows-latest' && steps.check_release.outputs.release_exists == 'false'
+      shell: pwsh
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git tag -a "v${{ steps.get_version.outputs.version }}" -m "Release v${{ steps.get_version.outputs.version }}"
-        git push origin "v${{ steps.get_version.outputs.version }}"
+        git tag -a "v${{ steps.get_version_win.outputs.version }}" -m "Release v${{ steps.get_version_win.outputs.version }}"
+        git push origin "v${{ steps.get_version_win.outputs.version }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create Release
-      if: matrix.os == 'windows-latest'  # Only create release once
+      if: matrix.os == 'windows-latest' && steps.check_release.outputs.release_exists == 'false'
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ steps.get_version.outputs.version }}
+        tag_name: v${{ steps.get_version_win.outputs.version }}
         files: |
           builds/*/*/*
           builds/_latest/*
