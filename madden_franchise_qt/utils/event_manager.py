@@ -390,6 +390,11 @@ class EventManager:
                 if 'impact' in processed_event:
                     processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
                     
+                    # Handle target_impacts if present
+                    if 'target_impacts' in processed_event and target_position in processed_event['target_impacts']:
+                        impact_text = processed_event['target_impacts'][target_position]
+                        processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'impact_text', impact_text)
+                    
                 # Also replace target in any result_options impact_text values
                 if 'result_options' in processed_event:
                     for option in processed_event['result_options']:
@@ -446,6 +451,11 @@ class EventManager:
                 if 'impact' in processed_event:
                     processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'target', target_display)
                     
+                    # Handle target_impacts if present
+                    if 'target_impacts' in processed_event and target_position in processed_event['target_impacts']:
+                        impact_text = processed_event['target_impacts'][target_position]
+                        processed_event['impact'] = self._replace_placeholder(processed_event['impact'], 'impact_text', impact_text)
+                    
                 # Also replace target in any result_options impact_text values
                 if 'result_options' in processed_event:
                     for option in processed_event['result_options']:
@@ -478,7 +488,7 @@ class EventManager:
             print(f"Trainer impact: {trainer_impact}")
         
         # Handle simple random selection fields
-        for field_type in ['reason_options', 'round_options', 'games_options', 'penalty_options', 'position_options', 'school_options']:
+        for field_type in ['reason_options', 'round_options', 'games_options', 'penalty_options', 'position_options', 'school_options', 'player_options', 'award_options', 'stat_options']:
             if field_type in processed_event:
                 chosen_value = random.choice(processed_event[field_type])
                 field_name = field_type.replace('_options', '')
@@ -488,6 +498,10 @@ class EventManager:
                 # Also replace in impact text if present
                 if 'impact' in processed_event:
                     processed_event['impact'] = self._replace_placeholder(processed_event['impact'], field_name, chosen_value)
+                
+                # Also replace in title if present
+                if 'title' in processed_event:
+                    processed_event['title'] = self._replace_placeholder(processed_event['title'], field_name, chosen_value)
         
         # Handle result options (like for the sprinter challenge)
         if 'result_options' in processed_event:
