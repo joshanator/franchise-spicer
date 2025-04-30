@@ -1,0 +1,56 @@
+name: Build Executables
+
+on:
+  push:
+    paths:
+      - 'version.txt'
+      - 'build_executable.py'
+      - 'madden_franchise_qt/**'
+      - 'resources/**'
+      - '.github/workflows/ci.yml'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller>=5.6.0
+        pip install appdirs>=1.4.4
+        if [ "${{ runner.os }}" == "Windows" ]; then
+          pip install pillow
+        fi
+    
+    - name: Build executable
+      run: python build_executable.py
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: executable-${{ matrix.os }}
+        path: |
+          builds/*/*/*
+          builds/_latest/*
+    
+    - name: Create Release
+      if: matrix.os == 'windows-latest'  # Only create release once
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          builds/*/*/*
+          builds/_latest/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
