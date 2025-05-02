@@ -47,14 +47,19 @@ jobs:
         $version = Get-Content "version.txt" -Raw
         $version = $version.Trim()
         $tag = "v$version"
-        $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$tag" -Method Get -ErrorAction SilentlyContinue -StatusCodeVariable statusCode
-        
-        if ($statusCode -eq 200) {
+        try {
+          $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$tag" -Method Get -ErrorAction Stop
           Write-Output "release_exists=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           Write-Host "Release $tag already exists"
-        } else {
-          Write-Output "release_exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          Write-Host "Release $tag does not exist, will create it"
+        } catch {
+          $statusCode = $_.Exception.Response.StatusCode.value__
+          if ($statusCode -eq 404) {
+            Write-Output "release_exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Release $tag does not exist, will create it"
+          } else {
+            Write-Host "Error checking for release: $_"
+            Write-Output "release_exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          }
         }
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
