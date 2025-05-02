@@ -118,6 +118,38 @@ The difficulty setting affects the types of events that can occur:
 - Staff and coaching changes
 - Unrealistic events (optional)
 
+## Madden Franchise File Analysis Tools
+
+This project includes a collection of tools for analyzing, decoding, and extracting data from Madden franchise save files. These tools are organized in the `madden_tools/` directory and can be run using the `decode_franchise.py` launcher script.
+
+### Available Tools
+
+- **Basic Extractors**: Tools for extracting general data and player information
+- **Decoders**: Convert binary franchise files to JSON format for analysis
+- **Advanced Tools**: Comprehensive decoders and specialized zlib extractors
+
+### Using the Analysis Tools
+
+To see all available tools:
+
+```bash
+python decode_franchise.py --list
+```
+
+To list available franchise files:
+
+```bash
+python decode_franchise.py --files
+```
+
+To run a specific tool:
+
+```bash
+python decode_franchise.py decode-improved
+```
+
+For more information about these tools, see the [madden_tools/README.md](madden_tools/README.md) file.
+
 ## Save File Location
 
 The application stores save files and configuration data in the following locations:

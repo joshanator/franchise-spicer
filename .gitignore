@@ -45,9 +45,22 @@ madden_franchise_qt/saves/example\ bears.json
 
 # Resources folder (except specific icon files that should be included)
 # resources/*
+resources/CAREER*
 # Uncomment the following lines when you add icons
 # !resources/app_icon.ico
 # !resources/app_icon.icns
 # !resources/app_icon.png 
 
 builds/
+
+# Extracted Madden data files and analysis results
+madden_extracted_data/
+madden_extracted_zlib/
+zlib_extracted_chunks/
+madden_players/
+madden_chunks/
+*_decoded.json
+*_improved.json
+advanced_franchise_decoded.json
+*.bin
+extraction_results.json
