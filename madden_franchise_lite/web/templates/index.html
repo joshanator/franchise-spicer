@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Madden Franchise Event Generator{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if franchise %}
+    <!-- Current Franchise Settings -->
+    <section class="card">
+        <h2>⚙️ Franchise Settings</h2>
+        <form method="POST" action="{{ url_for('update_franchise') }}" class="settings-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="week">Week</label>
+                    <input type="number" id="week" name="week" value="{{ franchise.week }}" min="1" max="22">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" value="{{ franchise.year }}" min="1">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="season_stage">Season Stage</label>
+                    <select id="season_stage" name="season_stage">
+                        {% for stage in season_stages %}
+                        <option value="{{ stage }}" {% if franchise.season_stage == stage %}selected{% endif %}>{{ stage }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="difficulty">Difficulty</label>
+                    <select id="difficulty" name="difficulty">
+                        {% for diff in difficulties %}
+                        <option value="{{ diff }}" {% if franchise.difficulty == diff %}selected{% endif %}>{{ diff|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row checkboxes">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="unrealistic_events" {% if franchise.unrealistic_events_enabled %}checked{% endif %}>
+                    Enable Unrealistic Events
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="adult_content" {% if franchise.adult_content_enabled %}checked{% endif %}>
+                    Enable Adult Content
+                </label>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="card">
+        <h2>⚡ Quick Actions</h2>
+        <div class="quick-actions">
+            <a href="{{ url_for('events') }}" class="btn btn-roll">🎲 Roll for Events</a>
+            <a href="{{ url_for('roster') }}" class="btn btn-secondary">👥 Manage Roster</a>
+            <a href="{{ url_for('history') }}" class="btn btn-secondary">📜 View History</a>
+            <form method="POST" action="{{ url_for('save_franchise') }}" class="inline-form">
+                <button type="submit" class="btn btn-secondary">💾 Save Franchise</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Load Different Franchise -->
+    <section class="card">
+        <h2>📂 Switch Franchise</h2>
+        {% if saves %}
+        <div class="save-list">
+            {% for save in saves %}
+            <a href="{{ url_for('load_franchise', name=save) }}" class="save-item {% if franchise.save_file == save + '.json' %}active{% endif %}">
+                {{ save }}
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="muted">No other saves available</p>
+        {% endif %}
+    </section>
+
+    {% else %}
+    <!-- Welcome Screen -->
+    <section class="card welcome">
+        <h2>🏈 Welcome to Madden Franchise Event Generator</h2>
+        <p>Create a new franchise or load an existing one to get started with random events that will spice up your Madden experience.</p>
+    </section>
+
+    <!-- Create New Franchise -->
+    <section class="card">
+        <h2>✨ Create New Franchise</h2>
+        <form method="POST" action="{{ url_for('new_franchise') }}" class="create-form">
+            <div class="form-group">
+                <label for="team_name">Team Name</label>
+                <input type="text" id="team_name" name="team_name" placeholder="Enter your team name (e.g., Chicago Bears)" required autofocus>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large">🚀 Create Franchise</button>
+        </form>
+    </section>
+
+    <!-- Load Existing -->
+    {% if saves %}
+    <section class="card">
+        <h2>📂 Load Existing Franchise</h2>
+        <div class="save-list">
+            {% for save in saves %}
+            <a href="{{ url_for('load_franchise', name=save) }}" class="save-item">
+                {{ save }}
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

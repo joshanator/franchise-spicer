@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Roster - Madden Franchise Event Generator{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="card">
+        <h2>👥 Roster Management</h2>
+        <p class="muted">Enter player names for each position to personalize event descriptions. Names will appear in events that affect these positions.</p>
+        
+        <form method="POST" action="{{ url_for('update_roster') }}">
+            <!-- Coaches -->
+            <div class="roster-section">
+                <h3>🎩 Coaching Staff</h3>
+                <div class="roster-grid coaches">
+                    <div class="roster-item">
+                        <label for="coach_HC">HC</label>
+                        <input type="text" id="coach_HC" name="coach_HC" 
+                               value="{{ franchise.coaches.get('HC', '') }}" placeholder="Head Coach">
+                    </div>
+                    <div class="roster-item">
+                        <label for="coach_OC">OC</label>
+                        <input type="text" id="coach_OC" name="coach_OC" 
+                               value="{{ franchise.coaches.get('OC', '') }}" placeholder="Offensive Coordinator">
+                    </div>
+                    <div class="roster-item">
+                        <label for="coach_DC">DC</label>
+                        <input type="text" id="coach_DC" name="coach_DC" 
+                               value="{{ franchise.coaches.get('DC', '') }}" placeholder="Defensive Coordinator">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offense -->
+            <div class="roster-section">
+                <h3>🏈 Offense</h3>
+                
+                <h4>Quarterbacks</h4>
+                <div class="roster-grid">
+                    {% for pos in ['QB1', 'QB2'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h4>Running Backs</h4>
+                <div class="roster-grid">
+                    {% for pos in ['RB1', 'RB2', 'RB3', 'FB1'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h4>Wide Receivers</h4>
+                <div class="roster-grid">
+                    {% for pos in ['WR1', 'WR2', 'WR3', 'WR4'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h4>Tight Ends</h4>
+                <div class="roster-grid">
+                    {% for pos in ['TE1', 'TE2'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h4>Offensive Line</h4>
+                <div class="roster-grid">
+                    {% for pos in ['LT1', 'LT2', 'LG1', 'LG2', 'C1', 'C2', 'RG1', 'RG2', 'RT1', 'RT2'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Defense -->
+            <div class="roster-section">
+                <h3>🛡️ Defense</h3>
+
+                <h4>Defensive Line</h4>
+                <div class="roster-grid">
+                    {% for pos in ['LE1', 'LE2', 'DT1', 'DT2', 'DT3', 'RE1', 'RE2'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h4>Linebackers</h4>
+                <div class="roster-grid">
+                    {% for pos in ['LOLB1', 'LOLB2', 'MLB1', 'MLB2', 'ROLB1', 'ROLB2'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h4>Secondary</h4>
+                <div class="roster-grid">
+                    {% for pos in ['CB1', 'CB2', 'CB3', 'CB4', 'FS1', 'FS2', 'SS1', 'SS2'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Special Teams -->
+            <div class="roster-section">
+                <h3>⭐ Special Teams</h3>
+                <div class="roster-grid">
+                    {% for pos in ['K1', 'P1'] %}
+                    <div class="roster-item">
+                        <label for="roster_{{ pos }}">{{ pos }}</label>
+                        <input type="text" id="roster_{{ pos }}" name="roster_{{ pos }}" 
+                               value="{{ franchise.roster.get(pos, '') }}" placeholder="{{ pos }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-large">💾 Save Roster</button>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

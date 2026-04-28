@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}History - Madden Franchise Event Generator{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="card">
+        <div class="history-header">
+            <h2>📜 Event History</h2>
+            {% if history %}
+            <form method="POST" action="{{ url_for('clear_history') }}" class="inline-form">
+                <button type="submit" class="btn btn-danger btn-small">🗑️ Clear History</button>
+            </form>
+            {% endif %}
+        </div>
+
+        {% if history %}
+        <div class="history-list">
+            {% for entry in history %}
+            <div class="history-entry {% if entry.is_temporary %}temporary{% endif %}">
+                <div class="history-meta">
+                    <span class="history-date">📅 Week {{ entry.week }}, Year {{ entry.year }}</span>
+                    {% if entry.category %}
+                    <span class="history-category">{{ entry.category }}</span>
+                    {% endif %}
+                    {% if entry.is_temporary %}
+                    <span class="history-tag temporary">⏱️ Temporary</span>
+                    {% endif %}
+                </div>
+                <h3 class="history-title">{{ entry.title }}</h3>
+                <p class="history-description">{{ entry.description|replace('\n', '<br>')|safe }}</p>
+                {% if entry.selected_target and entry.selected_target != 'N/A' %}
+                <p class="history-target"><strong>🎯 Affected:</strong> {{ entry.selected_target }}</p>
+                {% endif %}
+                <p class="history-impact"><strong>💥 Impact:</strong> {{ entry.impact }}</p>
+                {% if entry.selected_option %}
+                <div class="history-option">
+                    <p><strong>📝 Choice:</strong> {{ entry.selected_option.description }}</p>
+                    {% if entry.selected_option.impact %}
+                    <p><strong>📊 Result:</strong> {{ entry.selected_option.impact }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="history-timestamp">{{ entry.timestamp[:10] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>📭 No events recorded yet.</p>
+            <p class="muted">Roll some events to start building your franchise story!</p>
+            <a href="{{ url_for('events') }}" class="btn btn-primary btn-large">🎲 Roll for Events</a>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

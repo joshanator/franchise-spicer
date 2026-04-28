@@ -1,0 +1,412 @@
+{
+    "unrealistic_events": [
+        {
+            "id": 1,
+            "title": "A sketchy opportunity",
+            "description": "A shady figure dressed in a trench coat approaches your {target} at a signature event and asks them to come see something in private. Your player looks to you for approval.",
+            "impact": "Go with him and the shady figure to see what he has?",
+            "adult_content": true,
+            "options": [
+                {
+                    "description": "Nod and go with them.",
+                    "impact": "You and your player go with the shady figure to see what he has. He opens a breifcase and offers the player a series of syringes.",
+                    "options": [
+                        {
+                            "description": "Red syringe: The elixir of Immediate Gratification",
+                            "impact": "Your player sacrifices their youth for an immediate boost. Permanently gains +1 to every stat and +2 to his age."
+                        },
+                        {
+                            "description": "Blue syringe: The elixir of Envy",
+                            "impact": "Your player must trade their dev trait with another starter on the team. The other player must not be older than them."
+                        },
+                        {
+                            "description": "Green syringe: The elixir of Youth",
+                            "impact": "Your player trades their development for a return to youth. Downgrade the players dev trait to normal and remove -1 from age for every level of dev trait they lose. If at the end of the season this player gains a dev trait it must be reset to normal."
+                        },
+                        {
+                            "description": "Oh no thank you sir, I dont do drugs.",
+                            "impact": "Your player gets nominated to speak at a school assembly for DARE. They miss the next game.",
+                            "is_temporary": true
+                        }
+                    ]
+                },
+                {
+                    "description": "Call security and have the shady figure escorted out of the event.",
+                    "impact": "The figure is escorted out of the event. I wonder what that was about."
+                }
+            ],
+            "target_options": [
+                "all-players"
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.5,
+                "rookie": 0.4,
+                "pro": 0.3,
+                "all-madden": 0.2,
+                "diabolical": 0.1
+            },
+            "category": "roster",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end",
+                "playoffs",
+                "off-season"
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Goodell's Casino: Cap hit roulette",
+            "description": "In an imaginary casino commissioner Goodell stands and rolls some poker chips around in his hand. He looks at you and says I have an opportunity for you. Do you wanna play?",
+            "impact": "Whats the game?",
+            "adult_content": true,
+            "options": [
+                {
+                    "description": "No thank you. I have no cap space to spare.",
+                    "impact": "You walk away from the table and wake up in your own bed.."
+                },
+                {
+                    "description": "I'm in. What's the game?",
+                    "impact": "Here's the deal. You make pick a player of your choice with 3 years or more left on their contract. I am going to give you some options, the higher value you choose the more likely you are to recieve good rewards. This player will have the bet added to their yearly bonus value and the awarded attributes added to their stats",
+                    "options": [
+                        {
+                            "description": "I bet 100k",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 100k cap hit added to player's yearly bonus.": 0.01,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 100k cap hit added to player's yearly bonus.": 0.04,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 100k cap hit added to player's yearly bonus.": 0.15,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 100k cap hit added to player's yearly bonus.": 0.2,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 100k cap hit added to player's yearly bonus": 0.25,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 100k cap hit added to player's yearly bonus.": 0.2,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 100k cap hit added to player's yearly bonus.": 0.15
+                            }
+                        },
+                        {
+                            "description": "I bet 1m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 1m cap hit added to player's yearly bonus.": 0.04,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 1m cap hit added to player's yearly bonus.": 0.10,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 1m cap hit added to player's yearly bonus.": 0.21,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 1m cap hit added to player's yearly bonus.": 0.19,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 1m cap hit added to player's yearly bonus": 0.24,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 1m cap hit added to player's yearly bonus.": 0.12,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 1m cap hit added to player's yearly bonus.": 0.10
+                            }
+                        },
+                        {
+                            "description": "I bet 2.5m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 2.5m cap hit added to player's yearly bonus.": 0.08,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 2.5m cap hit added to player's yearly bonus.": 0.16,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 2.5m cap hit added to player's yearly bonus.": 0.26,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 2.5m cap hit added to player's yearly bonus.": 0.17,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 2.5m cap hit added to player's yearly bonus": 0.19,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 2.5m cap hit added to player's yearly bonus.": 0.09,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 2.5m cap hit added to player's yearly bonus.": 0.05
+                            }
+                        },
+                        {
+                            "description": "I bet 5m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 5m cap hit added to player's yearly bonus.": 0.14,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 5m cap hit added to player's yearly bonus.": 0.24,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 5m cap hit added to player's yearly bonus.": 0.31,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 5m cap hit added to player's yearly bonus.": 0.13,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 5m cap hit added to player's yearly bonus": 0.10,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 5m cap hit added to player's yearly bonus.": 0.05,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 5m cap hit added to player's yearly bonus.": 0.03
+                            }
+                        },
+                        {
+                            "description": "I bet 10m",
+                            "impact": "Roll the dice.",
+                            "impact_random_options": {
+                                "You are one lucky person I hope you know that. Choose a player (with 3 years or more left on their contract) to gain +1 to every stat. 10m cap hit added to player's yearly bonus.": 0.35,
+                                "Pretty good. Choose a player (with 3 years or more left on their contract) to gain +1 to every skill stat for his position. 10m cap hit added to player's yearly bonus.": 0.35,
+                                "Not bad. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice. 10m cap hit added to player's yearly bonus.": 0.25,
+                                "Meh. Choose a player (with 3 years or more left on their contract) to gain +1 to a skill of your choice, But also loses -1 to a skill of your choice (must be relevant to their position). 10m cap hit added to player's yearly bonus.": 0.06,
+                                "Nothing lol. Choose a player (with 3 years or more left on their contract). 10m cap hit added to player's yearly bonus": 0.03,
+                                "Ouch now that hurts. Choose a player (with 3 years or more left on their contract) to lose -1 to every skill stat for his position. 10m cap hit added to player's yearly bonus.": 0.01,
+                                "You are the least lucky person I have ever met. Choose a player (with 3 years or more left on their contract) to lose -1 to every stat. 10m cap hit added to player's yearly bonus.": 0.00
+                            }
+                        }
+                    ]
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.1,
+                "rookie": 0.05,
+                "pro": 0.05,
+                "all-madden": 0.05,
+                "diabolical": 0.05
+            },
+            "category": "gamble",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end",
+                "playoffs",
+                "off-season"
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Father Time's Wheel: Age Gamble",
+            "description": "You're visited in a dream by a mysterious hooded figure who introduces himself as Father Time. He offers to let you spin his enchanted wheel that can manipulate {target}'s aging process.",
+            "impact": "Would you like to spin the wheel of time?",
+            "target_options": ["all-players"],
+            "adult_content": true,
+            "options": [
+                {
+                    "description": "No thanks. I'll let nature take its course.",
+                    "impact": "You decline and wake up feeling well-rested. Everything continues normally."
+                },
+                {
+                    "description": "I'll take a spin.",
+                    "impact": "Father Time reveals a glowing wheel with various symbols. 'Choose your stake,' he says. 'The higher the stake, the greater the potential reward - or penalty.'",
+                    "options": [
+                        {
+                            "description": "Low Risk: Bet 1 year of {target}'s life",
+                            "impact": "Spin the wheel.",
+                            "impact_random_options": {
+                                "Miraculous! Your {target} becomes 1 year younger. Their physical attributes will not be affected.": 0.15,
+                                "Good fortune. Your {target} will maintain their current age and gain +1 to a single attribute of your choice.": 0.25,
+                                "Mixed blessing. Your {target} becomes 1 year younger but loses 1 point in all physical attributes": 0.20,
+                                "Nothing happens. Father Time chuckles.": 0.25,
+                                "Unfortunate. Your {target} immediately ages 1 additional year.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Medium Risk: Bet 2 years of {target}'s life",
+                            "impact": "Spin the wheel.",
+                            "impact_random_options": {
+                                "Extraordinary! Your {target} becomes 2 years younger and gains +1 to a physical attribute of your choice.": 0.10,
+                                "Excellent! Your {target} becomes 1 year younger with no negative effects.": 0.20,
+                                "Positive. Your {target} will maintain their current age and gain +1 to a single attribute of your choice.": 0.25,
+                                "Nothing happens. Father Time shrugs.": 0.20,
+                                "Bad luck. Your {target} immediately ages 1 additional year and loses 1 point in a physical attribute of your choice.": 0.15,
+                                "Cruel fate. Your {target} immediately ages 2 additional years and loses 1 point in a physical attribute of your choice.": 0.10
+                            }
+                        },
+                        {
+                            "description": "High Risk: Bet 3 years of {target}'s life",
+                            "impact": "Spin the wheel.",
+                            "impact_random_options": {
+                                "Incredible! Your {target} becomes 3 years younger and gains +1 to all physical attributes.": 0.09,
+                                "Amazing! Your {target} becomes 2 years younger and gains +1 to a physical attribute of your choice.": 0.16,
+                                "Very good. Your {target} becomes 1 year younger with no negative effects.": 0.22,
+                                "Nothing happens. Father Time nods respectfully at your courage.": 0.16,
+                                "Unfortunate turn. Your {target} immediately ages 2 additional years.": 0.20,
+                                "Harsh punishment. Your {target} immediately ages 3 additional years and loses 1 point in all physical attributes.": 0.15,
+                                "Devastating. Your {target} will age 1 year after every game for the rest of the season.": 0.02
+                            }
+                        },
+                        {
+                            "description": "All In: Ultimate Gamble. Who cares if it goes wrong? Its not your life.",
+                            "impact": "Spin the wheel.",
+                            "impact_random_options": {
+                                "The Fountain of Youth! Your {target} reverts to 20 years old while keeping all their current abilities.": 0.05,
+                                "Age Reversal! Your {target} becomes 5 years younger or gains +2 to all physical attributes.": 0.11,
+                                "Major Rejuvenation! Your {target} becomes 3 years younger or gains +1 to all physical attributes.": 0.16,
+                                "Youth Serum! Your {target} becomes 2 years younger with no negative effects.": 0.16,
+                                "Nothing happens. Father Time bows, impressed by your boldness.": 0.11,
+                                "Time Acceleration. Your {target} immediately ages 3 additional years.": 0.16,
+                                "Rapid Aging. Your {target} immediately ages 5 additional years and loses 2 points in all physical attributes.": 0.20,
+                                "Time's End. Your {target} immediately retires from football, regardless of age or contract status.": 0.05
+                            }
+                        }
+                    ]
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.05,
+                "rookie": 0.05,
+                "pro": 0.05,
+                "all-madden": 0.05,
+                "diabolical": 0.05
+            },
+            "category": "gamble",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end"
+            ]
+        },
+        {
+            "id": 4,
+            "title": "The Monkey's Paw Contract",
+            "description": "A strange, hunched figure claiming to be an ancient agent approaches {target} with a special contract offer. 'One signature and I can grant what you most desire,' he whispers.",
+            "impact": "The agent slides a parchment contract toward your {target}. Do you let them sign?",
+            "target_options": ["all-players"],
+            "adult_content": true,
+            "options": [
+                {
+                    "description": "Absolutely not. This seems highly suspicious.",
+                    "impact": "You tear up the contract and send the agent away. Nothing happens, but you have a strange feeling you avoided something terrible."
+                },
+                {
+                    "description": "Let {target} sign the contract.",
+                    "impact": "The agent grins wickedly as your player signs. 'Now choose your blessing,' he says with a disturbing smile.",
+                    "options": [
+                        {
+                            "description": "Strength Beyond Measure",
+                            "impact": "Your {target} chooses physical power. The agent cackles.",
+                            "impact_random_options": {
+                                "Success! Your {target} gains +3 strength and becomes an unstoppable force.": 0.05,
+                                "The curse activates. Your {target} gains +2 strength but loses -2 speed.": 0.25,
+                                "The curse twists your wish. Your {target} gains +1 strength but ages 3 years instantly.": 0.25,
+                                "The curse backfires completely. Your {target} loses -2 strength and is injured for 4 weeks.": 0.30,
+                                "The contract dissolves in smoke and your {target} collapses. Your player develops a strange aversion to football fields and is out for the rest of the season.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Speed Like The Wind",
+                            "impact": "Your {target} chooses incredible speed. The agent rubs his hands together gleefully.",
+                            "impact_random_options": {
+                                "Success! Your {target} gains +3 speed and becomes lightning fast.": 0.05,
+                                "The curse activates. Your {target} gains +2 speed but loses -2 in catching/carrying (depending on position).": 0.30,
+                                "The curse twists your wish. Your {target} gains +1 speed but develops chronic hamstring issues, suffering random injuries throughout the season.": 0.25,
+                                "The curse backfires completely. Your {target} loses -2 speed and their awareness drops by 5 points.": 0.25,
+                                "The contract bursts into flames. Your {target} can no longer play in divisional games this season due to extreme fatigue that doctors can't explain.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Knowledge of The Game",
+                            "impact": "Your {target} requests football intelligence. The agent nods slowly with a sinister smile.",
+                            "impact_random_options": {
+                                "Success! Your {target} gains +5 to awareness and play recognition.": 0.05,
+                                "The curse activates. Your {target} gains +3 awareness but loses -2 to speed and -3 to acceleration as they overthink everything.": 0.30,
+                                "The curse twists your wish. Your {target} becomes obsessed with film study, gaining +2 awareness but missing one game every 3 weeks due to mental exhaustion (this season).": 0.25,
+                                "The curse backfires completely. Your {target} becomes paranoid that other teams know all their moves, losing -5 awareness.": 0.25,
+                                "The contract vanishes with a puff of smoke. Your {target} can now perfectly predict plays but freezes in big moments, he cannot play in primetime games or playoffs this season.": 0.15
+                            }
+                        },
+                        {
+                            "description": "Career Longevity",
+                            "impact": "Your {target} asks for a longer career. The agent's eyes glow ominously.",
+                            "impact_random_options": {
+                                "Success! Your {target} stops aging entirely for the next 3 seasons (or de-ages 3 years).": 0.05,
+                                "The curse activates. Your {target} loses 1 year of age, but their development trait is now normal (any dev trait upgrade this season will be reset to normal).": 0.25,
+                                "The curse twists your wish. Your {target} gets a guaranteed 3 more years of playing (de-ages 3 years), but the lose their memory (awareness drops to 40).": 0.30,
+                                "The curse backfires completely. Your {target} rapidly ages 5 years and loses 50% of their contract value as their performance declines.": 0.25,
+                                "The contract dissolves into the air. Your {target} wakes up 3 years younger but without a contract. They are now a free agent and can sign with any team except yours for the rest of their career.": 0.15
+                            }
+                        }
+                    ]
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0,
+                "rookie": 0.01,
+                "pro": 0.05,
+                "all-madden": 0.075,
+                "diabolical": 0.1
+            },
+            "category": "gamble",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid"
+            ]
+        },
+        {
+            "id": 5,
+            "title": "Free cupcake?",
+            "description": "You are walking down a street with {target} when you both see a cupcake sitting on the sidewalk. Your player will eat anything and lunges for it. Do you let them?",
+            "impact": "Is that safe to eat?",
+            "target_options": ["all-players"],
+            "options": [
+                {
+                    "description": "No! Bad! You dont eat food off the ground.",
+                    "impact": "Your player is properly scolded and you continue on your way. He looks at you with a disappointed look in his eyes. -1 to awareness."
+                },
+                {
+                    "description": "No. Ill get you some real food.",
+                    "impact": "You get your player some McDonalds and thats good enough for him. Nothing happens."
+                },
+                {
+                    "description": "Yea why not",
+                    "impact": "Your player happily eats the cupcake. It's so delicious he starts to glow.",
+                    "impact_random_options": {
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +1 to every stat. The cupcake is magic!": 0.02,
+                        "Cupcake or magic mushroom? Your player gains 2 inches of height.": 0.03,
+                        "Cupcake or magic mushroom? Your player gains an inch of height.": 0.1,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +1 to 2 stats of your choice. The cupcake is magic!": 0.15,
+                        "Your player happily eats the cupcake. The player gains +1 speed permanatly. Sugar Rush.": 0.15,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player thinks of his childhood and suddenly he is 1 year younger. -1 age": 0.05,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +10 awareness for the next game": 0.15,
+                        "Your player happily eats the cupcake. It's so delicious he starts to glow. Your player gains +5 speed and +5 acceleration for the next game": 0.1,
+                        "Your player eats the cupcake and immediately gets sick. They are out for 1 game.": 0.25
+                    }
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.1,
+                "rookie": 0.01,
+                "pro": 0.006,
+                "all-madden": 0.001,
+                "diabolical": 0.0001
+            },
+            "category": "boost",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end"
+            ]
+        },
+        {
+            "id": 6,
+            "title": "Free cupcake?",
+            "description": "You are walking down a street with {target} when you both see a cupcake sitting on the sidewalk. Your player will eat anything and lunges for it. Do you let them?",
+            "impact": "Is that safe to eat?",
+            "target_options": ["all-players"],
+            "options": [
+                {
+                    "description": "No! Bad! You dont eat food off the ground.",
+                    "impact": "Your player is properly scolded and you continue on your way. He looks at you with a disappointed look in his eyes. -1 to awareness."
+                },
+                {
+                    "description": "No. Ill get you some real food.",
+                    "impact": "You get your player some McDonalds and thats good enough for him. Nothing happens."
+                },
+                {
+                    "description": "Yea why not",
+                    "impact": "Your player eats the cupcake and immediately regrets it.",
+                    "impact_random_options": {
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -1 to every stat. The cupcake is cursed!": 0.02,
+                        "Growing boys need real food. Your player loses 2 inches of height.": 0.03,
+                        "Growing boys need real food. Your player loses an inch of height.": 0.1,
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -1 to 2 relevant stats of your choice. The cupcake is cursed!": 0.15,
+                        "Your player eats the cupcake and immediately regrets it. The player loses -1 speed permanently. Sugar Crash.": 0.15,
+                        "Your player eats the cupcake and immediately regrets it. Your player has a mid-life crisis and suddenly he is 1 year older. +1 age": 0.05,
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -10 awareness for the next game": 0.15,
+                        "Your player eats the cupcake and immediately regrets it. Your player loses -5 speed and -5 acceleration for the next game": 0.1,
+                        "Your player eats the cupcake and somehow feels fine. Nothing happens.": 0.25
+                    }
+                }
+            ],
+            "difficulty_weights": {
+                "cupcake": 0.0001,
+                "rookie": 0.001,
+                "pro": 0.006,
+                "all-madden": 0.01,
+                "diabolical": 0.1
+            },
+            "category": "debuff",
+            "season_stages": [
+                "pre-season",
+                "regular-season-start",
+                "regular-season-mid",
+                "regular-season-end"
+            ]
+        }
+    ]
+}

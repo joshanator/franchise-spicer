@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Events - Madden Franchise Event Generator{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Roll for Event -->
+    <section class="card">
+        <h2>🎲 Generate Random Event</h2>
+        <div class="roll-section">
+            <form method="POST" action="{{ url_for('roll_event') }}">
+                <button type="submit" class="btn btn-roll">Roll for Event</button>
+            </form>
+            <div class="difficulty-display">
+                <span class="label">Difficulty:</span>
+                <span class="value difficulty-{{ franchise.difficulty }}">{{ franchise.difficulty|title }}</span>
+            </div>
+        </div>
+    </section>
+
+    {% if pending_event %}
+    <!-- Current Event -->
+    <section class="card event-result">
+        <h2>{{ pending_event.title }}</h2>
+        
+        <div class="event-details">
+            <div class="event-field">
+                <label>Description</label>
+                <p>{{ pending_event.description|replace('\n', '<br>')|safe }}</p>
+            </div>
+            
+            <div class="event-field">
+                <label>Impact</label>
+                <p class="impact">{{ pending_event.impact }}</p>
+            </div>
+            
+            {% if pending_event.selected_target and pending_event.selected_target != 'N/A' %}
+            <div class="event-field">
+                <label>Affected</label>
+                <p class="target">{{ pending_event.selected_target }}</p>
+            </div>
+            {% endif %}
+            
+            {% if pending_event.is_temporary %}
+            <div class="event-tag temporary">Temporary Effect</div>
+            {% endif %}
+        </div>
+
+        {% if pending_event.options %}
+        <!-- Branching Options -->
+        <div class="event-options">
+            <h3>🤔 Choose Your Response</h3>
+            {% for option in pending_event.options %}
+            <form method="POST" action="{{ url_for('select_option') }}" class="option-form">
+                <input type="hidden" name="option_index" value="{{ loop.index0 }}">
+                <button type="submit" class="btn btn-option">
+                    <span class="option-text">{{ option.description }}</span>
+                    {% if option.impact %}
+                    <span class="option-impact">→ {{ option.impact }}</span>
+                    {% endif %}
+                </button>
+            </form>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Action Buttons -->
+        <div class="event-actions">
+            <form method="POST" action="{{ url_for('accept_event') }}" class="inline-form">
+                <button type="submit" class="btn btn-primary btn-large">✅ Accept Event</button>
+            </form>
+            <form method="POST" action="{{ url_for('roll_event') }}" class="inline-form">
+                <button type="submit" class="btn btn-secondary">🔄 Re-roll</button>
+            </form>
+            <form method="POST" action="{{ url_for('dismiss_event') }}" class="inline-form">
+                <button type="submit" class="btn btn-danger">✕ Dismiss</button>
+            </form>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- Help -->
+    <section class="card help">
+        <h2>📖 How to Use</h2>
+        <ol>
+            <li>Click <strong>"Roll for Event"</strong> to generate a random event based on your difficulty setting</li>
+            <li>Read the event description and understand the impact on your franchise</li>
+            <li>For branching events, choose how you want to respond</li>
+            <li><strong>Accept</strong> to record the event, or <strong>Re-roll</strong> for a different one</li>
+            <li>Implement the changes in your actual Madden franchise game</li>
+        </ol>
+    </section>
+</div>
+{% endblock %}

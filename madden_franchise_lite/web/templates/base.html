@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate random events for your Madden franchise mode">
+    <meta name="theme-color" content="#0a1628">
+    <title>{% block title %}Madden Franchise Event Generator{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏈</text></svg>">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🏈 Madden Franchise Event Generator</h1>
+            {% if franchise %}
+            <div class="franchise-info">
+                <span class="team-name">{{ franchise.team_name }}</span>
+                <span class="separator">•</span>
+                <span>Week {{ franchise.week }}, Year {{ franchise.year }}</span>
+                <span class="separator">•</span>
+                <span>{{ franchise.season_stage }}</span>
+            </div>
+            {% endif %}
+        </div>
+        <nav>
+            <a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}class="active"{% endif %}>
+                🏠 Home
+            </a>
+            <a href="{{ url_for('events') }}" {% if request.endpoint == 'events' %}class="active"{% endif %}>
+                🎲 Events
+            </a>
+            <a href="{{ url_for('roster') }}" {% if request.endpoint == 'roster' %}class="active"{% endif %}>
+                👥 Roster
+            </a>
+            <a href="{{ url_for('history') }}" {% if request.endpoint == 'history' %}class="active"{% endif %}>
+                📜 History
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>Madden Franchise Event Generator — Lightweight Edition • Press <kbd>R</kbd> to Roll • <kbd>A</kbd> to Accept</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

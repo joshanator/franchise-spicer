@@ -2051,11 +2051,11 @@
         }
       ],
       "difficulty_weights": {
-        "cupcake": 0.25,
-        "rookie": 0.25,
-        "pro": 0.25,
-        "all-madden": 0.25,
-        "diabolical": 0.25
+        "cupcake": 0.4,
+        "rookie": 0.4,
+        "pro": 0.4,
+        "all-madden": 0.4,
+        "diabolical": 0.4
       },
       "category": "roster",
       "season_stages": [
@@ -2196,9 +2196,9 @@
       "difficulty_weights": {
         "cupcake": 0,
         "rookie": 0,
-        "pro": 0.1,
-        "all-madden": 0.2,
-        "diabolical": 0.3
+        "pro": 0.2,
+        "all-madden": 0.35,
+        "diabolical": 0.45
       },
       "category": "attribute",
       "season_stages": [
@@ -2855,10 +2855,10 @@
       "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
       "difficulty_weights": {
         "cupcake": 0,
-        "rookie": 0.1,
-        "pro": 0.2,
-        "all-madden": 0.35,
-        "diabolical": 0.5
+        "rookie": 0.15,
+        "pro": 0.25,
+        "all-madden": 0.45,
+        "diabolical": 0.65
       },
       "category": "draft",
       "season_stages": [
@@ -2874,10 +2874,10 @@
       "school_options": ["Alabama", "Arizona", "Arizona State", "Arkansas", "Auburn", "California", "Clemson", "Florida", "Georgia", "Georgia Tech", "Iowa", "Kansas State", "Louisville", "LSU", "Miami", "Michigan", "Michigan State", "Mississippi State", "Nebraska", "North Carolina", "Notre Dame", "Ohio State", "Oklahoma", "Oklahoma State", "Oregon", "Penn State", "Purdue", "South Carolina", "Stanford", "Tennessee", "Texas", "Texas A&M", "Texas Tech", "UCLA"],
       "difficulty_weights": {
         "cupcake": 0,
-        "rookie": 0.08,
-        "pro": 0.15,
-        "all-madden": 0.25,
-        "diabolical": 0.35
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.35,
+        "diabolical": 0.5
       },
       "category": "draft",
       "season_stages": [
@@ -3041,6 +3041,457 @@
       "season_stages": [
         "regular-season-end",
         "playoffs"
+      ]
+    },
+    {
+      "id": 86,
+      "title": "Crypto Currency Crash",
+      "description": "{target} invested their entire signing bonus in cryptocurrency and lost everything when the market crashed.",
+      "impact": "Your player is now broke and desperate for money.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Offer financial counseling and a small advance",
+          "impact": "Player gains +2 awareness from learning financial responsibility but you must add $500k to their contract"
+        },
+        {
+          "description": "Tell them it's a life lesson and move on",
+          "impact": "Player becomes distracted by financial stress and loses -3 awareness for the next 4 games"
+        },
+        {
+          "description": "Help them start a side business",
+          "impact": "50/50 chance: Either player gains +1 development trait from business success, or loses -2 awareness from business failure distraction"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.2,
+        "all-madden": 0.3,
+        "diabolical": 0.4
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 87,
+      "title": "Viral TikTok Dance",
+      "description": "{target} created a touchdown celebration dance that went viral on TikTok with 50 million views.",
+      "impact": "The dance is now expected every touchdown, but opponents are studying it.",
+      "target_options": [
+        "RB1",
+        "WR1",
+        "WR2",
+        "TE1"
+      ],
+      "options": [
+        {
+          "description": "Embrace the fame and trademark the dance",
+          "impact": "Player gains +2 awareness and must do the dance after every touchdown, but opponents get +1 to defensive awareness against this player"
+        },
+        {
+          "description": "Ban the celebration to avoid distraction",
+          "impact": "Player loses -2 awareness from disappointment but team focus improves"
+        },
+        {
+          "description": "Let the team vote on it",
+          "impact": "Random outcome: 60% team loves it (+1 team morale), 40% team thinks it's embarrassing (-1 team morale)"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.3,
+        "rookie": 0.3,
+        "pro": 0.3,
+        "all-madden": 0.3,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
+      ]
+    },
+    {
+      "id": 88,
+      "title": "Madden Curse Anxiety",
+      "description": "{target} was featured on the cover of Madden and is now paranoid about the infamous 'Madden Curse'.",
+      "impact": "Player is constantly worried about getting injured and plays tentatively.",
+      "target_options": [
+        "QB1",
+        "RB1",
+        "WR1"
+      ],
+      "options": [
+        {
+          "description": "Hire a sports psychologist to help with anxiety",
+          "impact": "Player overcomes the mental block and gains +3 awareness and +1 toughness"
+        },
+        {
+          "description": "Tell them the curse is nonsense",
+          "impact": "Player either gets over it (+2 awareness) or becomes more paranoid (-3 awareness and -1 to all physical stats for 6 games)"
+        },
+        {
+          "description": "Lean into the superstition and get protective gear",
+          "impact": "Player feels safer but the extra padding reduces speed and agility by 2 for the season"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 89,
+      "title": "Food Truck Empire",
+      "description": "{target} started a food truck business in the offseason and it's become wildly successful, but now they want to focus on it full-time.",
+      "impact": "Player is torn between football and their entrepreneurial success.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Support their business dreams and help them retire gracefully",
+          "impact": "Player retires but gives you a discount at their food trucks. Cut player but gain $2M in cap space from contract restructure"
+        },
+        {
+          "description": "Convince them football comes first",
+          "impact": "Player stays but is distracted. -2 awareness but they donate food truck profits to team facilities (+1 to all rookies' development)"
+        },
+        {
+          "description": "Help them hire managers so they can do both",
+          "impact": "Player gains +1 awareness from business success and stays focused on football"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.15,
+        "pro": 0.2,
+        "all-madden": 0.25,
+        "diabolical": 0.3
+      },
+      "category": "roster",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 90,
+      "title": "Alien Abduction Claim",
+      "description": "{target} claims they were abducted by aliens during the bye week and now have 'enhanced abilities'.",
+      "impact": "Player genuinely believes they have supernatural powers now.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Play along with their delusion for confidence",
+          "impact": "Placebo effect works! Player gains +2 to all attributes for 4 games, then returns to normal when 'powers fade'"
+        },
+        {
+          "description": "Get them psychiatric evaluation",
+          "impact": "Player either gets help and gains +1 awareness, or feels betrayed and requests trade"
+        },
+        {
+          "description": "Ignore it and hope it goes away",
+          "impact": "Player becomes team joke, loses -3 awareness but teammates find it hilarious (+1 team chemistry)"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.01,
+        "rookie": 0.05,
+        "pro": 0.1,
+        "all-madden": 0.15,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 91,
+      "title": "Doppelganger Confusion",
+      "description": "A fan who looks exactly like {target} has been showing up to practices and confusing security. The resemblance is uncanny.",
+      "impact": "The situation is causing identity confusion and media attention.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Hire the doppelganger as a decoy for media events",
+          "impact": "Player loves the idea and gains +2 awareness. Team gets creative marketing boost"
+        },
+        {
+          "description": "Get a restraining order against the fan",
+          "impact": "Legal drama creates distraction. Player loses -1 awareness for 3 games"
+        },
+        {
+          "description": "Embrace it and invite them to a game",
+          "impact": "Wholesome story goes viral. Player gains +1 awareness and team gets positive media coverage"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 92,
+      "title": "Time Capsule Discovery",
+      "description": "During stadium renovations, workers discovered a time capsule from 1975 containing 'lucky' items from the team's championship season.",
+      "impact": "The team is debating whether to use these 'lucky' items.",
+      "options": [
+        {
+          "description": "Embrace the superstition and display the items in the locker room",
+          "impact": "Team morale improves. All players gain +1 awareness for the next 3 games due to 'championship energy'"
+        },
+        {
+          "description": "Auction the items for charity",
+          "impact": "Good publicity but some players think you sold their luck. +2 awareness for 2 players, -1 awareness for 3 players"
+        },
+        {
+          "description": "Put them in a museum and focus on making new history",
+          "impact": "Rational approach. No immediate effects but team develops 'prove ourselves' mentality (+1 toughness for all starters)"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.3,
+        "rookie": 0.3,
+        "pro": 0.3,
+        "all-madden": 0.3,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 93,
+      "title": "Cooking Show Appearance",
+      "description": "{target} appeared on a celebrity cooking show and accidentally started a kitchen fire while making their 'signature dish'.",
+      "impact": "The embarrassing moment went viral and became a meme.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Laugh it off and lean into the meme",
+          "impact": "Player becomes more relatable to fans. +2 awareness and gains 'fan favorite' status"
+        },
+        {
+          "description": "Try to distance from the embarrassment",
+          "impact": "Streisand effect makes it worse. Player becomes self-conscious and loses -2 awareness for 4 games"
+        },
+        {
+          "description": "Take cooking lessons and return to redeem yourself",
+          "impact": "Redemption arc! Player gains +3 awareness and becomes team chef, improving team chemistry"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "off-season"
+      ]
+    },
+    {
+      "id": 94,
+      "title": "Escape Room Challenge",
+      "description": "The team went to an escape room for team building, but {target} had a panic attack and had to be rescued by staff.",
+      "impact": "Player is embarrassed and teammates are concerned about their mental state under pressure.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Address it openly and get them help for anxiety",
+          "impact": "Player appreciates the support and gains +2 awareness. Team respects the honesty"
+        },
+        {
+          "description": "Keep it quiet to protect their reputation",
+          "impact": "Player grateful but anxiety remains. -1 awareness in high-pressure situations (4th quarter, playoffs)"
+        },
+        {
+          "description": "Use it as motivation to overcome fears",
+          "impact": "Player either conquers their fears (+3 toughness) or the pressure makes it worse (-2 awareness, -1 toughness)"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.2,
+        "pro": 0.3,
+        "all-madden": 0.4,
+        "diabolical": 0.5
+      },
+      "category": "attribute",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start"
+      ]
+    },
+    {
+      "id": 95,
+      "title": "Weather Machine Malfunction",
+      "description": "The stadium's new climate control system malfunctioned during practice, creating a localized blizzard in 80-degree weather.",
+      "impact": "Players are confused and some are claiming it's a sign of the apocalypse.",
+      "options": [
+        {
+          "description": "Use it as unique cold-weather practice opportunity",
+          "impact": "Team gains experience with adverse conditions. +2 to all attributes when playing in bad weather this season"
+        },
+        {
+          "description": "Evacuate immediately for safety",
+          "impact": "Cautious approach. No bonuses but also no injuries. Some players call you overcautious (-1 toughness for 2 players)"
+        },
+        {
+          "description": "Have fun with it and build snowmen",
+          "impact": "Team bonding in bizarre circumstances. +3 team chemistry but practice is completely wasted"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.05,
+        "rookie": 0.1,
+        "pro": 0.15,
+        "all-madden": 0.2,
+        "diabolical": 0.25
+      },
+      "category": "team",
+      "season_stages": [
+        "pre-season",
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 96,
+      "title": "Mascot Rivalry",
+      "description": "Your team mascot got into a public fight with a rival team's mascot at a charity event, and it went viral.",
+      "impact": "The incident is embarrassing but also kind of hilarious.",
+      "options": [
+        {
+          "description": "Fire the mascot for unprofessional behavior",
+          "impact": "Professional response but fans are disappointed. Team loses some fan support but gains respect from league"
+        },
+        {
+          "description": "Defend the mascot and challenge the rival to a rematch",
+          "impact": "Fans love the competitive spirit! Team gains +1 toughness and +2 team chemistry"
+        },
+        {
+          "description": "Turn it into a charity boxing match",
+          "impact": "Creative solution raises money for charity and becomes annual tradition. +3 awareness for 3 players"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.3,
+        "rookie": 0.3,
+        "pro": 0.3,
+        "all-madden": 0.3,
+        "diabolical": 0.3
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 97,
+      "title": "Parallel Universe Theory",
+      "description": "{target} has become obsessed with the theory that there's a parallel universe where they're the GOAT at their position.",
+      "impact": "Player is spending all their free time researching quantum physics instead of studying film.",
+      "target_options": [
+        "all-players"
+      ],
+      "options": [
+        {
+          "description": "Encourage their intellectual curiosity",
+          "impact": "Player gains +3 awareness from expanded thinking but loses -1 to position-specific skills"
+        },
+        {
+          "description": "Tell them to focus on this universe",
+          "impact": "Player refocuses on football but feels intellectually stifled. +1 to position skills, -2 awareness"
+        },
+        {
+          "description": "Help them find balance between both interests",
+          "impact": "Player learns time management and gains +1 awareness and +1 to a skill of your choice"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.1,
+        "rookie": 0.15,
+        "pro": 0.2,
+        "all-madden": 0.25,
+        "diabolical": 0.3
+      },
+      "category": "attribute",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid"
+      ]
+    },
+    {
+      "id": 98,
+      "title": "Haunted Locker",
+      "description": "Players claim that locker #13 in the visiting team's facility is haunted after several strange incidents occurred there.",
+      "impact": "Team is divided between believers and skeptics, affecting chemistry.",
+      "options": [
+        {
+          "description": "Bring in a priest to bless the locker",
+          "impact": "Believers feel better (+2 awareness for 5 players) but skeptics think you're crazy (-1 awareness for 3 players)"
+        },
+        {
+          "description": "Investigate scientifically to debunk the claims",
+          "impact": "You find logical explanations. Skeptics gain +1 awareness, believers feel disappointed (-1 awareness)"
+        },
+        {
+          "description": "Embrace the supernatural and make it a team tradition",
+          "impact": "Team unites around the mystery. +2 team chemistry and players gain 'supernatural confidence' (+1 toughness)"
+        }
+      ],
+      "difficulty_weights": {
+        "cupcake": 0.2,
+        "rookie": 0.2,
+        "pro": 0.2,
+        "all-madden": 0.2,
+        "diabolical": 0.2
+      },
+      "category": "team",
+      "season_stages": [
+        "regular-season-start",
+        "regular-season-mid",
+        "regular-season-end"
       ]
     }
   ]

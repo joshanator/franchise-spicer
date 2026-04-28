@@ -1,0 +1,13 @@
+# Madden Franchise Event Generator - Lightweight Edition
+# =====================================================
+# 
+# Minimal dependencies for the web-based version.
+#
+# Installation:
+#   pip install -r requirements.txt
+#
+# Run:
+#   python run.py
+#
+
+Flask>=3.0.0
